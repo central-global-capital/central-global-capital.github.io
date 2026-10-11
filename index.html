@@ -1,88 +1,149 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Central Global Capital - IB + Copy Trading</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IB HUB - Modern Dark Trading IB Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#060a18;--card:#0c1228;--line:rgba(91,141,239,.22);--blue:#5b8def;--cyan:#7af0ff;--text:#e8ecf8;--muted:#8b93b0;--green:#22c55e}
-*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:Inter,sans-serif}
-h1,h2{font-family:'Instrument Serif',serif}
-nav{display:flex;justify-content:space-between;align-items:center;padding:14px 4%;border-bottom:1px solid var(--line);background:rgba(6,10,24,.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:20}
-.logo{display:flex;align-items:center;gap:10px;font-family:'Instrument Serif';letter-spacing:.08em}
-.logo .b{width:36px;height:36px;border:1px solid var(--blue);border-radius:8px;display:grid;place-items:center;color:var(--cyan);box-shadow:0 0 15px rgba(91,141,239,.4)}
-.menu{display:flex;gap:18px;font-size:11px;color:var(--muted)} .menu b{color:white;border-bottom:1px solid var(--blue)}
-.hero{text-align:center;padding:50px 4% 20px}
-.hero h1{font-size:clamp(28px,5vw,52px);background:linear-gradient(90deg,#6a8bff 0%,#7af0ff 50%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.hero p{color:var(--muted);font-size:13px;max-width:700px;margin:14px auto}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1100px;margin:24px auto;padding:0 4%}
-.card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:18px;padding:18px;transition:.3s}
-.card:hover{border-color:var(--blue);box-shadow:0 0 30px rgba(91,141,239,.2);transform:translateY(-4px)}
-.btn{display:block;text-align:center;padding:11px;border-radius:999px;background:linear-gradient(135deg,#4a7bff,#5ba8ff);color:white;font-weight:700;font-size:12px;text-decoration:none;margin-top:10px;box-shadow:0 0 20px rgba(74,123,255,.5)}
-.btn-wa{background:transparent;border:1px solid var(--line);box-shadow:none;color:var(--muted)}
-.divider{max-width:1100px;margin:40px auto;padding:0 4%;text-align:center;border-top:1px dashed var(--line);padding-top:40px}
-.master{display:grid;grid-template-columns:2fr 1fr;gap:16px;max-width:1100px;margin:20px auto;padding:0 4%;text-align:left}
-.box{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:16px;padding:18px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.scard{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
-.copy-big{display:block;width:100%;background:linear-gradient(135deg,#4a7bff,#5ba8ff);color:white;font-weight:800;text-align:center;padding:16px;border-radius:999px;text-decoration:none;margin-top:14px;box-shadow:0 0 30px rgba(91,141,239,.6);font-size:14px;animation:pulse 2s infinite}
-@keyframes pulse{0%{box-shadow:0 0 20px rgba(91,141,239,.4)}50%{box-shadow:0 0 35px rgba(91,141,239,.8)}100%{box-shadow:0 0 20px rgba(91,141,239,.4)}}
-@media(max-width:900px){.grid3,.master{grid-template-columns:1fr}.menu{display:none}}
+:root{--bg:#080e0e;--card:#0d1715;--card2:#111e1b;--neon:#00e092;--neon2:#00ffb0;--line:rgba(0,224,146,0.25);--text:#e6fff5;--muted:#7aa89a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(0,224,146,0.03) 50%,transparent 100%),repeating-linear-gradient(0deg,rgba(0,224,146,0.02) 0px,transparent 1px,transparent 2px,rgba(0,224,146,0.02) 3px);pointer-events:none;z-index:0}
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid var(--neon);background:rgba(8,14,14,0.95);backdrop-filter:blur(10px);position:sticky;top:0;z-index:50}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:48px;height:48px;background:linear-gradient(135deg,#0a1f1a,#0d2a22);border:1.5px solid var(--neon);border-radius:10px;display:grid;place-items:center;clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);box-shadow:0 0 20px rgba(0,224,146,0.4)}
+.logo-icon span{font-family:'Space Grotesk';font-weight:800;font-size:22px;color:var(--neon)}
+.logo-text{font-family:'Space Grotesk';font-size:32px;letter-spacing:1px;font-weight:700}
+.nav-links{display:flex;gap:28px;font-size:12px;font-weight:600}
+.nav-links .active{border-bottom:2px solid var(--neon);padding-bottom:4px;color:var(--neon)}
+.ib-badge{border:1px solid var(--neon);padding:6px 14px;border-radius:8px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--neon);background:rgba(0,224,146,0.1)}
+.hero{text-align:center;padding:42px 20px 24px;position:relative;z-index:1}
+.hero h1{font-family:'Space Grotesk';font-size:clamp(28px,4.5vw,48px);font-weight:700;background:linear-gradient(180deg,#fff 0%,#b8ffde 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--muted);font-size:13px;margin-top:10px;max-width:800px;margin:0 auto}
+.badges{display:flex;justify-content:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.badge{border:1px solid var(--line);background:rgba(13,23,21,0.8);padding:7px 14px;border-radius:8px;font-size:11px}
+.section-title{text-align:center;margin-top:22px;font-size:18px;font-weight:700}
+.section-sub{color:var(--muted);font-size:11px;text-align:center;margin-top:4px}
+.brokers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;max-width:1280px;margin:22px auto;padding:0 28px;position:relative;z-index:1}
+.card{position:relative;background:linear-gradient(180deg,var(--card2) 0%,var(--card) 100%);border:1px solid var(--neon);border-radius:12px;padding:18px;overflow:hidden;box-shadow:0 0 30px rgba(0,224,146,0.08) inset}
+.card-tag{position:absolute;top:12px;right:12px;border:1px solid var(--neon);color:var(--neon);font-size:9px;font-weight:800;padding:4px 10px;border-radius:6px;background:rgba(0,224,146,0.12)}
+.card-head{display:flex;align-items:center;gap:12px;margin-top:4px}
+.ex-icon{width:38px;height:38px;background:#00d084;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#000}
+.jf-icon{width:38px;height:38px;background:#fff;border-radius:8px;display:grid;place-items:center;color:#000;font-weight:900;font-size:14px}
+.card h2{font-size:26px;font-weight:800}
+.lev{text-align:center;font-size:12px;font-weight:600;margin:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 0}
+.features{display:flex;gap:8px;flex-wrap:wrap;font-size:10px;color:var(--muted);margin-bottom:14px}
+.stats{display:flex;gap:14px;margin:12px 0}
+.stat b{display:block;font-size:11px}.stat small{font-size:9px;color:var(--muted)}
+.btn-daftar{width:100%;background:var(--neon);color:#00140e;font-weight:800;font-size:14px;padding:12px;border:none;border-radius:8px;cursor:pointer;letter-spacing:1px;box-shadow:0 0 20px rgba(0,224,146,0.4)}
+.btn-daftar:hover{background:var(--neon2);transform:translateY(-1px)}
+.volume{font-size:9px;color:var(--neon);margin-top:6px}
+.overview{max-width:1280px;margin:24px auto 0;padding:0 28px;position:relative;z-index:1}
+.overview-box{border:1px solid var(--neon);border-radius:12px;padding:14px 18px;background:linear-gradient(180deg,var(--card2),var(--card))}
+.overview-box h3{text-align:center;font-size:14px;margin-bottom:14px}
+.overview-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.ov-card{border:1px solid var(--neon);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;background:rgba(0,0,0,0.3)}
+.ov-card b{font-size:20px;display:block}.ov-card small{font-size:10px;color:var(--muted)}.ov-card .up{color:var(--neon);font-size:10px}
+.footer{text-align:center;padding:20px 0 30px;font-size:11px;color:var(--muted)}
+.ref-code{font-size:12px;color:var(--text);margin-bottom:10px;display:flex;justify-content:center;gap:8px}.ref-code span{color:var(--neon);font-weight:700}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}.modal.active{display:flex}
+.modal-card{width:100%;max-width:440px;background:#0f1c19;border:1.5px solid var(--neon);border-radius:16px;padding:22px;box-shadow:0 0 40px rgba(0,224,146,0.25)}
+.inp{width:100%;background:#08120f;border:1px solid var(--line);border-radius:8px;padding:11px 12px;color:white;font-size:13px;margin-bottom:10px;outline:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.submit{width:100%;background:var(--neon);color:#000;font-weight:800;padding:12px;border:none;border-radius:8px;margin-top:6px;cursor:pointer}
+.cancel{background:transparent;border:1px solid var(--line);color:var(--muted);margin-top:8px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0f1c19;border:1px solid var(--neon);color:var(--neon);padding:12px 20px;border-radius:10px;font-size:12px;font-weight:600;display:none;z-index:200}
+@media(max-width:1024px){.brokers{grid-template-columns:1fr 1fr}.overview-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.brokers{grid-template-columns:1fr}.nav-links{display:none}.logo-text{font-size:22px}}
 </style>
 </head>
 <body>
-<nav>
-<div class="logo"><div class="b">CGC</div> CENTRAL GLOBAL CAPITAL</div>
-<div class="menu"><b>IB HUB</b><span>MASTER TRADE</span><span>WA 089660276661</span></div>
-</nav>
-
+<div class="topnav">
+<div class="logo"><div class="logo-icon"><span>IB</span></div><div class="logo-text">IB HUB</div></div>
+<div class="nav-links"><span class="active">DASHBOARD</span><span>BROKERS</span><span>EARNINGS</span><span>WITHDRAW</span><span>REFERRAL</span><span>SUPPORT</span></div>
+<div><span style="font-size:12px">IB Partner</span> <span class="ib-badge">IB STATUS: VERIFIED</span></div>
+</div>
 <div class="hero">
-<h1>Strategic IB Hub for Global Growth</h1>
-<p>Langkah 1: Daftar IB via link resmi di bawah → Langkah 2: Langsung Copy Trade DIEN SCALPER (Winrate 78.4%)</p>
+<h1>Modern Dark Trading IB Hub</h1>
+<p>Join as Introducing Broker • Earn Commission from Top Crypto & Forex Brokers • Payouts in Crypto or USD</p>
+<div class="badges"><div class="badge">₿ Crypto Trading Enabled</div><div class="badge">📈 Real-Time Commission Tracking</div><div class="badge">⚡ Instant Withdrawal</div></div>
+<div class="section-title">Select Your Broker Partner</div>
+<div class="section-sub">Choose your preferred broker to start earning commissions. Click Daftar to register and connect your IB account.</div>
 </div>
-
-<div class="grid3">
-<div class="card"><div style="font-weight:800">Exness</div><div style="font-size:11px;color:var(--muted);margin:6px 0">Leverage 1:2000 • Spread 0.0 • Min $1</div><div style="font-size:10px;color:var(--cyan)">Rebate up to 40%</div><a class="btn" href="#master-copy" onclick="document.getElementById('master-copy').scrollIntoView({behavior:'smooth'})">DAFTAR EXNESS → COPY</a><a class="btn btn-wa" href="https://wa.me/6289660276661">WA 089660276661</a></div>
-<div class="card"><div style="font-weight:800">CXM Direct</div><div style="font-size:11px;color:var(--muted);margin:6px 0">Leverage 1:1000 • ECN • Min $50</div><div style="font-size:10px;color:var(--cyan)">UK Regulated</div><a class="btn" href="#master-copy">DAFTAR CXM → COPY</a><a class="btn btn-wa" href="https://wa.me/6289660276661">WA 089660276661</a></div>
-<div class="card"><div style="font-weight:800">JustForex</div><div style="font-size:11px;color:var(--muted);margin:6px 0">Leverage 1:3000 • Bonus • Min $1</div><div style="font-size:10px;color:var(--cyan)">Rebate up to 60%</div><a class="btn" href="#master-copy">DAFTAR JUSTFOREX → COPY</a><a class="btn btn-wa" href="https://wa.me/6289660276661">WA 089660276661</a></div>
+<div class="brokers">
+<div class="card">
+<div class="card-tag">POPULAR</div>
+<div class="card-head"><div class="ex-icon">Ø</div><h2>Exness</h2></div>
+<div class="lev">Leverage: up to 1:2000</div>
+<div class="features"><span>Zero Commission</span><span>• Crypto CFDs Available</span><span>• Regulated & Trusted</span></div>
+<div class="stats"><div class="stat"><small>Min Deposit</small><b>$1</b></div><div class="stat"><small>Instruments</small><b>200+</b></div><div class="stat"><small>Spreads from</small><b>0.0 pips</b></div></div>
+<div class="volume">Crypto Volume: +18.2% this month</div>
+<button class="btn-daftar" onclick="openModal('Exness')">DAFTAR</button>
 </div>
-
-<div class="divider">
-<h2 style="font-size:32px">Langkah 2: Copy Master Live Trade</h2>
-<p style="color:var(--muted);font-size:12px;margin-top:8px">Setelah daftar IB, langsung copy trade master kami yang lagi profit live</p>
+<div class="card">
+<div class="card-tag">TRUSTED</div>
+<div class="card-head"><div style="font-weight:800;font-size:28px"><span style="color:#ff4d4d">X</span> CXM</div><h2 style="font-size:20px;margin-left:4px">Direct</h2></div>
+<div class="lev">Leverage: up to 1:1000</div>
+<div class="features"><span>1000+ Instruments</span><span>• Crypto Trading</span><span>• Bonus Available</span></div>
+<div class="stats"><div class="stat"><small>Min Deposit</small><b>$5</b></div><div class="stat"><small>Instruments</small><b>1000+</b></div><div class="stat"><small>Cashback Rebate</small><b>Available</b></div></div>
+<div class="volume">Active Traders: 45.6K+</div>
+<button class="btn-daftar" onclick="openModal('CXM Direct')">DAFTAR</button>
 </div>
-
-<div class="master" id="master-copy">
-<div>
-<div class="box">
-<div style="font-size:10px;color:#22c55e;border:1px solid #22c55e;padding:3px 8px;border-radius:999px;display:inline-block">● LIVE</div>
-<div style="font-family:'Instrument Serif';font-size:32px;margin-top:8px">MASTER LIVE TRADE<br><span style="color:#22c55e">BUY XAUUSD +$12.50</span></div>
-<div style="font-size:12px;color:var(--muted);margin-top:10px">Symbol XAUUSD • Volume 0.10 lots • Entry 2321.40 • Current 2323.90 • SL 2318.00 • TP 2330.00</div>
-<div style="margin-top:14px"><canvas id="eq" height="120"></canvas></div>
-</div>
-</div>
-<div>
-<div class="box">
-<h3 style="font-family:'Instrument Serif'">Performance Stats</h3>
-<div class="stats" style="margin-top:10px">
-<div class="scard"><small style="color:var(--muted);font-size:10px">Winrate</small><b style="color:var(--cyan);font-size:20px">78.4%</b><small style="font-size:9px">47W / 13L</small></div>
-<div class="scard"><small style="color:var(--muted);font-size:10px">Total Profit</small><b style="color:#22c55e;font-size:20px">+$452.50</b></div>
-<div class="scard"><small style="color:var(--muted);font-size:10px">Followers</small><b style="font-size:20px">1,243</b><small style="font-size:9px;color:#22c55e">+24 today</small></div>
-<div class="scard"><small style="color:var(--muted);font-size:10px">Active Copiers</small><b style="font-size:20px">89</b></div>
-</div>
-<div style="margin-top:12px;font-size:11px;display:flex;justify-content:space-between"><span style="color:var(--muted)">Risk Score</span><b style="color:#22c55e">2.1/10 LOW RISK</b></div>
-<a class="copy-big" href="https://wa.me/6289660276661?text=Halo%20Dien%20Scalper%20saya%20sudah%20daftar%20IB%20dan%20mau%20COPY%20TRADE%20MASTER" target="_blank">🔥 COPY THIS MASTER SEKARANG</a>
-<div style="font-size:10px;color:var(--muted);text-align:center;margin-top:6px">Fee 10% profit • Min copy $50 • WA Fast: 089660276661</div>
+<div class="card">
+<div class="card-tag">BONUS 100%</div>
+<div class="card-head"><div class="jf-icon">JF</div><h2>JustForex</h2></div>
+<div class="lev">Leverage: up to 1:3000</div>
+<div class="features"><span>Zero Commission</span><span>• Fast Withdraw</span><span>• Copy Trading</span></div>
+<div class="stats"><div class="stat"><small>Min Deposit</small><b>$1</b></div><div class="stat"><small>Instruments</small><b>200+</b></div><div class="stat"><small>Spreads from</small><b>0.1 pips</b></div></div>
+<div class="volume">Bonus Deposit: +100% Available</div>
+<button class="btn-daftar" onclick="openModal('JustForex')">DAFTAR</button>
 </div>
 </div>
+<div class="overview">
+<div class="overview-box">
+<h3>Your IB Performance Overview</h3>
+<div class="overview-grid">
+<div class="ov-card"><div>💲</div><div><small>Total Commission</small><b id="comm">Rp 12.450.000</b><span class="up">+24.5% this month ↑</span></div></div>
+<div class="ov-card"><div>👥</div><div><small>Active Clients</small><b id="clients">128</b><span class="up">+12 new this week ↑</span></div></div>
+<div class="ov-card"><div>👛</div><div><small>Pending Payout</small><b>Rp 2.180.000</b><small class="up">Next payout: 15 Oct 2024</small></div></div>
 </div>
-
-<div style="text-align:center;padding:30px;color:var(--muted);font-size:11px">© 2026 Central Global Capital • WA 089660276661 • Trading berisiko, past performance tidak menjamin masa depan</div>
-
+</div>
+</div>
+<div class="footer">
+<div class="ref-code">Referral Code: <span id="refcode">IB-EMERALD-8842</span> • <span onclick="copyCode()" style="cursor:pointer">Copy Code 📋</span></div>
+© 2024 IB Hub • Terms • Privacy Policy • Help Center
+</div>
+<div class="modal" id="modal">
+<div class="modal-card">
+<h3 id="mTitle">Daftar IB</h3>
+<p style="font-size:11px;color:var(--muted);margin:8px 0 14px">Isi data untuk daftar jadi member IB. Tanpa VPS, copy via server broker.</p>
+<input id="name" class="inp" placeholder="Nama Lengkap">
+<input id="wa" class="inp" placeholder="No WhatsApp 0896...">
+<input id="email" class="inp" placeholder="Email Aktif">
+<div class="grid2">
+<input id="mt5" class="inp" placeholder="ID MT5 (opsional)">
+<select id="broker" class="inp"><option>Exness</option><option>CXM Direct</option><option>JustForex</option></select>
+</div>
+<button class="submit" onclick="submitForm()">DAFTAR & AKTIFKAN COPY TRADE</button>
+<button class="submit cancel" onclick="closeModal()">BATAL</button>
+</div>
+</div>
+<div class="toast" id="toast"></div>
 <script>
-new Chart(document.getElementById('eq'),{type:'line',data:{labels:['Oct04','Oct05','Oct06','Oct07','Oct08','Oct09','Oct10'],datasets:[{data:[10220,10280,10360,10420,10520,10600,10652],borderColor:'#5b8def',backgroundColor:'rgba(91,141,239,.15)',fill:true,tension:.4,pointRadius:0}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#8b93b0',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#8b93b0',font:{size:9}}}}}});
-</script>
-</body>
-</html>
+// GANTI LINK IB LU DI SINI BRO
+const links = {
+  'Exness':'https://one.exness.link/a/g2h5k3f9',
+  'CXM Direct':'https://www.cxmdirect.com/en/register?ib=YOURCODE',
+  'JustForex':'https://justforex.com/register?ib=YOURCODE'
+}
+function openModal(b){document.getElementById('broker').value=b;document.getElementById('mTitle').innerText='Daftar '+b+' IB';document.getElementById('modal').classList.add('active')}
+function closeModal(){document.getElementById('modal').classList.remove('active')}
+function toast(m){const t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
+function copyCode(){navigator.clipboard.writeText(document.getElementById('refcode').innerText);toast('Referral code copied!')}
+function submitForm(){
+  const name=document.getElementById('name').value;
+  const wa=document.getElementById('wa').value;
+  const email=document.getElementById('email').value;
+  const broker=document.getElementById('broker').value;
+  if(!name||!wa||!email){toast('Lengkapi Nama, WA, Email!');return
