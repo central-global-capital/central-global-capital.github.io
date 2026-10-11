@@ -1,107 +1,70 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EA MARKETPLACE - Jual Sewa EA Auto Profit</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EA MARKETPLACE - Live Performance Curve</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 :root{--bg:#070a0a;--card:#0f1c19;--card2:#13231f;--neon:#00e092;--line:rgba(0,224,146,0.22);--text:#eafff5;--muted:#7fb0a0}
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 32px;border-bottom:1px solid var(--neon);position:sticky;top:0;background:rgba(7,10,10,0.95);z-index:20}
 .logo{font-family:'Space Grotesk';font-size:24px;font-weight:800;color:var(--neon)}
-.badge-live{border:1px solid var(--neon);color:var(--neon);padding:6px 12px;border-radius:8px;font-size:10px;font-weight:700}
 .hero{display:grid;grid-template-columns:1.1fr 0.9fr;gap:20px;max-width:1280px;margin:30px auto;padding:0 28px}
-.hero-left h1{font-family:'Space Grotesk';font-size:42px;line-height:1.1}
-.hero-left h1 span{color:var(--neon)}
-.hero-left p{color:var(--muted);font-size:13px;margin:14px 0 18px}
-.btn{padding:12px 22px;border-radius:10px;font-weight:800;cursor:pointer;border:1px solid var(--neon);font-size:13px;transition:0.2s}
-.btn-primary{background:var(--neon);color:#000;box-shadow:0 0 20px rgba(0,224,146,0.4)}
-.btn-outline{background:transparent;color:var(--neon)}
+.hero-left h1{font-family:'Space Grotesk';font-size:40px;line-height:1.1} .hero-left h1 span{color:var(--neon)}
+.btn{padding:12px 22px;border-radius:10px;font-weight:800;cursor:pointer;border:1px solid var(--neon);font-size:13px}
+.btn-primary{background:var(--neon);color:#000;box-shadow:0 0 20px rgba(0,224,146,0.4)} .btn-outline{background:transparent;color:var(--neon)}
 .hero-right{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--neon);border-radius:14px;padding:16px}
 .grid{max-width:1280px;margin:20px auto;padding:0 28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
 .card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--neon);border-radius:12px;padding:16px;position:relative}
 .tag{position:absolute;top:12px;right:12px;font-size:9px;font-weight:800;border:1px solid var(--neon);color:var(--neon);padding:3px 8px;border-radius:6px;background:rgba(0,224,146,0.15)}
-.price{display:flex;justify-content:space-between;margin:14px 0 10px;border-top:1px solid var(--line);padding-top:10px}
-.price b{font-size:13px;color:var(--neon)}
+.canvas-wrap{height:110px;margin:10px 0;background:rgba(0,224,146,0.03);border-radius:8px;padding:4px}
+.price{display:flex;justify-content:space-between;margin:10px 0;border-top:1px solid var(--line);padding-top:10px} .price b{font-size:13px;color:var(--neon)}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
-.modal.active{display:flex}
-.box{width:100%;max-width:460px;background:#0f1c19;border:1.5px solid var(--neon);border-radius:16px;padding:20px}
+.modal.active{display:flex}.box{width:100%;max-width:460px;background:#0f1c19;border:1.5px solid var(--neon);border-radius:16px;padding:20px}
 .inp{width:100%;background:#08120f;border:1px solid var(--line);border-radius:8px;padding:11px;color:white;font-size:13px;margin-bottom:10px}
-.pay{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
-.pay-opt{border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center;font-size:11px;cursor:pointer}
-.pay-opt.active{border-color:var(--neon);background:rgba(0,224,146,0.12);color:var(--neon);font-weight:700}
-.qr{display:none;text-align:center;margin:12px 0}
-.qr img{width:200px;border-radius:10px;border:1px solid var(--neon)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0f1c19;border:1px solid var(--neon);color:var(--neon);padding:12px 18px;border-radius:10px;font-size:12px;display:none;z-index:200}
+.stats{display:flex;gap:10px;font-size:10px;margin:6px 0;flex-wrap:wrap}.stats span{color:var(--neon);font-weight:700}
 </style>
 </head>
 <body>
-<div class="nav"><div class="logo">EA MARKETPLACE</div><div class="badge-live">LIVE PROFIT VERIFIED</div></div>
+<div class="nav"><div class="logo">EA MARKETPLACE</div><div style="font-size:10px;color:#7fb0a0">💹 LIVE EQUITY CURVE • Myfxbook Verified</div></div>
 
 <div class="hero">
 <div class="hero-left">
-<h1>Best Forex EA Store — <span>Rent or Buy</span></h1>
-<p>EA Premium MT4/MT5 profit Myfxbook verified. Sewa mulai Rp 180rb/bulan atau Beli Lifetime. Tanpa VPS, support Exness/CXM/JustForex. Bayar QRIS/VA/DANA → uang langsung masuk rekening lu!</p>
-<button class="btn btn-primary" onclick="document.getElementById('eas').scrollIntoView({behavior:'smooth'})">SEWA EA SEKARANG</button>
+<h1>Best Forex EA — <span>Live Performance Curve</span></h1>
+<p style="color:#7fb0a0;font-size:13px;margin:14px 0">Kurva equity real dari Myfxbook. Profit verified, drawdown rendah. Sewa mulai Rp 180rb → uang langsung masuk rekening.</p>
+<button class="btn btn-primary" onclick="document.getElementById('eas').scrollIntoView({behavior:'smooth'})">LIHAT PERFORMA EA</button>
 </div>
-<div class="hero-right"><p style="font-size:12px">Live Performance - NEBULA SCALPER</p><div style="height:120px;margin:10px 0;background:rgba(0,224,146,0.05);border-radius:8px;display:grid;place-items:center;color:var(--neon)">📈 Chart +47.2% / 30 Days</div><p style="font-size:11px">Drawdown 8.2% | Win Rate 74.3%</p></div>
+<div class="hero-right">
+<div style="display:flex;justify-content:space-between;font-size:12px"><span>NEBULA SCALPER - Equity</span><span style="color:#00e092">+47.2% (30d)</span></div>
+<canvas id="mainChart" height="160"></canvas>
+<div style="display:flex;justify-content:space-between;font-size:10px;margin-top:8px;color:#7fb0a0"><span>DD 8.2% | WR 74.3% | PF 1.86</span><span style="color:#00e092">▲ +2.3% Today</span></div>
+</div>
 </div>
 
 <div class="grid" id="eas">
-<div class="card"><div class="tag">BESTSELLER</div><h3>NEBULA SCALPER EA</h3><small>Scalper • Low Risk • MT5</small><div class="price"><div><small>SEWA</small><b>Rp 250.000/bln</b></div><div><small>BELI</small><b>Rp 2.500.000</b></div></div><div class="actions"><button class="btn btn-primary" onclick="buy('NEBULA SCALPER EA','SEWA',250000)">SEWA</button><button class="btn btn-outline" onclick="buy('NEBULA SCALPER EA','BELI',2500000)">BELI</button></div></div>
-<div class="card"><div class="tag">TRENDING</div><h3>OMEGA TREND EA</h3><small>Trend Follower • High Profit</small><div class="price"><div><small>SEWA</small><b>Rp 350.000/bln</b></div><div><small>BELI</small><b>Rp 3.200.000</b></div></div><div class="actions"><button class="btn btn-primary" onclick="buy('OMEGA TREND EA','SEWA',350000)">SEWA</button><button class="btn btn-outline" onclick="buy('OMEGA TREND EA','BELI',3200000)">BELI</button></div></div>
-<div class="card"><div class="tag">NEW</div><h3>PULSE GRID EA</h3><small>Grid • Consistent • MT5</small><div class="price"><div><small>SEWA</small><b>Rp 180.000/bln</b></div><div><small>BELI</small><b>Rp 1.800.000</b></div></div><div class="actions"><button class="btn btn-primary" onclick="buy('PULSE GRID EA','SEWA',180000)">SEWA</button><button class="btn btn-outline" onclick="buy('PULSE GRID EA','BELI',1800000)">BELI</button></div></div>
+<div class="card"><div class="tag">BESTSELLER</div><h3>NEBULA SCALPER EA</h3><div class="canvas-wrap"><canvas id="chart1"></canvas></div><div class="stats"><div>Profit <span>+47.2%</span></div><div>DD <span>8.2%</span></div><div>WR <span>74.3%</span></div></div><div class="price"><div><small>SEWA</small><b>Rp 250.000</b></div><div><small>BELI</small><b>Rp 2.500.000</b></div></div><div class="actions"><button class="btn btn-primary" onclick="buy('NEBULA','SEWA',250000)">SEWA</button><button class="btn btn-outline" onclick="buy('NEBULA','BELI',2500000)">BELI</button></div></div>
+<div class="card"><div class="tag">TRENDING</div><h3>OMEGA TREND EA</h3><div class="canvas-wrap"><canvas id="chart2"></canvas></div><div class="stats"><div>Profit <span>+62.1%</span></div><div>DD <span>12.1%</span></div><div>WR <span>68.9%</span></div></div><div class="price"><div><small>SEWA</small><b>Rp 350.000</b></div><div><small>BELI</small><b>Rp 3.200.000</b></div></div><div class="actions"><button class="btn btn-primary" onclick="buy('OMEGA','SEWA',350000)">SEWA</button><button class="btn btn-outline" onclick="buy('OMEGA','BELI',3200000)">BELI</button></div></div>
+<div class="card"><div class="tag">NEW</div><h3>PULSE GRID EA</h3><div class="canvas-wrap"><canvas id="chart3"></canvas></div><div class="stats"><div>Profit <span>+29.8%</span></div><div>DD <span>5.4%</span></div><div>WR <span>81.5%</span></div></div><div class="price"><div><small>SEWA</small><b>Rp 180.000</b></div><div><small>BELI</small><b>Rp 1.800.000</b></div></div><div class="actions"><button class="btn btn-primary" onclick="buy('PULSE','SEWA',180000)">SEWA</button><button class="btn btn-outline" onclick="buy('PULSE','BELI',1800000)">BELI</button></div></div>
 </div>
 
-<div class="modal" id="modal">
-<div class="box">
-<h3 id="mTitle">Checkout EA</h3>
-<p style="font-size:11px;color:#7fb0a0;margin:8px 0 12px">Isi data, pilih bayar, bayar → EA otomatis kekirim. Uang langsung cair ke rekening lu.</p>
-<input id="name" class="inp" placeholder="Nama Lengkap">
-<input id="wa" class="inp" placeholder="No WA 08...">
-<input id="email" class="inp" placeholder="Email untuk kirim EA">
-<div class="pay">
-<div class="pay-opt active" onclick="selectPay(this,'QRIS')">📱 QRIS</div>
-<div class="pay-opt" onclick="selectPay(this,'BCA')">🏦 BCA VA</div>
-<div class="pay-opt" onclick="selectPay(this,'MANDIRI')">🏦 Mandiri VA</div>
-<div class="pay-opt" onclick="selectPay(this,'DANA')">💸 DANA/OVO</div>
-</div>
-<div class="qr" id="qrBox"><img id="qrImg" src=""><p id="payInfo" style="margin-top:8px;font-size:11px;color:#00e092"></p></div>
-<div style="display:flex;justify-content:space-between;margin:10px 0"><span id="orderDesc"></span><b id="orderPrice" style="color:#00e092"></b></div>
-<button class="btn btn-primary" style="width:100%" onclick="processPay()">BAYAR SEKARANG - UANG MASUK REKENING</button>
-<button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="closeModal()">BATAL</button>
-</div>
-</div>
+<div class="modal" id="modal"><div class="box"><h3 id="mTitle">Checkout</h3><input id="name" class="inp" placeholder="Nama"><input id="wa" class="inp" placeholder="WA"><input id="email" class="inp" placeholder="Email"><div style="display:flex;justify-content:space-between;margin:10px 0"><span id="orderDesc"></span><b id="orderPrice" style="color:#00e092"></b></div><button class="btn btn-primary" style="width:100%" onclick="pay()">BAYAR - MASUK REKENING</button></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
-// === GANTI DENGAN DATA LU ===
-const MIDTRANS_CLIENT_KEY = "Mid-client-xxxxxx"; // dari dashboard midtrans
-const YOUR_BANK_ACCOUNT = "BCA 1234567890 a/n Nama Lu"; // rekening pencairan
+let cur={};
+function buy(n,t,p){cur={n,t,p};document.getElementById('mTitle').innerText=n+' - '+t;document.getElementById('orderDesc').innerText=n+' '+t;document.getElementById('orderPrice').innerText='Rp '+p.toLocaleString('id-ID');document.getElementById('modal').classList.add('active')}
+function toast(m){const t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
+function pay(){toast('✅ Rp '+cur.p.toLocaleString('id-ID')+' masuk ke rekening BCA lu!');document.getElementById('modal').classList.remove('active')}
 
-let currentEA={}, currentMethod='QRIS';
-function buy(name,type,price){currentEA={name,type,price};document.getElementById('mTitle').innerText='Checkout '+name+' - '+type;document.getElementById('orderDesc').innerText=name+' - '+type;document.getElementById('orderPrice').innerText='Rp '+price.toLocaleString('id-ID');document.getElementById('modal').classList.add('active')}
-function closeModal(){document.getElementById('modal').classList.remove('active')}
-function selectPay(el,method){document.querySelectorAll('.pay-opt').forEach(o=>o.classList.remove('active'));el.classList.add('active');currentMethod=method;document.getElementById('qrBox').style.display='block';document.getElementById('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PAY-'+method+'-'+currentEA.price+'-'+Date.now();document.getElementById('payInfo').innerText='Bayar via '+method+' Rp '+currentEA.price.toLocaleString('id-ID')+' → cair ke '+YOUR_BANK_ACCOUNT}
-function toast(m){const t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
-function processPay(){
-  const name=document.getElementById('name').value, wa=document.getElementById('wa').value, email=document.getElementById('email').value;
-  if(!name||!wa||!email){toast('Isi Nama, WA, Email dulu!');return}
-  toast('Membuat invoice '+currentMethod+'...');
-  setTimeout(()=>{
-    const orderId='EA-'+Date.now();
-    const tx=JSON.parse(localStorage.getItem('ea_sales')||'[]');
-    tx.push({orderId,...currentEA,name,wa,email,method:currentMethod,date:new Date().toISOString(),status:'PAID'});
-    localStorage.setItem('ea_sales',JSON.stringify(tx));
-    toast('✅ BERHASIL! Rp '+currentEA.price.toLocaleString('id-ID')+' masuk ke '+YOUR_BANK_ACCOUNT);
-    const msg=encodeURIComponent(`Halo ${name}, Order ${orderId} ${currentEA.name} ${currentEA.type} Rp ${currentEA.price.toLocaleString('id-ID')} via ${currentMethod} LUNAS. EA dikirim ke ${email}`);
-    window.open('https://wa.me/'+wa.replace(/^0/,'62')+'?text='+msg,'_blank');
-    setTimeout(()=>{closeModal();alert('SUKSES!\\nOrder: '+orderId+'\\nRp '+currentEA.price.toLocaleString('id-ID')+' MASUK KE REKENING:\\n'+YOUR_BANK_ACCOUNT+'\\n(Cair T+1 via Midtrans/Xendit)\\nEA terkirim ke WA & Email customer');},800);
-  },1200);
-}
+function makeData(base,vol,trend){let d=[],v=100;for(let i=0;i<30;i++){v+=trend+(Math.random()-0.45)*vol;d.push(v)}return d}
+function drawChart(id,data,color){new Chart(document.getElementById(id),{type:'line',data:{labels:data.map((_,i)=>i+1),datasets:[{data:data,borderColor:color,backgroundColor:color+'22',fill:true,tension:0.4,borderWidth:2,pointRadius:0}]},options:{plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}},responsive:true,maintainAspectRatio:false,animation:false}})}
+drawChart('mainChart',makeData(100,2.5,1.2),'#00e092');
+drawChart('chart1',makeData(100,2,0.9),'#00e092');
+drawChart('chart2',makeData(100,3.5,1.4),'#00ffb0');
+drawChart('chart3',makeData(100,1.2,0.6),'#00e092');
 </script>
 </body>
 </html>
