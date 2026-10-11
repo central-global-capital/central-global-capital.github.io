@@ -1,42 +1,125 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Central Global Capital | Financial Solutions</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<style>body{font-family:'Inter',sans-serif} .serif{font-family:'Playfair Display',serif}</style>
+<title>Central Global Capital | Strategic Capital for Global Growth</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060a18;--bg2:#0c1228;--line:rgba(255,255,255,.08);--blue:#5b8def;--cyan:#7af0ff;--text:#e8ecf8;--muted:#8b93b0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:Inter,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:'Instrument Serif',serif;font-weight:400}
+nav{position:fixed;top:0;width:100%;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:18px 5%;background:rgba(6,10,24,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:12px;font-family:'Instrument Serif';letter-spacing:.12em;font-size:16px;line-height:1.1}
+.logo svg{width:36px;height:36px}
+.nav-links{display:flex;gap:28px;list-style:none;font-size:13px;letter-spacing:.04em;color:var(--muted)}
+.nav-links a{color:inherit;text-decoration:none;transition:.2s}
+.nav-links a:hover{color:white}
+.btn{padding:11px 22px;border-radius:999px;border:1px solid rgba(123,240,255,.3);background:linear-gradient(135deg,#4a7bff,#5ba8ff);color:white;font-weight:600;font-size:13px;cursor:pointer;box-shadow:0 0 20px rgba(74,123,255,.4);transition:.3s;text-decoration:none;display:inline-block;text-align:center}
+.btn:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(74,123,255,.6)}
+.btn-wa{background:linear-gradient(135deg,#25D366,#128C7E);border-color:#25D366;box-shadow:0 0 20px rgba(37,211,102,.4)}
+.hero{padding:150px 5% 80px;text-align:center;position:relative;overflow:hidden}
+.hero:before{content:'';position:absolute;width:800px;height:800px;background:radial-gradient(circle,rgba(74,123,255,.15),transparent 70%);top:-200px;left:50%;transform:translateX(-50%);pointer-events:none}
+.hero h1{font-size:clamp(36px,6vw,68px);line-height:.95;background:linear-gradient(90deg,#6a8bff 0%,#7af0ff 50%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;max-width:900px;margin:0 auto 18px}
+.hero p{max-width:620px;margin:0 auto 32px;color:var(--muted);font-size:16px;line-height:1.6}
+.stats{display:flex;justify-content:center;gap:50px;margin-top:60px;flex-wrap:wrap}
+.stat b{font-family:'Instrument Serif';font-size:20px;display:block;color:white}
+.stat span{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:60px auto 0;padding:0 5%}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:28px;backdrop-filter:blur(10px);transition:.4s}
+.card:hover{transform:translateY(-6px);border-color:rgba(122,240,255,.3);box-shadow:0 20px 40px rgba(0,0,0,.4)}
+.card .icon{width:48px;height:48px;border-radius:12px;background:rgba(74,123,255,.15);display:grid;place-items:center;margin-bottom:16px;font-size:22px}
+.card h3{font-size:22px;margin-bottom:10px}
+.card p{font-size:13px;color:var(--muted);line-height:1.6}
+section{padding:90px 5%;max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;letter-spacing:.25em;color:var(--cyan);text-transform:uppercase;margin-bottom:14px}
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+.two h2{font-size:clamp(28px,4vw,46px);line-height:1.1;margin-bottom:18px}
+.two p{color:var(--muted);line-height:1.7;font-size:14px;margin-bottom:14px}
+.list{list-style:none;margin-top:20px}
+.list li{display:flex;gap:12px;margin-bottom:12px;font-size:13px;color:var(--text)}
+.list li:before{content:'✓';color:var(--cyan)}
+.contact-box{background:linear-gradient(135deg,#0f1735,#121e45);border:1px solid var(--line);border-radius:24px;padding:40px;display:grid;grid-template-columns:1fr 1fr;gap:40px}
+input,textarea{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:white;font-size:13px;margin-bottom:12px;outline:none}
+input:focus,textarea:focus{border-color:var(--blue)}
+footer{border-top:1px solid var(--line);padding:30px 5%;display:flex;justify-content:space-between;color:var(--muted);font-size:11px;flex-wrap:wrap;gap:10px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.two,.contact-box{grid-template-columns:1fr}.nav-links{display:none}}
+</style>
 </head>
-<body class="bg-[#0a0f1c] text-white">
-<!-- NAV -->
-<nav class="flex justify-between items-center p-6 max-w-7xl mx-auto">
-<div class="font-bold text-xl tracking-widest"><span class="text-blue-400">CENTRAL</span> GLOBAL CAPITAL</div>
-<a href="mailto:centralglobalcapital@gmail.com" class="bg-white text-black px-5 py-2 rounded-full text-sm font-semibold">Contact Us</a>
+<body>
+<nav>
+<div class="logo">
+<svg viewBox="0 0 40 48" fill="none"><path d="M20 0L4 12L10 20L20 14L30 20L36 12L20 0Z" stroke="#6aa8ff" stroke-width="1.5"/><path d="M4 12L20 44L36 12" stroke="#6aa8ff" stroke-width="1.5"/><path d="M10 20L20 44L30 20" stroke="#7af0ff" stroke-width="1.2"/><path d="M10 20L20 14L30 20" stroke="#6aa8ff" stroke-width="1.2"/></svg>
+<div>CENTRAL GLOBAL<br>CAPITAL</div>
+</div>
+<ul class="nav-links">
+<li><a href="#solutions">Solutions</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li>
+</ul>
+<a class="btn btn-wa" href="https://wa.me/6289660276661?text=Halo%20Central%20Global%20Capital%2C%20saya%20ingin%20konsultasi" target="_blank">💬 WhatsApp</a>
 </nav>
-
-<!-- HERO -->
-<section class="max-w-7xl mx-auto px-6 pt-20 pb-32 text-center">
-<div class="inline-block border border-blue-400/30 rounded-full px-4 py-1 text-xs tracking-widest text-blue-300 mb-6">EST. 2026 • GLOBAL FINANCIAL ADVISORY</div>
-<h1 class="serif text-5xl md:text-7xl leading-tight">Strategic Capital <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">for Global Growth</span></h1>
-<p class="text-gray-400 max-w-2xl mx-auto mt-6 text-lg">We provide corporate financing, investment advisory, and asset management solutions for enterprises across Indonesia and Southeast Asia.</p>
-<div class="mt-10 flex justify-center gap-4">
-<a href="mailto:centralglobalcapital@gmail.com" class="bg-blue-600 hover:bg-blue-500 px-8 py-4 rounded-full font-semibold">Start Consultation</a>
-<a href="#services" class="border border-white/20 px-8 py-4 rounded-full">Our Services</a>
+<div class="hero">
+<h1>Strategic Capital for Global Growth</h1>
+<p>We partner with institutions and enterprises to deliver bespoke capital solutions, advisory services, and asset management across global markets.</p>
+<div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+<a class="btn btn-wa" href="https://wa.me/6289660276661?text=Halo%20Central%20Global%20Capital%2C%20saya%20ingin%20jadwalkan%20konsultasi" target="_blank">💬 Schedule via WhatsApp</a>
+<a class="btn" style="background:transparent;border-color:rgba(255,255,255,.2);box-shadow:none" href="#solutions">View Capabilities</a>
+</div>
+<div class="stats">
+<div class="stat"><b>$12B+ Capital Deployed</b><span>Deployed across 40+ markets</span></div>
+<div class="stat"><b>40+ Countries</b><span>Global reach & local expertise</span></div>
+<div class="stat"><b>25 Years Experience</b><span>Trusted since 2000</span></div>
+</div>
+<div class="grid" id="solutions">
+<div class="card"><div class="icon">📊</div><h3>Corporate Finance</h3><p>M&A advisory, capital raising, debt structuring, and strategic financing tailored to corporate growth objectives.</p></div>
+<div class="card"><div class="icon">🧭</div><h3>Investment Advisory</h3><p>Portfolio advisory, risk management, and investment strategy for institutions, family offices, and private clients.</p></div>
+<div class="card"><div class="icon">💼</div><h3>Asset Management</h3><p>Disciplined multi-asset portfolio management focused on long-term value creation and sustainable returns.</p></div>
+</div>
+</div>
+<section id="about" class="two">
+<div>
+<div class="section-label">About Us</div>
+<h2>A legacy of trusted partnership and performance.</h2>
+<p>Central Global Capital is an independent financial advisory and asset management firm. We serve corporations, institutional investors, and high-net-worth individuals.</p>
+<p>Our approach combines deep market insight, rigorous analysis, and a commitment to long-term relationships. Every engagement is led by senior partners with decades of experience.</p>
+<ul class="list">
+<li>Independent and conflict-free advice</li>
+<li>Senior-led execution on every mandate</li>
+<li>Global network with local intelligence</li>
+</ul>
+</div>
+<div style="background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:24px;padding:30px">
+<h3 style="font-size:28px;margin-bottom:20px">Why CGC?</h3>
+<div style="display:grid;gap:20px">
+<div><b style="color:white">Institutional Rigor</b><p style="color:var(--muted);font-size:12px;margin-top:4px">Bank-grade analysis with boutique attention.</p></div>
+<div><b style="color:white">Global Perspective</b><p style="color:var(--muted);font-size:12px;margin-top:4px">Transactions in 40+ countries since inception.</p></div>
+<div><b style="color:white">Direct Access</b><p style="color:var(--muted);font-size:12px;margin-top:4px">Chat langsung via WhatsApp: 0896-6027-6661</p></div>
+</div>
 </div>
 </section>
-
-<!-- SERVICES -->
-<section id="services" class="max-w-7xl mx-auto px-6 pb-24 grid md:grid-cols-3 gap-6">
-<div class="bg-white/5 border border-white/10 p-8 rounded-2xl"><h3 class="font-bold text-xl mb-3">Corporate Finance</h3><p class="text-gray-400 text-sm">Debt restructuring, capital raising, and M&A advisory tailored for growth-stage companies.</p></div>
-<div class="bg-white/5 border border-white/10 p-8 rounded-2xl"><h3 class="font-bold text-xl mb-3">Investment Advisory</h3><p class="text-gray-400 text-sm">Data-driven portfolio strategy and risk management for institutional and private clients.</p></div>
-<div class="bg-white/5 border border-white/10 p-8 rounded-2xl"><h3 class="font-bold text-xl mb-3">Asset Management</h3><p class="text-gray-400 text-sm">Professional asset allocation and wealth preservation with global market access.</p></div>
+<section id="contact">
+<div class="section-label">Contact</div>
+<h2 style="font-size:clamp(28px,4vw,46px);margin-bottom:30px">Start a conversation.</h2>
+<div class="contact-box">
+<div>
+<h3 style="font-size:24px;margin-bottom:12px">Get in Touch</h3>
+<p style="color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:24px">Our team is ready to discuss your capital needs. Chat langsung via WhatsApp untuk respon cepat.</p>
+<div style="font-size:13px;line-height:2;color:var(--muted)">
+<span style="color:white">WhatsApp / Phone:</span> 0896-6027-6661<br>
+<span style="color:white">Email:</span> contact@centralglobalcapital.com<br>
+<span style="color:white">HQ:</span> Jakarta • Singapore • Dubai
+</div>
+<br>
+<a class="btn btn-wa" href="https://wa.me/6289660276661?text=Halo%20Central%20Global%20Capital%2C%20saya%20ingin%20konsultasi" target="_blank" style="width:100%">💬 Chat on WhatsApp - 089660276661</a>
+</div>
+<div>
+<input placeholder="Full Name"><input placeholder="Email Address"><input placeholder="Company"><textarea rows="4" placeholder="How can we help?"></textarea>
+<a class="btn btn-wa" style="width:100%" href="https://wa.me/6289660276661?text=Halo%20Central%20Global%20Capital%2C%20saya%20ingin%20konsultasi" target="_blank">Send via WhatsApp</a>
+</div>
+</div>
 </section>
-
-<!-- FOOTER -->
-<footer class="border-t border-white/10 py-12 text-center text-gray-500 text-sm">
-<p>© 2026 Central Global Capital. All rights reserved.</p>
-<p class="mt-2">centralglobalcapital@gmail.com | Jakarta • Singapore • Global</p>
+<footer>
+<div>© 2026 Central Global Capital. WhatsApp: 089660276661</div><div>Privacy • Terms • Disclosures</div>
 </footer>
 </body>
 </html>
