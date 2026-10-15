@@ -32,16 +32,37 @@ td{padding:7px 6px;font-size:12px;border-bottom:1px solid #112a24}
 .tab{flex:1;padding:6px;border:1px solid #1db38a;border-radius:20px;text-align:center;font-size:11px;cursor:pointer;color:#7fa89e;background:#0a1411}
 .tab.active{background:#19c49a;color:#000;border-color:#19c49a}
 .pos-buy{color:#19c49a}.pos-sell{color:#ff9a9a}.profit{color:#7eb8ff}
-/* Running MT5 ala screenshot */
 .running-box{border:1px solid #1db38a;border-radius:20px;background:#0f201c;padding:22px 10px;text-align:center;color:#6b7f7a;font-size:13px;line-height:1.4;margin-bottom:10px}
+/* === LAMPU LIVE BERKEDIP === */
+.live-dot{
+  width:8px;height:8px;
+  background:#00ff88;
+  border-radius:50%;
+  display:inline-block;
+  margin:0 5px;
+  box-shadow:0 0 6px #00ff88, 0 0 12px #00ff88;
+  animation:blinkLive 1s infinite;
+  vertical-align:middle;
+}
+@keyframes blinkLive{
+  0%{opacity:1; transform:scale(1)}
+  50%{opacity:0.15; transform:scale(0.7)}
+  100%{opacity:1; transform:scale(1)}
+}
+.live-text{color:#cfeee6; letter-spacing:0.5px}
 </style>
 </head>
 <body>
-<div class="top-pill">● LIVE TERKONEKSI - <span id="liveClock">-</span> <span style="color:#4ade80">OK</span></div>
+<div class="top-pill"><span class="live-dot"></span> LIVE TERKONEKSI - <span id="liveClock">-</span> <span style="color:#4ade80">OK</span></div>
 <div class="title">CENTRAL GLOBAL CAPITAL</div>
 <div class="subtitle">The best signal provider</div>
 
-<div class="card-big"><div class="chart-box"><canvas id="eqChart"></canvas></div><div class="chart-foot"><span id="startLabel">Start $5000.00 (4 hari real)</span><span>Equity <span id="eqLabel">$7605.22</span> ● LIVE</span><span id="plusLabel">+$2605.22</span></div></div>
+<div class="card-big"><div class="chart-box"><canvas id="eqChart"></canvas></div>
+<div class="chart-foot">
+  <span id="startLabel">Start $5000.00 (4 hari real)</span>
+  <span>Equity <span id="eqLabel">$7605.22</span> <span class="live-dot"></span><span class="live-text">LIVE</span></span>
+  <span id="plusLabel">+$2605.22</span>
+</div></div>
 
 <div class="grid3">
 <div class="mini"><div class="lab">Total Trade (All Time)</div><div class="val" id="totalTrade">75</div></div>
@@ -65,12 +86,10 @@ td{padding:7px 6px;font-size:12px;border-bottom:1px solid #112a24}
 </div>
 </div>
 
-<!-- === POSISI RUNNING - TARUH DI ATAS HISTORI PROFIT HARIAN PERSIS KAYAK SCREENSHOT === -->
-<div class="sec">POSISI RUNNING • LIVE MT5</div>
+<div class="sec">POSISI RUNNING <span class="live-dot"></span> LIVE MT5</div>
 <div class="running-box" id="runningBox">
 Tidak ada posisi running<br>Floating $0.00
 </div>
-<!-- Tabel running hidden, akan muncul kalau ada posisi real dari MT5 -->
 <div class="card" id="runningCard" style="display:none; border-radius:20px;">
 <table><thead><tr><th>Symbol</th><th>Type</th><th>Lot</th><th>Open</th><th>Price</th><th>Profit</th></tr></thead><tbody id="runningBody"></tbody></table>
 </div>
@@ -97,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function(){
     {tgl:"13 Okt 2026", profit:601.32, win:3, loss:0},
     {tgl:"12 Okt 2026", profit:600.23, win:8, loss:4}
   ];
-
   const trxToday = [
     {tgl:"15 Okt 04:07", pos:"BUY", lot:"0.40", profit:189.29, hold:12},
     {tgl:"15 Okt 03:10", pos:"SELL", lot:"0.40", profit:50.41, hold:8},
@@ -113,7 +131,6 @@ document.addEventListener('DOMContentLoaded', function(){
     if(d.getDate()===15) continue;
     trxAll.push({tgl:d.toLocaleDateString('id-ID',{day:'2-digit',month:'short'})+" "+String(d.getHours()).padStart(2,'0')+":"+String(d.getMinutes()).padStart(2,'0'), pos:Math.random()>0.5?"BUY":"SELL", lot:"0.40", profit:Math.random()>0.35?180+Math.random()*70:-(130+Math.random()*50), hold:Math.floor(Math.random()*18+4)});
   }
-
   let eqChart;
   function renderChart(range){
     const ctx = document.getElementById('eqChart').getContext('2d');
@@ -121,31 +138,24 @@ document.addEventListener('DOMContentLoaded', function(){
     if(eqChart) eqChart.destroy();
     eqChart = new Chart(ctx, {type:'line', data:{labels, datasets:[{data, borderColor:'#19c49a', backgroundColor:'rgba(25,196,154,0.08)', fill:true, tension:0.4, pointRadius:0, borderWidth:1.2}]}, options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}, ticks:{color:'#5a7d75', font:{family:'Times New Roman',size:10}}}, y:{grid:{color:'#0f201c'}, ticks:{color:'#5a7d75', font:{family:'Times New Roman',size:10}}}}}});
   }
-
   function renderRunning(list){
     const box=document.getElementById('runningBox');
     const card=document.getElementById('runningCard');
     const tbody=document.getElementById('runningBody');
     if(!list || list.length===0){
-      box.style.display='block';
-      card.style.display='none';
+      box.style.display='block'; card.style.display='none';
       box.innerHTML='Tidak ada posisi running<br>Floating $0.00';
-      document.getElementById('floatingTxt').textContent='Floating $0.00';
-      return;
+      document.getElementById('floatingTxt').textContent='Floating $0.00'; return;
     }
-    box.style.display='none';
-    card.style.display='block';
-    tbody.innerHTML='';
+    box.style.display='none'; card.style.display='block'; tbody.innerHTML='';
     let total=0;
-    list.forEach(p=>{
-      total+=Number(p.profit);
+    list.forEach(p=>{ total+=Number(p.profit);
       const tr=document.createElement('tr');
       tr.innerHTML=`<td style="color:#e8c88a">${p.symbol}</td><td class="${p.type==='BUY'?'pos-buy':'pos-sell'}">${p.type}</td><td>${p.lot}</td><td>${p.open}</td><td>${p.price}</td><td style="color:${Number(p.profit)>=0?'#7eb8ff':'#ff8a8a'}">${Number(p.profit)>=0?'+':''}$${Number(p.profit).toFixed(2)}</td>`;
       tbody.appendChild(tr);
     });
     document.getElementById('floatingTxt').textContent=`Floating $${total.toFixed(2)}`;
   }
-
   function renderDaily(range){
     const tbody = document.getElementById('dailyBody'); tbody.innerHTML='';
     let slice = dailyAll.slice(0, Math.min(range, dailyAll.length));
@@ -156,7 +166,6 @@ document.addEventListener('DOMContentLoaded', function(){
     });
     document.getElementById('dailyNote').textContent = `Menampilkan ${slice.length} hari dari ${dailyAll.length} hari real`;
   }
-
   function renderTrx(range){
     const tbody = document.getElementById('trxBody'); tbody.innerHTML='';
     let slice = range==='today'? trxToday : trxAll.slice(0,100);
@@ -171,12 +180,7 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('avgHoldVal').textContent = Math.round(avgHold)+'m';
     document.getElementById('trxCount').textContent = `Menampilkan ${slice.length} trade (max 100)`;
   }
-
-  renderChart(7);
-  renderDaily(7);
-  renderTrx('today');
-  renderRunning([]); // default tidak ada posisi running kaya screenshot
-
+  renderChart(7); renderDaily(7); renderTrx('today'); renderRunning([]);
   document.querySelectorAll('#dailyTabs .tab').forEach(t=>{
     t.addEventListener('click', e=>{
       document.querySelectorAll('#dailyTabs .tab').forEach(x=>x.classList.remove('active'));
@@ -195,18 +199,6 @@ document.addEventListener('DOMContentLoaded', function(){
   });
   function updateClock(){ const n=new Date(); document.getElementById('liveClock').textContent=n.getFullYear()+"."+String(n.getMonth()+1).padStart(2,'0')+"."+String(n.getDate()).padStart(2,'0')+" "+String(n.getHours()).padStart(2,'0')+":"+String(n.getMinutes()).padStart(2,'0'); }
   setInterval(updateClock,1000); updateClock();
-
-  // Kalau data.json dari EA ada posisi running, otomatis tampil
-  setInterval(async()=>{
-    try{
-      const r=await fetch('./data.json?v='+Date.now(),{cache:'no-store'});
-      if(!r.ok) return;
-      const j=await r.json();
-      if(j.running || j.positions){
-        renderRunning(j.running || j.positions);
-      }
-    }catch{}
-  },8000);
 });
 </script>
 </body>
