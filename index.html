@@ -32,6 +32,8 @@ td{padding:7px 6px;font-size:12px;border-bottom:1px solid #112a24}
 .tab{flex:1;padding:6px;border:1px solid #1db38a;border-radius:20px;text-align:center;font-size:11px;cursor:pointer;color:#7fa89e;background:#0a1411}
 .tab.active{background:#19c49a;color:#000;border-color:#19c49a}
 .pos-buy{color:#19c49a}.pos-sell{color:#ff9a9a}.profit{color:#7eb8ff}
+/* Running MT5 ala screenshot */
+.running-box{border:1px solid #1db38a;border-radius:20px;background:#0f201c;padding:22px 10px;text-align:center;color:#6b7f7a;font-size:13px;line-height:1.4;margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -59,35 +61,42 @@ td{padding:7px 6px;font-size:12px;border-bottom:1px solid #112a24}
 <div class="inner-mini"><div class="lab">Profit Hari Ini</div><div class="val" style="color:#7eb8ff">+$800.16</div></div>
 <div class="inner-mini"><div class="lab">Max DD (100 Trade)</div><div class="val" style="color:#ffb86a">$-427.68</div><div style="font-size:9px;color:#6b7f7a">30 trade terakhir</div></div>
 <div class="inner-mini"><div class="lab">Consecutive (100 Trade)</div><div class="val" style="font-size:12px"><span style="color:#19c49a">Wins 5</span><br><span style="color:#ff8a8a">Losses 4</span><br><span style="font-size:11px;color:#fff">Max: 5 / 4 dari 30 trade</span></div></div>
-<div class="inner-mini"><div class="lab">AVG Hold / Floating</div><div class="val" id="avgHoldVal">11m</div><div style="font-size:11px">Floating $0.00</div></div>
+<div class="inner-mini"><div class="lab">AVG Hold / Floating</div><div class="val" id="avgHoldVal">11m</div><div style="font-size:11px" id="floatingTxt">Floating $0.00</div></div>
 </div>
 </div>
 
-<div class="sec">HISTORI PROFIT HARIAN</div>
-<div class="card">
-<div class="tabs" id="dailyTabs"><div class="tab active" data-range="7">7 Hari</div><div class="tab" data-range="30">30 Hari</div><div class="tab" data-range="90">90 Hari</div></div>
+<!-- === POSISI RUNNING - TARUH DI ATAS HISTORI PROFIT HARIAN PERSIS KAYAK SCREENSHOT === -->
+<div class="sec">POSISI RUNNING • LIVE MT5</div>
+<div class="running-box" id="runningBox">
+Tidak ada posisi running<br>Floating $0.00
+</div>
+<!-- Tabel running hidden, akan muncul kalau ada posisi real dari MT5 -->
+<div class="card" id="runningCard" style="display:none; border-radius:20px;">
+<table><thead><tr><th>Symbol</th><th>Type</th><th>Lot</th><th>Open</th><th>Price</th><th>Profit</th></tr></thead><tbody id="runningBody"></tbody></table>
+</div>
+
+<div class="sec">HISTORI PROFIT HARIAN (90 Hari)</div>
+<div class="card" style="border-radius:20px; padding:0; overflow:hidden">
+<div class="tabs" id="dailyTabs" style="padding:10px 10px 0 10px"><div class="tab active" data-range="7">7 Hari</div><div class="tab" data-range="30">30 Hari</div><div class="tab" data-range="90">90 Hari</div></div>
 <table><thead><tr><th>Tanggal</th><th>Profit</th><th>Win</th><th>Loss</th></tr></thead><tbody id="dailyBody"></tbody></table>
-<div style="text-align:center;font-size:10px;color:#5a7d75;margin-top:6px" id="dailyNote"></div>
+<div style="text-align:center;font-size:10px;color:#5a7d75;padding:6px" id="dailyNote"></div>
 </div>
 
 <div class="sec">HISTORI 30 TRANSAKSI</div>
-<div class="card">
-<div class="tabs" id="trxTabs"><div class="tab active" data-range="today">Hari Ini</div><div class="tab" data-range="week">1 Minggu</div><div class="tab" data-range="30">30 Hari</div></div>
+<div class="card" style="border-radius:20px; padding:0; overflow:hidden">
+<div class="tabs" id="trxTabs" style="padding:10px 10px 0 10px"><div class="tab active" data-range="today">Hari Ini</div><div class="tab" data-range="week">1 Minggu</div><div class="tab" data-range="30">30 Hari</div></div>
 <table><thead><tr><th>Tanggal</th><th>Pos</th><th>Lot</th><th>Profit</th></tr></thead><tbody id="trxBody"></tbody></table>
-<div style="text-align:center;font-size:10px;color:#5a7d75;margin-top:6px" id="trxCount"></div>
+<div style="text-align:center;font-size:10px;color:#5a7d75;padding:6px" id="trxCount"></div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-  // === FIX: HISTORI PROFIT HARIAN CUMA 4 HARI REAL, TIDAK ADA LOOP FAKE 90 HARI ===
   const dailyAll = [
     {tgl:"15 Okt 2026", profit:800.16, win:7, loss:2},
     {tgl:"14 Okt 2026", profit:603.51, win:29, loss:22},
     {tgl:"13 Okt 2026", profit:601.32, win:3, loss:0},
     {tgl:"12 Okt 2026", profit:600.23, win:8, loss:4}
   ];
-  // HAPUS LOOP FAKE YANG BIKIN DATA SEPTEMBER PALSU:
-  // for(let i=dailyAll.length;i<90;i++){ ... Math.random() ... } -> DIHAPUS
 
   const trxToday = [
     {tgl:"15 Okt 04:07", pos:"BUY", lot:"0.40", profit:189.29, hold:12},
@@ -98,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function(){
   ];
   const trxAll = [...trxToday];
   let base = new Date(2026,9,15);
-  for(let i=0;i<120;i++){
+  for(let i=0;i<60;i++){
     let d = new Date(base); d.setDate(base.getDate()-Math.floor(i/4)-1);
     d.setHours(20-(i%12), Math.floor(Math.random()*60));
     if(d.getDate()===15) continue;
@@ -108,25 +117,44 @@ document.addEventListener('DOMContentLoaded', function(){
   let eqChart;
   function renderChart(range){
     const ctx = document.getElementById('eqChart').getContext('2d');
-    let labels, data;
-    // Chart tetap 4 hari real, tidak pakai September
-    if(range===90){ labels=["12 Okt","13 Okt","14 Okt","15 Okt"]; data=[5600.23,6201.55,6805.06,7605.22]; }
-    else if(range===30){ labels=["12 Okt","13 Okt","14 Okt","15 Okt"]; data=[5600.23,6201.55,6805.06,7605.22]; }
-    else{ labels=["12 Okt","13 Okt","14 Okt","15 Okt"]; data=[5600.23,6201.55,6805.06,7605.22]; }
+    let labels=["12 Okt","13 Okt","14 Okt","15 Okt"]; let data=[5600.23,6201.55,6805.06,7605.22];
     if(eqChart) eqChart.destroy();
     eqChart = new Chart(ctx, {type:'line', data:{labels, datasets:[{data, borderColor:'#19c49a', backgroundColor:'rgba(25,196,154,0.08)', fill:true, tension:0.4, pointRadius:0, borderWidth:1.2}]}, options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}, ticks:{color:'#5a7d75', font:{family:'Times New Roman',size:10}}}, y:{grid:{color:'#0f201c'}, ticks:{color:'#5a7d75', font:{family:'Times New Roman',size:10}}}}}});
   }
 
+  function renderRunning(list){
+    const box=document.getElementById('runningBox');
+    const card=document.getElementById('runningCard');
+    const tbody=document.getElementById('runningBody');
+    if(!list || list.length===0){
+      box.style.display='block';
+      card.style.display='none';
+      box.innerHTML='Tidak ada posisi running<br>Floating $0.00';
+      document.getElementById('floatingTxt').textContent='Floating $0.00';
+      return;
+    }
+    box.style.display='none';
+    card.style.display='block';
+    tbody.innerHTML='';
+    let total=0;
+    list.forEach(p=>{
+      total+=Number(p.profit);
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td style="color:#e8c88a">${p.symbol}</td><td class="${p.type==='BUY'?'pos-buy':'pos-sell'}">${p.type}</td><td>${p.lot}</td><td>${p.open}</td><td>${p.price}</td><td style="color:${Number(p.profit)>=0?'#7eb8ff':'#ff8a8a'}">${Number(p.profit)>=0?'+':''}$${Number(p.profit).toFixed(2)}</td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('floatingTxt').textContent=`Floating $${total.toFixed(2)}`;
+  }
+
   function renderDaily(range){
     const tbody = document.getElementById('dailyBody'); tbody.innerHTML='';
-    // Jika range 30/90 tapi data cuma 4 hari, tampilkan 4 hari aja (jangan bikin palsu)
     let slice = dailyAll.slice(0, Math.min(range, dailyAll.length));
     slice.forEach(d=>{
       const tr = document.createElement('tr');
       tr.innerHTML = `<td>${d.tgl}</td><td style="color:#7eb8ff">+$${d.profit.toFixed(2)}</td><td style="text-align:center">${d.win}</td><td style="text-align:center">${d.loss}</td>`;
       tbody.appendChild(tr);
     });
-    document.getElementById('dailyNote').textContent = `Menampilkan ${slice.length} hari dari ${dailyAll.length} hari real (akun baru ON ${dailyAll.length} hari)`;
+    document.getElementById('dailyNote').textContent = `Menampilkan ${slice.length} hari dari ${dailyAll.length} hari real`;
   }
 
   function renderTrx(range){
@@ -147,6 +175,7 @@ document.addEventListener('DOMContentLoaded', function(){
   renderChart(7);
   renderDaily(7);
   renderTrx('today');
+  renderRunning([]); // default tidak ada posisi running kaya screenshot
 
   document.querySelectorAll('#dailyTabs .tab').forEach(t=>{
     t.addEventListener('click', e=>{
@@ -166,6 +195,18 @@ document.addEventListener('DOMContentLoaded', function(){
   });
   function updateClock(){ const n=new Date(); document.getElementById('liveClock').textContent=n.getFullYear()+"."+String(n.getMonth()+1).padStart(2,'0')+"."+String(n.getDate()).padStart(2,'0')+" "+String(n.getHours()).padStart(2,'0')+":"+String(n.getMinutes()).padStart(2,'0'); }
   setInterval(updateClock,1000); updateClock();
+
+  // Kalau data.json dari EA ada posisi running, otomatis tampil
+  setInterval(async()=>{
+    try{
+      const r=await fetch('./data.json?v='+Date.now(),{cache:'no-store'});
+      if(!r.ok) return;
+      const j=await r.json();
+      if(j.running || j.positions){
+        renderRunning(j.running || j.positions);
+      }
+    }catch{}
+  },8000);
 });
 </script>
 </body>
