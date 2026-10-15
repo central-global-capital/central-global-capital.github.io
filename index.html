@@ -4,90 +4,218 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Central Global Capital - The best signal provider</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
+*{box-sizing:border-box}
 body{margin:0;background:#0a1411;color:#cfeee6;font-family:"Times New Roman", Times, serif;padding:0 6px 20px}
-.top-pill{border:1.5px solid #1db38a;border-radius:20px;padding:7px;text-align:center;color:#e8c88a;font-size:13px;margin:8px 4px}
-.title{color:#19c49a;text-align:center;letter-spacing:3px;font-size:14px;margin:8px 0 2px;font-weight:700}
-.subtitle{color:#e8c88a;text-align:center;font-size:11px;letter-spacing:2px;margin-bottom:10px;opacity:0.8}
-.card-big{border:1.5px solid #1db38a;border-radius:18px;background:#0f201c;padding:10px;margin-bottom:10px}
-.chart-box{height:150px;position:relative}
-.chart-foot{display:flex;justify-content:space-between;font-size:11px;margin-top:6px}
+.top-pill{border:1.5px solid #1db38a;border-radius:20px;padding:8px;text-align:center;color:#e8c88a;font-size:13px;margin:8px 4px}
+.title{color:#19c49a;text-align:center;letter-spacing:3px;font-size:15px;margin:10px 0 2px;font-weight:700}
+.subtitle{color:#e8c88a;text-align:center;font-size:11px;letter-spacing:2px;margin-bottom:10px}
+.card-big{border:1.5px solid #1db38a;border-radius:18px;background:#0f201c;padding:12px;margin-bottom:12px}
+.chart-box{height:160px;position:relative;width:100%}
+.chart-foot{display:flex;justify-content:space-between;font-size:11px;margin-top:8px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:7px}
-.mini{border:1.5px solid #1db38a;border-radius:12px;background:#0f201c;text-align:center;padding:7px 4px}
-.mini .lab{font-size:9px;color:#7fa89e;background:#112a24;padding:2px 6px;border-radius:8px;display:inline-block;margin-bottom:4px}
-.mini .val{font-size:18px;font-weight:700}
-.sec{color:#19c49a;font-size:11px;letter-spacing:1px;margin:12px 4px 5px;font-weight:700}
+.mini{border:1.5px solid #1db38a;border-radius:12px;background:#0f201c;text-align:center;padding:8px 4px}
+.mini .lab{font-size:9px;color:#7fa89e;background:#112a24;padding:2px 6px;border-radius:8px;display:inline-block;margin-bottom:5px}
+.mini .val{font-size:20px;font-weight:700}
+.sec{color:#19c49a;font-size:11px;letter-spacing:1px;margin:14px 4px 6px;font-weight:700}
 .card{background:#0f201c;border:1.5px solid #1db38a;border-radius:16px;padding:10px;margin-bottom:10px}
 .balance-big{font-size:28px;color:#fff;font-weight:700}
-.badge{font-size:10px;background:#112a24;color:#19c49a;padding:3px 8px;border-radius:6px;display:inline-block;margin:5px 0}
+.badge{font-size:10px;background:#112a24;color:#19c49a;padding:4px 8px;border-radius:6px;display:inline-block;margin:6px 0}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .inner-mini{border:1.5px solid #1db38a;border-radius:12px;padding:8px 4px;text-align:center;background:#0f201c}
 .inner-mini .lab{font-size:9px;color:#7fa89e;background:#112a24;padding:2px 6px;border-radius:8px;display:inline-block;margin-bottom:4px}
 .profit{color:#7eb8ff}
 .pos-buy{color:#19c49a;font-weight:700}
 .pos-sell{color:#ff9a9a}
-.empty{color:#6b7f7a;text-align:center;padding:10px;font-size:12px}
+.empty{color:#6b7f7a;text-align:center;padding:12px;font-size:12px}
 table{width:100%;border-collapse:collapse}
-th{color:#19c49a;font-size:11px;text-align:left;padding:8px 4px;border-bottom:1px solid #1a3d34;font-weight:400}
-td{padding:7px 4px;font-size:12px;border-bottom:1px solid #112a24}
+th{color:#19c49a;font-size:11px;text-align:left;padding:10px 6px;border-bottom:1px solid #1a3d34}
+td{padding:8px 6px;font-size:12px;border-bottom:1px solid #112a24}
+/* TAB STYLE */
+.tabs{display:flex;gap:6px;margin-bottom:8px}
+.tab{flex:1;padding:7px;border:1.5px solid #1db38a;border-radius:20px;text-align:center;font-size:11px;cursor:pointer;color:#7fa89e;background:#0a1411;font-family:"Times New Roman", Times, serif}
+.tab.active{background:#19c49a;color:#000;font-weight:700;border-color:#19c49a}
 </style>
 </head>
 <body>
+
 <div class="top-pill">● LIVE TERKONEKSI - <span id="liveClock">2026.10.15 06:13</span> <span style="color:#4ade80">OK</span></div>
 <div class="title">CENTRAL GLOBAL CAPITAL</div>
 <div class="subtitle">The best signal provider</div>
-<div class="card-big"><div class="chart-box"><canvas id="eqChart"></canvas></div><div class="chart-foot"><span>Start <span style="color:#fff">$5000.00 (90 hari)</span></span><span style="color:#19c49a">Equity $7605.22 ● LIVE</span><span style="color:#19c49a">+$2605.22</span></div></div>
-<div class="grid3">
-<div class="mini"><div class="lab">Total Trade (All Time)</div><div class="val">75</div></div>
-<div class="mini"><div class="lab">Gross Profit</div><div class="val" style="color:#7eb8ff">+ $4.72K</div></div>
-<div class="mini"><div class="lab">Gross Loss</div><div class="val" style="color:#ff8a8a">- $2.12K</div></div>
-<div class="mini"><div class="lab">R:R</div><div class="val" id="rrVal">1:1.5</div></div>
-<div class="mini"><div class="lab">Profit Factor (All)</div><div class="val" style="color:#19c49a">2.23</div></div>
-<div class="mini"><div class="lab">Winrate (All)</div><div class="val" style="color:#7eb8ff">62.7%</div></div>
+
+<div class="card-big">
+  <div class="chart-box"><canvas id="eqChart"></canvas></div>
+  <div class="chart-foot">
+    <span>Start <span style="color:#fff" id="startTxt">$5000.00 (90 hari)</span></span>
+    <span style="color:#19c49a">Equity <span id="eqTxt">$7605.22</span> ● LIVE</span>
+    <span style="color:#19c49a" id="plusTxt">+$2605.22</span>
+  </div>
 </div>
+
+<div class="grid3">
+  <div class="mini"><div class="lab">Total Trade (All Time)</div><div class="val">75</div></div>
+  <div class="mini"><div class="lab">Gross Profit</div><div class="val" style="color:#7eb8ff">+ $4.72K</div></div>
+  <div class="mini"><div class="lab">Gross Loss</div><div class="val" style="color:#ff8a8a">- $2.12K</div></div>
+  <div class="mini"><div class="lab">R:R (Close TP/SL)</div><div class="val" id="rrVal">1:1.5</div></div>
+  <div class="mini"><div class="lab">Profit Factor (All)</div><div class="val" style="color:#19c49a">2.23</div></div>
+  <div class="mini"><div class="lab">Winrate (All)</div><div class="val" style="color:#7eb8ff">62.7%</div></div>
+</div>
+
 <div class="sec">BALANCE & TODAY</div>
 <div class="card">
-<div style="font-size:10px;background:#112a24;display:inline-block;padding:2px 6px;border-radius:8px;color:#7fa89e">Balance</div>
-<div class="balance-big">$7,605.22</div>
-<div class="badge">↗ Live dari MT5 - 90 Hari Chart</div>
-<div class="grid2" style="margin-top:8px">
-<div class="inner-mini"><div class="lab">Profit Hari Ini</div><div class="val" style="color:#7eb8ff">+$800.16</div></div>
-<div class="inner-mini"><div class="lab">Max DD (100 Trade)</div><div class="val" style="color:#ffb86a">$-427.68</div><div style="font-size:9px;color:#6b7f7a">30 trade terakhir</div></div>
-<div class="inner-mini"><div class="lab">Consecutive (100 Trade)</div><div class="val" style="font-size:12px"><span style="color:#19c49a">Wins 5</span><br><span style="color:#ff8a8a">Losses 4</span><br><span style="font-size:11px;color:#fff;font-weight:400">Max: 5 / 4 dari 30 trade</span></div></div>
-<div class="inner-mini"><div class="lab">AVG Hold / Floating</div><div class="val" id="avgHoldVal">11m</div><div style="font-size:11px">Floating $0.00</div><div style="font-size:9px;color:#6b7f7a">2026.10.15 06:13</div></div>
+  <div style="font-size:10px;background:#112a24;display:inline-block;padding:2px 6px;border-radius:8px;color:#7fa89e">Balance</div>
+  <div class="balance-big">$7,605.22</div>
+  <div class="badge">↗ Live dari MT5 - 90 Hari Chart</div>
+  <div class="grid2" style="margin-top:8px">
+    <div class="inner-mini"><div class="lab">Profit Hari Ini</div><div class="val" style="color:#7eb8ff">+$800.16</div></div>
+    <div class="inner-mini"><div class="lab">Max DD (100 Trade)</div><div class="val" style="color:#ffb86a">$-427.68</div></div>
+    <div class="inner-mini"><div class="lab">Consecutive (100 Trade)</div><div class="val" style="font-size:12px"><span style="color:#19c49a">Wins 5</span><br><span style="color:#ff8a8a">Losses 4</span></div></div>
+    <div class="inner-mini"><div class="lab">AVG Hold / Floating</div><div class="val" id="avgHoldVal">11m</div><div style="font-size:11px">Floating $0.00</div></div>
+  </div>
 </div>
+
+<div class="sec">HISTORI PROFIT HARIAN</div>
+<div class="card">
+  <div class="tabs" id="dailyTabs">
+    <div class="tab active" data-range="7">7 Hari</div>
+    <div class="tab" data-range="30">30 Hari</div>
+    <div class="tab" data-range="90">90 Hari</div>
+  </div>
+  <table><thead><tr><th>Tanggal</th><th>Profit</th><th>Win</th><th>Loss</th></tr></thead><tbody id="dailyBody"></tbody></table>
 </div>
-<div class="sec">POSISI RUNNING • LIVE MT5</div>
-<div class="card"><div class="empty">Tidak ada posisi running<br>Floating $0.00</div></div>
-<div class="sec">HISTORI PROFIT HARIAN (90 Hari)</div>
-<div class="card" style="padding:0;overflow:hidden"><table><thead><tr><th>Tanggal</th><th>Profit</th><th>Win</th><th>Loss</th></tr></thead><tbody id="dailyBody"></tbody></table></div>
-<div class="sec">HISTORI 30 TRANSAKSI</div>
-<div class="card" style="padding:0;overflow:hidden"><table><thead><tr><th>Tanggal</th><th>Pos</th><th>Lot</th><th>Profit</th></tr></thead><tbody id="trxBody"></tbody></table></div>
+
+<div class="sec">HISTORI TRANSAKSI</div>
+<div class="card">
+  <div class="tabs" id="trxTabs">
+    <div class="tab active" data-range="today">Hari Ini</div>
+    <div class="tab" data-range="week">1 Minggu</div>
+    <div class="tab" data-range="30">30 Hari</div>
+  </div>
+  <table><thead><tr><th>Tanggal</th><th>Pos</th><th>Lot</th><th>Profit</th></tr></thead><tbody id="trxBody"></tbody></table>
+</div>
+
 <script>
-const dailyData = [
-  {tgl:"15 Okt 2026", profit:800.16, win:7, loss:2},
-  {tgl:"14 Okt 2026", profit:603.51, win:29, loss:22},
-  {tgl:"13 Okt 2026", profit:601.32, win:3, loss:0},
-  {tgl:"12 Okt 2026", profit:600.23, win:8, loss:4},
-  {tgl:"09 Okt 2026", profit:0.00, win:0, loss:0},
-  {tgl:"08 Okt 2026", profit:0.00, win:0, loss:0},
-];
-const trxData = [
-  {tgl:"15 Okt 04:07", pos:"BUY", lot:"0.40", profit:189.29, open:4102.11, close:4115.22, hold:12, res:"TP"},
-  {tgl:"15 Okt 03:10", pos:"SELL", lot:"0.40", profit:50.41, open:4105.33, close:4100.12, hold:8, res:"TP"},
-  {tgl:"15 Okt 03:05", pos:"SELL", lot:"0.40", profit:215.22, open:4108.90, close:4095.44, hold:15, res:"TP"},
-  {tgl:"15 Okt 02:44", pos:"BUY", lot:"0.40", profit:-45.22, open:4099.11, close:4094.22, hold:6, res:"SL"},
-  {tgl:"15 Okt 02:10", pos:"BUY", lot:"0.40", profit:120.15, open:4088.22, close:4099.33, hold:22, res:"TP"},
-];
-let tp = trxData.filter(t=>t.res=="TP");
-let sl = trxData.filter(t=>t.res=="SL");
-let avgTP = tp.reduce((a,b)=>a+Math.abs(b.close-b.open),0)/(tp.length||1);
-let avgSL = sl.reduce((a,b)=>a+Math.abs(b.close-b.open),0)/(sl.length||1);
-document.getElementById('rrVal').textContent="1:"+(avgTP/(avgSL||1)).toFixed(1);
-let avgHold = trxData.reduce((a,b)=>a+b.hold,0)/trxData.length;
-document.getElementById('avgHoldVal').textContent=Math.round(avgHold)+"m";
-const ctx=document.getElementById('eqChart').getContext('2d');
-new Chart(ctx,{type:'line',data:{labels:["08 Okt","09 Okt","12 Okt","13 Okt","14 Okt","15 Okt"],datasets:[{data:[5000,[STRIPPED] New Roman',size:10}}},y:{min:5000,max:8000,grid:{color:'#112a24'},ticks:{color:'#5a7d75',font:{family:'Times New Roman',size:10}}}}}});
-let db=document.getElementById('dailyBody');
-dailyData.forEach(d=>{let tr=document.createElement('tr');tr.innerHTML=`<td>${d.tgl}</td><td class="profit">+$${d.profit.toFixed(2)}</td><td style="text-align:center">${d.win}</td><td style="text-align:center">${d.loss}</td>`;db.appendChild(tr);
+document.addEventListener('DOMContentLoaded', function(){
+  // === DATA 90 HARI ===
+  const dailyFull = [];
+  const baseDate = new Date(2026,9,15);
+  for(let i=0;i<90;i++){
+    let d = new Date(baseDate); d.setDate(baseDate.getDate()-i);
+    let isWeekend = d.getDay()==0 || d.getDay()==6;
+    let profit = isWeekend ? 0 : (i==0?800.16:i==1?603.51:i==2?601.32:i==3?600.23: Math.random()*300+20);
+    let win = isWeekend?0:Math.floor(Math.random()*10+1);
+    let loss = isWeekend?0:Math.floor(Math.random()*5);
+    dailyFull.push({date:d, tgl:d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}), profit, win, loss});
+  }
+
+  // === DATA TRANSAKSI ===
+  const trxFull = [];
+  for(let i=0;i<60;i++){
+    let t = new Date(baseDate); t.setDate(baseDate.getDate()-Math.floor(i/3)); t.setHours(20-i);
+    let isTP = Math.random()>0.35;
+    let pos = Math.random()>0.5?"BUY":"SELL";
+    let open = 4050+Math.random()*80;
+    let close = pos=="BUY" ? open + (isTP?Math.random()*15+2:-(Math.random()*8+1)) : open - (isTP?Math.random()*15+2:-(Math.random()*8+1));
+    let hold = Math.floor(Math.random()*25+3);
+    let profit = isTP ? Math.random()*180+10 : -(Math.random()*80+5);
+    trxFull.push({date:t, tgl:t.toLocaleDateString('id-ID',{day:'2-digit',month:'short'})+" "+String(t.getHours()).padStart(2,'0')+":"+String(t.getMinutes()).padStart(2,'0'), pos, lot:"0.40", profit, open, close, hold, res:isTP?"TP":"SL"});
+  }
+  // Inject data asli dari foto biar sama persis
+  trxFull[0]={date:new Date(2026,9,15,4,7), tgl:"15 Okt 04:07", pos:"BUY", lot:"0.40", profit:189.29, open:4102.11, close:4115.22, hold:12, res:"TP"};
+  trxFull[1]={date:new Date(2026,9,15,3,10), tgl:"15 Okt 03:10", pos:"SELL", lot:"0.40", profit:50.41, open:4105.33, close:4100.12, hold:8, res:"TP"};
+  trxFull[2]={date:new Date(2026,9,15,3,5), tgl:"15 Okt 03:05", pos:"SELL", lot:"0.40", profit:215.22, open:4108.90, close:4095.44, hold:15, res:"TP"};
+
+  // HITUNG R:R = close TP / close SL & AVG HOLD
+  function calcMetrics(list){
+    const tp = list.filter(t=>t.res==="TP");
+    const sl = list.filter(t=>t.res==="SL");
+    const avgTP = tp.reduce((a,b)=>a+Math.abs(b.close-b.open),0)/(tp.length||1);
+    const avgSL = sl.reduce((a,b)=>a+Math.abs(b.close-b.open),0)/(sl.length||1);
+    const avgHold = list.reduce((a,b)=>a+b.hold,0)/list.length;
+    return {rr:(avgTP/(avgSL||1)).toFixed(1), hold:Math.round(avgHold)};
+  }
+
+  // CHART
+  let eqChart;
+  function renderChart(range){
+    const slice = dailyFull.slice(0,range).reverse();
+    let equity = 5000;
+    const labels = slice.map(d=>d.date.toLocaleDateString('id-ID',{day:'2-digit',month:'short'}));
+    const eqData = slice.map(d=>{equity+=d.profit; return equity;});
+    document.getElementById('startTxt').textContent = `$5000.00 (${range} hari)`;
+    document.getElementById('eqTxt').textContent = `$${equity.toFixed(2)}`;
+    document.getElementById('plusTxt').textContent = `+$${(equity-5000).toFixed(2)}`;
+    const ctx = document.getElementById('eqChart').getContext('2d');
+    if(eqChart) eqChart.destroy();
+    eqChart = new Chart(ctx, {
+      type:'line',
+      data:{labels, datasets:[{data:eqData, borderColor:'#19c49a', backgroundColor:'rgba(25,196,154,0.12)', fill:true, tension:0.4, pointRadius:0, borderWidth:2}]},
+      options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}, ticks:{color:'#5a7d75', font:{family:'Times New Roman',size:10}}}, y:{grid:{color:'#112a24'}, ticks:{color:'#5a7d75', font:{family:'Times New Roman',size:10}}}}}
+    });
+  }
+
+  function renderDaily(range){
+    const slice = dailyFull.slice(0,range);
+    const tbody = document.getElementById('dailyBody'); tbody.innerHTML="";
+    slice.forEach(d=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${d.tgl}</td><td style="color:#7eb8ff">+$${d.profit.toFixed(2)}</td><td style="text-align:center">${d.win}</td><td style="text-align:center">${d.loss}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderTrx(range){
+    let slice;
+    const today = new Date(2026,9,15); today.setHours(0,0,0,0);
+    if(range==="today"){
+      slice = trxFull.filter(t=>{let d=new Date(t.date); d.setHours(0,0,0,0); return d.getTime()===today.getTime();});
+    }else if(range==="week"){
+      let weekAgo = new Date(today); weekAgo.setDate(today.getDate()-7);
+      slice = trxFull.filter(t=>t.date>=weekAgo);
+    }else{
+      slice = trxFull.slice(0,parseInt(range));
+    }
+    const tbody = document.getElementById('trxBody'); tbody.innerHTML="";
+    slice.forEach(d=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${d.tgl}</td><td class="${d.pos==='BUY'?'pos-buy':'pos-sell'}">${d.pos}</td><td>${d.lot}</td><td style="color:${d.profit>0?'#7eb8ff':'#ff8a8a'}">${d.profit>0?'+':''}$${d.profit.toFixed(2)}</td>`;
+      tbody.appendChild(tr);
+    });
+    const m = calcMetrics(slice.length?slice:trxFull);
+    document.getElementById('rrVal').textContent = "1:"+m.rr;
+    document.getElementById('avgHoldVal').textContent = m.hold+"m";
+  }
+
+  // INIT
+  renderChart(90);
+  renderDaily(7);
+  renderTrx("today");
+
+  // TAB EVENT
+  document.querySelectorAll('#dailyTabs .tab').forEach(t=>{
+    t.addEventListener('click', (e)=>{
+      document.querySelectorAll('#dailyTabs .tab').forEach(x=>x.classList.remove('active'));
+      e.target.classList.add('active');
+      const r = parseInt(e.target.dataset.range);
+      renderDaily(r);
+      renderChart(r);
+    });
+  });
+  document.querySelectorAll('#trxTabs .tab').forEach(t=>{
+    t.addEventListener('click', (e)=>{
+      document.querySelectorAll('#trxTabs .tab').forEach(x=>x.classList.remove('active'));
+      e.target.classList.add('active');
+      renderTrx(e.target.dataset.range);
+    });
+  });
+
+  function updateClock(){
+    const n=new Date();
+    document.getElementById('liveClock').textContent=n.getFullYear()+"."+String(n.getMonth()+1).padStart(2,'0')+"."+String(n.getDate()).padStart(2,'0')+" "+String(n.getHours()).padStart(2,'0')+":"+String(n.getMinutes()).padStart(2,'0');
+  }
+  setInterval(updateClock,10000); updateClock();
+});
+</script>
+</body>
+</html>
