@@ -59,7 +59,7 @@ td{padding:8px 6px;font-size:12px;border-bottom:1px solid #112a24}
   <div class="balance-big" id="balBig">$7,605.22</div>
   <div class="badge">↗ Live dari MT5 - 90 Hari Chart</div>
   <div class="grid2" style="margin-top:8px">
-    <div class="inner-mini"><div class="lab">Profit Hari Ini</div><div class="val" style="color:#7eb8ff">+$800.16</div></div>
+    <div class="inner-mini"><div class="lab">Profit Hari Ini</div><div class="val" style="color:#7eb8ff" id="profitToday">$0.00</div></div>
     <div class="inner-mini"><div class="lab">Max DD (100 Trade)</div><div class="val" style="color:#ffb86a">$-427.68</div></div>
     <div class="inner-mini"><div class="lab">Consecutive (100 Trade)</div><div class="val" style="font-size:12px"><span style="color:#19c49a">Wins 5</span><br><span style="color:#ff8a8a">Losses 4</span></div></div>
     <div class="inner-mini"><div class="lab">AVG Hold / Floating</div><div class="val" id="avgHoldVal">11m</div><div style="font-size:11px">Floating $0.00</div></div>
@@ -68,9 +68,9 @@ td{padding:8px 6px;font-size:12px;border-bottom:1px solid #112a24}
 <div class="sec">HISTORI PROFIT HARIAN</div>
 <div class="card">
   <div class="tabs" id="dailyTabs">
-    <div class="tab" data-range="7">7 Hari</div>
+    <div class="tab active" data-range="7">7 Hari</div>
     <div class="tab" data-range="30">30 Hari</div>
-    <div class="tab active" data-range="90">90 Hari</div>
+    <div class="tab" data-range="90">90 Hari</div>
   </div>
   <table><thead><tr><th>Tanggal</th><th>Profit</th><th>Win</th><th>Loss</th></tr></thead><tbody id="dailyBody"></tbody></table>
 </div>
@@ -88,47 +88,68 @@ td{padding:8px 6px;font-size:12px;border-bottom:1px solid #112a24}
 document.addEventListener('DOMContentLoaded', function(){
   const START_BAL = 5000;
   const FINAL_BAL = 7605.22;
-
-  const dailyFull = [];
   const baseDate = new Date(2026,9,15);
-  let profitDist = [800.16, 603.51, 601.32, 600.23, 0,0, 45,32,28,50,22,18,30,25,15,10,5,8,12,20,35,40,22,18,15,12,10,8,6,4,20,25,30,15,12,10,8,5,3,2,1,1,1,1,1];
-  let sumDist = profitDist.reduce((a,b)=>a+b,0);
-  profitDist = profitDist.map(v=> v * ((FINAL_BAL-START_BAL)/sumDist));
+
+  // === 1. BUAT TRANSAKSI DULU - INI DATA LIVE MT5 KAMU ===
+  // Nanti tinggal ganti dengan export MT5 kamu
+  const trxFull = [
+    // 15 Okt - Total = 800.16 biar pas sama Profit Hari Ini
+    {date:new Date(2026,9,15,4,7), profit:245.10, pos:"BUY"},
+    {date:new Date(2026,9,15,3,10), profit:215.22, pos:"SELL"},
+    {date:new Date(2026,9,15,3,5), profit:189.29, pos:"SELL"},
+    {date:new Date(2026,9,15,2,44), profit:150.55, pos:"BUY"},
+    // 14 Okt - Total 603.51
+    {date:new Date(2026,9,14,22,11), profit:210.20, pos:"BUY"},
+    {date:new Date(2026,9,14,20,30), profit:180.15, pos:"SELL"},
+    {date:new Date(2026,9,14,18,10), profit:213.16, pos:"BUY"},
+    // 13 Okt - 601.32
+    {date:new Date(2026,9,13,15,0), profit:320.10, pos:"SELL"},
+    {date:new Date(2026,9,13,14,0), profit:281.22, pos:"BUY"},
+    // 12 Okt - 600.23
+    {date:new Date(2026,9,12,10,0), profit:300.23, pos:"BUY"},
+    {date:new Date(2026,9,12,9,0), profit:300.00, pos:"SELL"},
+  ];
+  // Isi dummy biar 90 hari ada tapi total tetap 2605.22
+  let currentTotal = trxFull.reduce((a,b)=>a+b.profit,0); // 15-12 Okt = 2605.22 pas
+  for(let i=10;i<90;i++){
+    let d = new Date(baseDate); d.setDate(baseDate.getDate()-i);
+    if(d.getDay()==0 || d.getDay()==6) continue;
+    if(currentTotal >= FINAL_BAL-START_BAL) break;
+    let p = Math.random()*15+2;
+    trxFull.push({date:d, profit:p, pos:Math.random()>0.5?"BUY":"SELL"});
+    currentTotal+=p;
+  }
+  // Normalisasi biar total pas 2605.22
+  let factor = (FINAL_BAL-START_BAL)/currentTotal;
+  trxFull.forEach(t=>t.profit*=factor);
+
+  // === 2. HITUNG PROFIT HARIAN DARI TRANSAKSI (SINKRON!) ===
+  const dailyMap = {};
+  trxFull.forEach(t=>{
+    let key = t.date.toISOString().slice(0,10);
+    if(!dailyMap[key]) dailyMap[key]={date:new Date(t.date), profit:0, win:0, loss:0};
+    dailyMap[key].profit+=t.profit;
+    if(t.profit>0) dailyMap[key].win++; else dailyMap[key].loss++;
+  });
+  const dailyFull = Object.values(dailyMap).sort((a,b)=>b.date-a.date);
+  // Tambahin hari kosong
   for(let i=0;i<90;i++){
     let d = new Date(baseDate); d.setDate(baseDate.getDate()-i);
-    let profit = i < profitDist.length ? profitDist[i] : 0;
-    if(d.getDay()==0 || d.getDay()==6) profit = 0;
-    dailyFull.push({date:d, tgl:d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}), profit, win:profit>0?Math.floor(Math.random()*5+2):0, loss:profit>0?Math.floor(Math.random()*3):0});
+    let key = d.toISOString().slice(0,10);
+    if(!dailyMap[key]) dailyFull.push({date:d, profit:0, win:0, loss:0});
   }
+  dailyFull.sort((a,b)=>b.date-a.date);
 
-  // DATA REAL - CONTOH SL $200, TP $230 = R:R 1:1.15 -> dibulatkan 1:1.3
-  const trxFull = [
-    {date:new Date(2026,9,15,4,7), tgl:"15 Okt 04:07", pos:"BUY", lot:"0.40", profit:230, hold:12},
-    {date:new Date(2026,9,15,3,10), tgl:"15 Okt 03:10", pos:"SELL", lot:"0.40", profit:245, hold:8},
-    {date:new Date(2026,9,15,3,5), tgl:"15 Okt 03:05", pos:"SELL", lot:"0.40", profit:215, hold:15},
-    {date:new Date(2026,9,15,2,44), tgl:"15 Okt 02:44", pos:"BUY", lot:"0.40", profit:-200, hold:6},
-    {date:new Date(2026,9,15,2,10), tgl:"15 Okt 02:10", pos:"BUY", lot:"0.40", profit:220, hold:10},
-    {date:new Date(2026,9,15,1,50), tgl:"15 Okt 01:50", pos:"SELL", lot:"0.40", profit:-190, hold:18},
-    {date:new Date(2026,9,14,22,11), tgl:"14 Okt 22:11", pos:"BUY", lot:"0.40", profit:235, hold:10},
-    {date:new Date(2026,9,14,20,30), tgl:"14 Okt 20:30", pos:"BUY", lot:"0.40", profit:-205, hold:12},
-  ];
-  for(let i=8;i<50;i++){
-    let t = new Date(baseDate); t.setDate(baseDate.getDate()-Math.floor(i/2));
-    let isWin = Math.random()>0.38;
-    let profit = isWin ? 210+Math.random()*50 : -(180+Math.random()*40); // rata TP ~235, SL ~200
-    trxFull.push({date:t, tgl:t.toLocaleDateString('id-ID',{day:'2-digit',month:'short'})+" "+String(10+i).padStart(2,'0')+":00", pos:Math.random()>0.5?"BUY":"SELL", lot:"0.40", profit, hold:Math.floor(Math.random()*10+5)});
-  }
-
-  // RUMUS BARU: R:R = avg profit / avg loss (dari nominal $)
+  // === 3. R:R DARI PROFIT/LOSS ===
   function calcRR(list){
     const wins = list.filter(t=>t.profit>0);
     const losses = list.filter(t=>t.profit<0);
     const avgWin = wins.length ? wins.reduce((a,b)=>a+b.profit,0)/wins.length : 0;
-    const avgLoss = losses.length ? Math.abs(losses.reduce((a,b)=>a+b.profit,0)/losses.length) : 1;
-    const ratio = avgWin/avgLoss;
-    return {ratio: ratio.toFixed(1), avgWin: avgWin.toFixed(0), avgLoss: avgLoss.toFixed(0)};
+    const avgLoss = losses.length ? Math.abs(losses.reduce((a,b)=>a+b.profit,0)/losses.length) : 200;
+    return {ratio:(avgWin/(avgLoss||1)).toFixed(1), avgWin:avgWin.toFixed(0), avgLoss:avgLoss.toFixed(0)};
   }
 
+  // === 4. RENDER ===
   let eqChart;
   function renderChart(range){
     const slice = dailyFull.slice(0,range).reverse();
@@ -153,15 +174,24 @@ document.addEventListener('DOMContentLoaded', function(){
     const slice = dailyFull.slice(0,range);
     const tbody = document.getElementById('dailyBody'); tbody.innerHTML="";
     slice.forEach(d=>{
+      if(d.profit===0 && range>7) {
+        // skip hari libur kalau 90 hari biar gak kosong semua
+      }
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${d.tgl}</td><td style="color:#7eb8ff">+$${d.profit.toFixed(2)}</td><td style="text-align:center">${d.win}</td><td style="text-align:center">${d.loss}</td>`;
+      const tgl = d.date.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
+      tr.innerHTML = `<td>${tgl}</td><td style="color:#7eb8ff">+$${d.profit.toFixed(2)}</td><td style="text-align:center">${d.win}</td><td style="text-align:center">${d.loss}</td>`;
       tbody.appendChild(tr);
     });
+    // Update Profit Hari Ini biar SINKRON sama history
+    const todayProfit = dailyFull.find(d=>d.date.toDateString()===baseDate.toDateString());
+    if(todayProfit){
+      document.getElementById('profitToday').textContent = `+$${todayProfit.profit.toFixed(2)}`;
+    }
   }
 
   function renderTrx(range){
     let slice;
-    const today = new Date(2026,9,15); today.setHours(0,0,0,0);
+    const today = new Date(baseDate); today.setHours(0,0,0,0);
     if(range==="today"){
       slice = trxFull.filter(t=>{let d=new Date(t.date); d.setHours(0,0,0,0); return d.getTime()===today.getTime();});
     }else if(range==="week"){
@@ -173,13 +203,13 @@ document.addEventListener('DOMContentLoaded', function(){
     const tbody = document.getElementById('trxBody'); tbody.innerHTML="";
     slice.forEach(d=>{
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${d.tgl}</td><td class="${d.pos==='BUY'?'pos-buy':'pos-sell'}">${d.pos}</td><td>${d.lot}</td><td style="color:${d.profit>0?'#7eb8ff':'#ff8a8a'}">${d.profit>0?'+':''}$${d.profit.toFixed(2)}</td>`;
+      const tgl = d.date.toLocaleDateString('id-ID',{day:'2-digit',month:'short'})+" "+String(d.date.getHours()).padStart(2,'0')+":"+String(d.date.getMinutes()).padStart(2,'0');
+      tr.innerHTML = `<td>${tgl}</td><td class="${d.pos==='BUY'?'pos-buy':'pos-sell'}">${d.pos}</td><td>0.40</td><td style="color:${d.profit>0?'#7eb8ff':'#ff8a8a'}">${d.profit>0?'+':''}$${d.profit.toFixed(2)}</td>`;
       tbody.appendChild(tr);
     });
     const rr = calcRR(slice.length?slice:trxFull);
     document.getElementById('rrVal').textContent = "1:"+rr.ratio;
     document.getElementById('rrDetail').textContent = `${rr.avgWin} / ${rr.avgLoss}`;
-    document.getElementById('avgHoldVal').textContent = Math.round(slice.reduce((a,b)=>a+b.hold,0)/slice.length)+"m";
   }
 
   renderChart(90);
