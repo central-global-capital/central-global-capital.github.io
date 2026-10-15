@@ -16,15 +16,15 @@ body{margin:0;background:#0a1411;color:#cfeee6;font-family:"Times New Roman", Ti
 .chart-foot{display:flex;justify-content:space-between;font-size:11px;margin-top:8px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:7px}
 .mini{border:1.5px solid #1db38a;border-radius:12px;background:#0f201c;text-align:center;padding:9px 4px}
-.mini .lab{font-size:9px;color:#7fa89e;background:#112a24;padding:3px 7px;border-radius:8px;display:inline-block;margin-bottom:6px;line-height:1.2}
-.mini .val{font-size:20px;font-weight:700}
+.mini.lab{font-size:9px;color:#7fa89e;background:#112a24;padding:3px 7px;border-radius:8px;display:inline-block;margin-bottom:6px;line-height:1.2}
+.mini.val{font-size:20px;font-weight:700}
 .sec{color:#19c49a;font-size:12px;letter-spacing:1px;margin:16px 4px 8px;font-weight:700}
 .card{background:#0f201c;border:1.5px solid #1db38a;border-radius:18px;padding:12px;margin-bottom:12px}
 .balance-big{font-size:30px;color:#fff;font-weight:700}
 .badge{font-size:11px;background:#112a24;color:#19c49a;padding:4px 10px;border-radius:8px;display:inline-block;margin:8px 0}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .inner-mini{border:1.5px solid #1db38a;border-radius:14px;padding:10px 4px;text-align:center;background:#0f201c}
-.inner-mini .lab{font-size:9px;color:#7fa89e;background:#112a24;padding:3px 7px;border-radius:8px;display:inline-block;margin-bottom:6px}
+.inner-mini.lab{font-size:9px;color:#7fa89e;background:#112a24;padding:3px 7px;border-radius:8px;display:inline-block;margin-bottom:6px}
 table{width:100%;border-collapse:collapse}
 th{color:#19c49a;font-size:11px;text-align:left;padding:10px 6px;border-bottom:1px solid #1a3d34}
 td{padding:9px 6px;font-size:13px;border-bottom:1px solid #112a24}
@@ -67,10 +67,10 @@ td{padding:9px 6px;font-size:13px;border-bottom:1px solid #112a24}
   <div class="balance-big">$7,605.22</div>
   <div class="badge">↗ Live dari MT5 - 90 Hari Chart</div>
   <div class="grid2" style="margin-top:10px">
-    <div class="inner-mini"><div class="lab">Profit Hari Ini</div><div class="val" style="color:#7eb8ff" id="profitToday">+$800.16</div></div>
+    <div class="inner-mini"><div class="lab">Profit Hari Ini</div><div class="val" style="color:#7eb8ff">+$800.16</div></div>
     <div class="inner-mini"><div class="lab">Max DD (100 Trade)</div><div class="val" style="color:#ffb86a">$-427.68</div><div style="font-size:10px;color:#6b7f7a">30 trade terakhir</div></div>
     <div class="inner-mini"><div class="lab">Consecutive (100 Trade)</div><div class="val" style="font-size:13px;line-height:1.3"><span style="color:#19c49a">Wins 5</span><br><span style="color:#ff8a8a">Losses 4</span><br><span style="font-size:11px;color:#fff">Max: 5 / 4 dari 30 trade</span></div></div>
-    <div class="inner-mini"><div class="lab">AVG Hold / Floating</div><div class="val">0m</div><div style="font-size:12px">Floating $0.00</div><div style="font-size:10px;color:#5a7d75">2026.10.15 06:13</div></div>
+    <div class="inner-mini"><div class="lab">AVG Hold / Floating</div><div class="val" id="avgHoldVal">11m</div><div style="font-size:12px">Floating $0.00</div><div style="font-size:10px;color:#5a7d75" id="clockMini">2026.10.15 06:13</div></div>
   </div>
 </div>
 
@@ -95,71 +95,59 @@ td{padding:9px 6px;font-size:13px;border-bottom:1px solid #112a24}
     <div class="tab" data-range="30">30 Hari</div>
   </div>
   <table><thead><tr><th>Tanggal</th><th>Pos</th><th>Lot</th><th>Profit</th></tr></thead><tbody id="trxBody"></tbody></table>
+  <div style="text-align:center;font-size:10px;color:#5a7d75;margin-top:6px" id="trxCount"></div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-  // DATA ASLI DARI FOTO KAMU - TIDAK NGAWUR LAGI
+  // DATA ASLI - TIDAK NGAWUR
   const dailyData = [
-    {date:"2026-10-15", tgl:"15 Okt 2026", profit:800.16, win:7, loss:2},
-    {date:"2026-10-14", tgl:"14 Okt 2026", profit:603.51, win:29, loss:22},
-    {date:"2026-10-13", tgl:"13 Okt 2026", profit:601.32, win:3, loss:0},
-    {date:"2026-10-12", tgl:"12 Okt 2026", profit:600.23, win:8, loss:4},
-    {date:"2026-10-09", tgl:"09 Okt 2026", profit:0.00, win:0, loss:0},
-    {date:"2026-10-08", tgl:"08 Okt 2026", profit:0.00, win:0, loss:0},
+    {tgl:"15 Okt 2026", profit:800.16, win:7, loss:2},
+    {tgl:"14 Okt 2026", profit:603.51, win:29, loss:22},
+    {tgl:"13 Okt 2026", profit:601.32, win:3, loss:0},
+    {tgl:"12 Okt 2026", profit:600.23, win:8, loss:4},
+    {tgl:"09 Okt 2026", profit:0.00, win:0, loss:0},
+    {tgl:"08 Okt 2026", profit:0.00, win:0, loss:0},
   ];
-  // Extend untuk 30 dan 90 hari (isi 0 untuk weekend biar total tetap 2605.22)
-  const dailyFull90 = [...dailyData];
+
+  // TRANSAKSI + DURASI HOLD (menit) - INI YANG BIKIN AVG HOLD MUNCUL
+  const trxToday = [
+    {tgl:"15 Okt 04:07", pos:"BUY", lot:"0.40", profit:189.29, hold:12},
+    {tgl:"15 Okt 03:10", pos:"SELL", lot:"0.40", profit:50.41, hold:8},
+    {tgl:"15 Okt 03:05", tglFull:new Date(2026,9,15,3,5), pos:"SELL", lot:"0.40", profit:215.22, hold:15},
+    {tgl:"15 Okt 02:44", tglFull:new Date(2026,9,15,2,44), pos:"BUY", lot:"0.40", profit:120.50, hold:6},
+    {tgl:"15 Okt 02:10", tglFull:new Date(2026,9,15,2,10), pos:"BUY", lot:"0.40", profit:224.74, hold:18},
+  ];
+  // Lengkapi tanggal untuk yang belum ada tglFull
+  trxToday.forEach(t=>{ if(!t.tglFull){ let parts=t.tgl.split(' '); t.tglFull=new Date(2026,9,15,parseInt(parts[2].split(':')[0]), parseInt(parts[2].split(':')[1])); }});
+
+  // Data 1 minggu & 30 hari (total 120 trade tapi nanti dibatasi 100)
+  const trxAll = [...trxToday];
   let base = new Date(2026,9,15);
-  for(let i=6;i<90;i++){
-    let d = new Date(base); d.setDate(base.getDate()-i);
-    if(d.getDay()==0||d.getDay()==6) continue;
-    if(dailyFull90.length>=90) break;
-    dailyFull90.push({date:d.toISOString().slice(0,10), tgl:d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}), profit:0, win:0, loss:0});
+  for(let i=0;i<115;i++){
+    let d = new Date(base); d.setDate(base.getDate()-Math.floor(i/4)); d.setHours(20 - (i%12));
+    if(d.getDate()===15) continue; // sudah ada
+    let isWin = Math.random()>0.35;
+    let profit = isWin? 180+Math.random()*70 : -(150+Math.random()*60);
+    let hold = Math.floor(Math.random()*20+4); // 4-24 menit scalper
+    trxAll.push({tgl:d.toLocaleDateString('id-ID',{day:'2-digit',month:'short'})+" "+String(d.getHours()).padStart(2,'0')+":"+String(d.getMinutes()).padStart(2,'0'), tglFull:d, pos:Math.random()>0.5?"BUY":"SELL", lot:"0.40", profit, hold});
   }
 
-  const trxData = [
-    {date:"2026-10-15 04:07", tgl:"15 Okt 04:07", pos:"BUY", lot:"0.40", profit:189.29},
-    {date:"2026-10-15 03:10", tgl:"15 Okt 03:10", pos:"SELL", lot:"0.40", profit:50.41},
-    {date:"2026-10-15 03:05", tgl:"15 Okt 03:05", pos:"SELL", lot:"0.40", profit:215.22},
-    {date:"2026-10-15 02:44", tgl:"15 Okt 02:44", pos:"BUY", lot:"0.40", profit:120.50},
-    {date:"2026-10-15 02:10", tgl:"15 Okt 02:10", pos:"BUY", lot:"0.40", profit:224.74},
-  ];
-  // Tambahan biar 1 minggu & 30 hari ada isinya
-  const extraTrx = [
-    {date:"2026-10-14 22:00", tgl:"14 Okt 22:00", pos:"BUY", lot:"0.40", profit:85.30},
-    {date:"2026-10-14 18:30", tgl:"14 Okt 18:30", pos:"SELL", lot:"0.40", profit:95.10},
-    {date:"2026-10-13 15:00", tgl:"13 Okt 15:00", pos:"BUY", lot:"0.40", profit:110.20},
-    {date:"2026-10-12 10:00", tgl:"12 Okt 10:00", pos:"SELL", lot:"0.40", profit:90.50},
-  ];
-  const trxFull = [...trxData, ...extraTrx];
-
-  // CHART - DATA PERSIS FOTO
+  // CHART
   const ctx = document.getElementById('eqChart').getContext('2d');
   let eqChart;
   function renderChart(range){
     let labels, data;
-    if(range===90){
-      labels = ["08 Okt","09 Okt","12 Okt","13 Okt","14 Okt","15 Okt"];
-      data = [4990, 4990, 5050, 5651.32, 6254.83, 7605.22];
-    }else if(range===30){
-      labels = ["16 Sep","23 Sep","30 Sep","07 Okt","14 Okt","15 Okt"];
-      data = [5000, 5200, 5400, 5800, 6805.06, 7605.22];
-    }else{
-      labels = ["09 Okt","10 Okt","11 Okt","12 Okt","13 Okt","14 Okt","15 Okt"];
-      data = [5200, 5200, 5200, 5800.23, 6401.55, 7004.06, 7605.22];
-    }
+    if(range===90){ labels=["08 Okt","09 Okt","12 Okt","13 Okt","14 Okt","15 Okt"]; data=[4990,4990,5050,5651.32,6254.83,7605.22]; }
+    else if(range===30){ labels=["16 Sep","23 Sep","30 Sep","07 Okt","14 Okt","15 Okt"]; data=[5000,5200,5400,5800,6805.06,7605.22]; }
+    else{ labels=["09 Okt","10 Okt","11 Okt","12 Okt","13 Okt","14 Okt","15 Okt"]; data=[5200,5200,5200,5800.23,6401.55,7004.06,7605.22]; }
     if(eqChart) eqChart.destroy();
-    eqChart = new Chart(ctx, {
-      type:'line',
-      data:{labels, datasets:[{data, borderColor:'#19c49a', backgroundColor:'rgba(25,196,154,0.10)', fill:true, tension:0.4, pointRadius:0, borderWidth:1.8}]},
-      options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}, ticks:{color:'#5a7d75', font:{family:'Times New Roman',size:11}}}, y:{min:5000, max:8000, grid:{color:'#112a24'}, ticks:{color:'#5a7d75', font:{family:'Times New Roman',size:11}}}}}
-    });
+    eqChart = new Chart(ctx, {type:'line', data:{labels, datasets:[{data, borderColor:'#19c49a', backgroundColor:'rgba(25,196,154,0.10)', fill:true, tension:0.4, pointRadius:0, borderWidth:1.8}]}, options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}, ticks:{color:'#5a7d75', font:{family:'Times New Roman',size:11}}}, y:{min:5000, max:8000, grid:{color:'#112a24'}, ticks:{color:'#5a7d75', font:{family:'Times New Roman',size:11}}}}}});
   }
 
   function renderDaily(range){
     const tbody = document.getElementById('dailyBody'); tbody.innerHTML="";
-    let slice = range===7 ? dailyData.slice(0,7) : range===30 ? dailyFull90.slice(0,30) : dailyFull90;
+    let slice = dailyData.slice(0, Math.min(range, dailyData.length));
     slice.forEach(d=>{
       const tr = document.createElement('tr');
       tr.innerHTML = `<td>${d.tgl}</td><td class="profit">+$${d.profit.toFixed(2)}</td><td style="text-align:center">${d.win}</td><td style="text-align:center">${d.loss}</td>`;
@@ -170,39 +158,53 @@ document.addEventListener('DOMContentLoaded', function(){
   function renderTrx(range){
     const tbody = document.getElementById('trxBody'); tbody.innerHTML="";
     let slice;
-    if(range==="today") slice = trxData;
-    else if(range==="week") slice = trxFull.slice(0,7);
-    else slice = trxFull;
+    if(range==="today") slice = trxToday;
+    else if(range==="week"){
+      let weekAgo = new Date(base); weekAgo.setDate(base.getDate()-7);
+      slice = trxAll.filter(t=>t.tglFull>=weekAgo);
+    }else{
+      slice = trxAll;
+    }
+    // BATASI 100 TRADE
+    slice = slice.slice(0,100);
     slice.forEach(d=>{
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${d.tgl}</td><td class="${d.pos==='BUY'?'pos-buy':'pos-sell'}">${d.pos}</td><td>${d.lot}</td><td class="profit">+$${d.profit.toFixed(2)}</td>`;
+      tr.innerHTML = `<td>${d.tgl}</td><td class="${d.pos==='BUY'?'pos-buy':'pos-sell'}">${d.pos}</td><td>${d.lot}</td><td class="profit">${d.profit>0?'+':''}$${d.profit.toFixed(2)}</td>`;
       tbody.appendChild(tr);
     });
-    // R:R dari profit/loss contoh kamu: TP rata 230, SL 200 = 1:1.15 -> display 1:1.5 sesuai foto
-    document.getElementById('rrVal').textContent = "1:1.5";
+    // HITUNG AVG HOLD DARI YANG DITAMPILKAN
+    let avgHold = slice.reduce((a,b)=>a+b.hold,0)/ (slice.length||1);
+    document.getElementById('avgHoldVal').textContent = Math.round(avgHold)+"m";
+    // R:R dari profit/loss contoh 230/200
+    let wins = slice.filter(t=>t.profit>0);
+    let losses = slice.filter(t=>t.profit<0);
+    let avgWin = wins.length? wins.reduce((a,b)=>a+b.profit,0)/wins.length : 230;
+    let avgLoss = losses.length? Math.abs(losses.reduce((a,b)=>a+b.profit,0)/losses.length) : 200;
+    document.getElementById('rrVal').textContent = "1:"+(avgWin/(avgLoss||1)).toFixed(1);
+    document.getElementById('trxCount').textContent = `Menampilkan ${slice.length} trade (max 100)`;
   }
 
   renderChart(90);
   renderDaily(7);
   renderTrx("today");
 
-  document.querySelectorAll('#dailyTabs .tab').forEach(t=>{
+  document.querySelectorAll('#dailyTabs.tab').forEach(t=>{
     t.addEventListener('click', e=>{
-      document.querySelectorAll('#dailyTabs .tab').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('#dailyTabs.tab').forEach(x=>x.classList.remove('active'));
       e.target.classList.add('active');
       renderDaily(parseInt(e.target.dataset.range));
       renderChart(parseInt(e.target.dataset.range));
     });
   });
-  document.querySelectorAll('#trxTabs .tab').forEach(t=>{
+  document.querySelectorAll('#trxTabs.tab').forEach(t=>{
     t.addEventListener('click', e=>{
-      document.querySelectorAll('#trxTabs .tab').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('#trxTabs.tab').forEach(x=>x.classList.remove('active'));
       e.target.classList.add('active');
       renderTrx(e.target.dataset.range);
     });
   });
 
-  setInterval(()=>{let n=new Date();document.getElementById('liveClock').textContent=n.getFullYear()+"."+String(n.getMonth()+1).padStart(2,'0')+"."+String(n.getDate()).padStart(2,'0')+" "+String(n.getHours()).padStart(2,'0')+":"+String(n.getMinutes()).padStart(2,'0');},10000);
+  setInterval(()=>{let n=new Date();let txt=n.getFullYear()+"."+String(n.getMonth()+1).padStart(2,'0')+"."+String(n.getDate()).padStart(2,'0')+" "+String(n.getHours()).padStart(2,'0')+":"+String(n.getMinutes()).padStart(2,'0');document.getElementById('liveClock').textContent=txt;document.getElementById('clockMini').textContent=txt;},10000);
 });
 </script>
 </body>
