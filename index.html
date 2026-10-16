@@ -71,7 +71,7 @@ async function tryFetch(){
      const j = JSON.parse(txt);
      if(!j || (!j.balance && !j.profitToday && !j.daily)){ lastErr=`Format salah di ${path}`; continue; }
      liveData=j;
-     document.getElementById('statusTxt').textContent="LIVE TERKONEKSI - "+path;
+     document.getElementById('statusTxt').textContent="LIVE TERKONEKSI";
      document.getElementById('connStatus').textContent="OK"; document.getElementById('connStatus').style.color="#4ade80";
      renderAll(); return;
    }catch(e){ lastErr=e.message; document.getElementById('debug').textContent = `ERR ${path}: ${e.message}`; }
