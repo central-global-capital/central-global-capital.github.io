@@ -18,11 +18,11 @@ table{width:100%;border-collapse:collapse}th{color:#19c49a;font-size:11px;text-a
 .tabs{display:flex;gap:6px;margin-bottom:8px}.tab{flex:1;padding:6px;border:1px solid #1db38a;border-radius:20px;text-align:center;font-size:11px;cursor:pointer;color:#7fa89e;background:#0a1411}.tab.active{background:#19c49a;color:#000;border-color:#19c49a}
 .pos-buy{color:#19c49a}.pos-sell{color:#ff9a9a}.running-box{border:1px solid #1db38a;border-radius:20px;background:#0f201c;padding:22px 10px;text-align:center;color:#6b7f7a;font-size:13px;line-height:1.4;margin-bottom:10px}
 .live-dot{width:8px;height:8px;background:#00ff88;border-radius:50%;display:inline-block;margin:0 5px;box-shadow:0 0 6px #00ff88,0 0 12px #00ff88;animation:blinkLive 1s infinite;vertical-align:middle}
-@keyframes blinkLive{0%{opacity:1;transform:scale(1)}50%{opacity:0.15;transform:scale(0.7)}100%{opacity:1;transform:scale(1)}}.live-text{color:#cfeee6}
+@keyframes blinkLive{0%{opacity:1;transform:scale(1)}50%{opacity:0.15;transform:scale(0.7)}100%{opacity:1;transform:scale(1)}}
 </style>
 </head>
 <body>
-<div class="top-pill"><span class="live-dot"></span> <span id="statusTxt">MENGHUBUNGKAN KE FIREBASE...</span> - <span id="liveClock">-</span> <span id="connStatus">WAIT</span></div>
+<div class="top-pill"><span class="live-dot"></span> LIVE TERKONEKSI - <span id="liveClock">-</span> <span id="connStatus" style="color:#4ade80">OK</span></div>
 <div class="title">CENTRAL GLOBAL CAPITAL</div><div class="subtitle">The best signal provider</div>
 <div class="card-big"><div class="chart-box"><canvas id="eqChart"></canvas></div><div class="chart-foot"><span id="startLabel">Start $5000.00</span><span>Equity <span id="eqLabel">-</span> <span class="live-dot"></span> LIVE</span><span id="plusLabel">-</span></div></div>
 <div class="grid3">
@@ -45,42 +45,30 @@ table{width:100%;border-collapse:collapse}th{color:#19c49a;font-size:11px;text-a
 </div>
 </div>
 <div class="sec">POSISI RUNNING LIVE MT5</div>
-<div class="running-box" id="runningBox">Menunggu data Firebase...</div>
+<div class="running-box" id="runningBox">Tidak ada posisi running</div>
 <div class="card" id="runningCard" style="display:none;border-radius:20px"><table><thead><tr><th>Waktu</th><th>Symbol</th><th>Type</th><th>Lot</th><th>Profit</th></tr></thead><tbody id="runningBody"></tbody></table></div>
 <div class="sec">HISTORI PROFIT HARIAN</div>
 <div class="card" style="border-radius:20px;padding:0;overflow:hidden"><div class="tabs" id="dailyTabs" style="padding:10px 10px 0 10px"><div class="tab active" data-range="7">7 Hari</div><div class="tab" data-range="30">30 Hari</div><div class="tab" data-range="90">90 Hari</div></div><table><thead><tr><th>Tanggal</th><th>Profit</th><th>Win</th><th>Loss</th></tr></thead><tbody id="dailyBody"></tbody></table><div style="text-align:center;font-size:10px;color:#5a7d75;padding:6px" id="dailyNote"></div></div>
 <div class="sec">HISTORI 30 TRANSAKSI</div>
 <div class="card" style="border-radius:20px;padding:0;overflow:hidden"><div class="tabs" id="trxTabs" style="padding:10px 10px 0 10px"><div class="tab active" data-range="today">Hari Ini</div><div class="tab" data-range="week">1 Minggu</div><div class="tab" data-range="30">30 Hari</div></div><table><thead><tr><th>Tanggal</th><th>Pos</th><th>Lot</th><th>Profit</th></tr></thead><tbody id="trxBody"></tbody></table><div style="text-align:center;font-size:10px;color:#5a7d75;padding:6px" id="trxCount"></div></div>
-<div id="debug" style="font-size:9px;color:#555;margin-top:20px;word-break:break-all"></div>
 <script>
-const BASE = "https://mrdien-scalper-default-rtdb.firebaseio.com";
-const TOKENS = ["live/LIVE_MAIN","live/LIVE","live"]; // coba 3 token biar gak kosong
+const FIREBASE_URL = "https://mrdien-scalper-default-rtdb.firebaseio.com/live/LIVE_MAIN.json";
 let liveData=null, eqChart=null, currentDailyRange=7, currentTrxRange='today';
-
-async function tryFetch(){
- let lastErr="";
- for(let path of TOKENS){
-   const url = `${BASE}/${path}.json`;
-   try{
-     document.getElementById('statusTxt').textContent="FETCH "+path;
-     const res = await fetch(url, {method:"GET", mode:"cors", cache:"no-store"});
-     const txt = await res.text();
-     document.getElementById('debug').textContent = `URL: ${url} | Status: ${res.status} | Body: ${txt.slice(0,300)}`;
-     if(!res.ok){ lastErr = `HTTP ${res.status} di ${path}`; continue; }
-     if(!txt || txt==="null"){ lastErr = `Data null di ${path}`; continue; }
-     const j = JSON.parse(txt);
-     if(!j || (!j.balance && !j.profitToday && !j.daily)){ lastErr=`Format salah di ${path}`; continue; }
-     liveData=j;
-     document.getElementById('statusTxt').textContent="LIVE TERKONEKSI";
-     document.getElementById('connStatus').textContent="OK"; document.getElementById('connStatus').style.color="#4ade80";
-     renderAll(); return;
-   }catch(e){ lastErr=e.message; document.getElementById('debug').textContent = `ERR ${path}: ${e.message}`; }
+async function fetchLive(){
+ try{
+   const res = await fetch(FIREBASE_URL, {cache:"no-store"});
+   if(!res.ok) throw new Error();
+   const j = await res.json();
+   if(!j) return;
+   liveData=j;
+   document.getElementById('connStatus').textContent="OK";
+   document.getElementById('connStatus').style.color="#4ade80";
+   renderAll();
+ }catch(e){
+   document.getElementById('connStatus').textContent="OFFLINE";
+   document.getElementById('connStatus').style.color="#ff5a5a";
  }
- document.getElementById('statusTxt').textContent="GAGAL KONEK";
- document.getElementById('connStatus').textContent="ERR: "+lastErr; document.getElementById('connStatus').style.color="#ff5a5a";
- document.getElementById('runningBox').innerHTML = `Gagal ambil Firebase<br><br>${lastErr}<br><br>Cek 1: Buka di browser:<br>${BASE}/live/LIVE_MAIN.json<br><br>Kalau keluar null = EA belum push<br>Kalau 401 = Rules Firebase belum public`;
 }
-
 function renderAll(){
  if(!liveData) return;
  document.getElementById('balanceBig').textContent="$"+Number(liveData.balance||0).toFixed(2);
@@ -95,10 +83,18 @@ function renderAll(){
  document.getElementById('totalTrade').textContent=s.total||0;
  document.getElementById('grossProfit').textContent="+ $"+(Number(s.profit||0)/1000).toFixed(2)+"K";
  document.getElementById('grossLoss').textContent="- $"+(Math.abs(Number(s.lossSum||0))/1000).toFixed(2)+"K";
- document.getElementById('pfVal').textContent=Number(s.pf||liveData.pf||0).toFixed(2);
+ document.getElementById('pfVal').textContent=Number(s.pf||0).toFixed(2);
  const win=Number(s.win||0), loss=Number(s.loss||0);
  document.getElementById('winrateVal').textContent= win+loss>0? (win/(win+loss)*100).toFixed(1)+"%":"-";
- document.getElementById('rrVal').textContent=s.profit&&s.lossSum? "1:"+(Math.abs(s.profit/s.lossSum)).toFixed(1):"1:1.5";
+ // === FIX R:R SESUAI CONTEKAN HISTORY SL 200 TP 200 ===
+ let rrText="1:1.0";
+ if(win>0 && loss>0){
+   let avgWin = Math.abs(Number(s.profit||0)) / win;
+   let avgLoss = Math.abs(Number(s.lossSum||0)) / loss;
+   let rr = avgLoss>0 ? avgWin/avgLoss : 1;
+   rrText = "1:" + rr.toFixed(1);
+ }
+ document.getElementById('rrVal').textContent=rrText;
  document.getElementById('maxDDVal').textContent="$"+Number(liveData.maxDD||0).toFixed(2);
  const c=liveData.consecutive5||{}; document.getElementById('consecVal').innerHTML=`<span style="color:#19c49a">Wins ${c.curWin||0}</span><br><span style="color:#ff8a8a">Losses ${c.curLoss||0}</span><br>Max: ${c.maxWin||0}/${c.maxLoss||0}`;
  document.getElementById('avgHoldVal').textContent=liveData.avgHold||"-";
@@ -106,7 +102,7 @@ function renderAll(){
 }
 function renderRunning(list){
  const box=document.getElementById('runningBox'), card=document.getElementById('runningCard'), tbody=document.getElementById('runningBody');
- if(!list||list.length===0){ box.style.display='block'; card.style.display='none'; box.innerHTML=`Tidak ada posisi running<br>Floating $0.00<br><br>Data running dari EA: ${liveData? JSON.stringify(liveData.running).slice(0,100):'kosong'}`; return; }
+ if(!list||list.length===0){ box.style.display='block'; card.style.display='none'; box.innerHTML=`Tidak ada posisi running<br>Floating $0.00`; return; }
  box.style.display='none'; card.style.display='block'; tbody.innerHTML=''; let total=0;
  list.forEach(p=>{ total+=Number(p.p||0); const tr=document.createElement('tr'); tr.innerHTML=`<td>${p.dt||''}</td><td style="color:#e8c88a">${p.symbol||''}</td><td class="${p.pos==='BUY'?'pos-buy':'pos-sell'}">${p.pos||''}</td><td>${Number(p.lot||0).toFixed(2)}</td><td style="color:${Number(p.p)>=0?'#7eb8ff':'#ff8a8a'}">${Number(p.p)>=0?'+':''}$${Number(p.p).toFixed(2)}</td>`; tbody.appendChild(tr); });
  document.getElementById('floatingTxt').textContent=`Floating $${total.toFixed(2)}`;
@@ -114,9 +110,8 @@ function renderRunning(list){
 function renderDaily(range){ if(!liveData||!liveData.daily) return; const tbody=document.getElementById('dailyBody'); tbody.innerHTML=''; let slice=liveData.daily.slice(0,Math.min(range,liveData.daily.length)); slice.forEach(d=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${d.display||d.date}</td><td style="color:${Number(d.p)>=0?'#7eb8ff':'#ff8a8a'}">${Number(d.p)>=0?'+':''}$${Number(d.p).toFixed(2)}</td><td style="text-align:center">${d.w}</td><td style="text-align:center">${d.l}</td>`; tbody.appendChild(tr); }); document.getElementById('dailyNote').textContent=`Menampilkan ${slice.length} dari ${liveData.daily.length} hari`; }
 function renderTrx(range){ if(!liveData||!liveData.tx) return; const tbody=document.getElementById('trxBody'); tbody.innerHTML=''; let slice=range==='today'?liveData.tx.slice(0,7): range==='week'?liveData.tx.slice(0,30): liveData.tx.slice(0,90); slice.forEach(d=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${d.dt||''}</td><td class="${d.pos==='BUY'?'pos-buy':'pos-sell'}">${d.pos}</td><td>${Number(d.lot).toFixed(2)}</td><td style="color:${Number(d.p)>=0?'#7eb8ff':'#ff8a8a'}">${Number(d.p)>=0?'+':''}$${Number(d.p).toFixed(2)}</td>`; tbody.appendChild(tr); }); document.getElementById('trxCount').textContent=`Menampilkan ${slice.length} dari ${liveData.tx.length}`; }
 function renderChart(range){ if(!liveData||!liveData.daily) return; const ctx=document.getElementById('eqChart').getContext('2d'); let daily=liveData.daily.slice(0,range).reverse(); let labels=daily.map(d=>(d.display||d.date).split(' ').slice(0,2).join(' ')); let startEq=Number(liveData.equity||0)-daily.reduce((a,b)=>a+Number(b.p),0); let run=startEq; let data=daily.map(d=>{run+=Number(d.p); return run;}); if(eqChart) eqChart.destroy(); eqChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:'#19c49a',backgroundColor:'rgba(25,196,154,0.08)',fill:true,tension:0.4,pointRadius:0,borderWidth:1.2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#5a7d75',font:{size:10}}},y:{grid:{color:'#0f201c'},ticks:{color:'#5a7d75',font:{size:10}}}}}}); }
-
-document.addEventListener('DOMContentLoaded',()=>{ 
-  tryFetch(); setInterval(tryFetch,3000);
+document.addEventListener('DOMContentLoaded',()=>{
+  fetchLive(); setInterval(fetchLive,3000);
   document.querySelectorAll('#dailyTabs .tab').forEach(t=>t.addEventListener('click',e=>{document.querySelectorAll('#dailyTabs .tab').forEach(x=>x.classList.remove('active'));e.currentTarget.classList.add('active');currentDailyRange=parseInt(e.currentTarget.dataset.range);renderDaily(currentDailyRange);renderChart(currentDailyRange);}));
   document.querySelectorAll('#trxTabs .tab').forEach(t=>t.addEventListener('click',e=>{document.querySelectorAll('#trxTabs .tab').forEach(x=>x.classList.remove('active'));e.currentTarget.classList.add('active');currentTrxRange=e.currentTarget.dataset.range;renderTrx(currentTrxRange);}));
   function upd(){const n=new Date();document.getElementById('liveClock').textContent=n.getFullYear()+"."+String(n.getMonth()+1).padStart(2,'0')+"."+String(n.getDate()).padStart(2,'0')+" "+String(n.getHours()).padStart(2,'0')+":"+String(n.getMinutes()).padStart(2,'0');} setInterval(upd,1000); upd();
