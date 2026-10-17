@@ -32,29 +32,34 @@ body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,seri
 .live-mini{font-size:9px;background:#132a24;border-radius:6px;padding:4px 8px;color:#2cc8a0;display:inline-block;margin-top:4px}
 .section-title{color:#2cc8a0;font-size:11px;font-weight:700;margin:12px 0 6px;display:flex;gap:5px;align-items:center}
 
-/* === FIX TOTAL ALIGNMENT === */
+/* === FIX RAPI SEJAJAR === */
 .running-card{border:1.2px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden}
-.run-header{display:grid;grid-template-columns:36% 20% 14% 10% 20%;padding:10px 6px;background:#0e221c;border-bottom:1px solid #143a2f}
-.run-header span{color:#2cc8a0;font-size:9.5px;font-weight:700;text-align:center}
-.run-item{display:grid;grid-template-columns:36% 20% 14% 10% 20%;padding:11px 6px;border-bottom:1px solid #10241f;align-items:center}
+/* Header: judul di tengah */
+.run-header{display:grid;grid-template-columns:36% 20% 14% 10% 20%;padding:10px 4px;background:#0e221c;border-bottom:1px solid #143a2f}
+.run-header span{color:#2cc8a0;font-size:9px;font-weight:700;text-align:center}
+/* Isi: angka di kiri sejajar */
+.run-item{display:grid;grid-template-columns:36% 20% 14% 10% 20%;padding:11px 4px;border-bottom:1px solid #10241f;align-items:center}
 .run-item:last-child{border-bottom:none}
 .run-item span{text-align:left;padding-left:4px}
-.run-time{font-size:9.5px;white-space:nowrap}
+.run-time{font-size:9px;line-height:1.2;white-space:nowrap}
 .run-symbol{font-size:11px;font-weight:700}
 .run-pos{font-size:9px;font-weight:700;padding:3px 6px;border-radius:6px;display:inline-block;min-width:36px;text-align:center}
 .run-pos.BUY{color:#6fb8ff;background:rgba(111,184,255,0.12);border:1px solid rgba(111,184,255,0.25)}
 .run-pos.SELL{color:#ff8a8a;background:rgba(255,138,138,0.12);border:1px solid rgba(255,138,138,0.25)}
-.run-lot{font-size:11px}
+.run-lot{font-size:10px}
 .run-float{font-size:11px;font-weight:700}
 
 .tabs{display:flex;gap:5px;margin-bottom:5px}
 .tab{flex:1;min-width:0;padding:6px 2px;border-radius:15px;border:1.2px solid var(--border);background:transparent;color:var(--dim);font-weight:700;font-size:10px;font-family:"Times New Roman";cursor:pointer}
 .tab.active{background:var(--green);color:#06110e}
 .table-wrap{border:1.2px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden;margin-bottom:10px}
-.table-header{display:grid;grid-template-columns:28% 28% 22% 22%;padding:10px 6px;background:#0e221c;border-bottom:1px solid #143a2f}
+/* Header histori: judul tengah */
+.table-header{display:grid;grid-template-columns:28% 28% 22% 22%;padding:10px 4px;background:#0e221c;border-bottom:1px solid #143a2f}
 .table-header span{color:#2cc8a0;font-size:10px;font-weight:700;text-align:center}
-.table-row{display:grid;grid-template-columns:28% 28% 22% 22%;padding:11px 6px;border-bottom:1px solid #10241f;align-items:center}
-.table-row span{font-size:11px;text-align:left;padding-left:6px}
+/* Isi histori: angka kiri sejajar */
+.table-row{display:grid;grid-template-columns:28% 28% 22% 22%;padding:11px 4px;border-bottom:1px solid #10241f;align-items:center}
+.table-row span{font-size:11px;text-align:left;padding-left:8px}
+
 .profit{color:#6fb8ff}.loss{color:#ff8a8a}.note{font-size:10px;color:var(--dim);text-align:center;padding:12px}
 </style>
 </head>
@@ -124,7 +129,7 @@ function formatTanggalBulanTahun(dateStr){
 function listenFirebase(){
   db.ref('live/LIVE_MAIN').on('value',snap=>{
     raw=snap.val();
-    if(!raw){document.getElementById('connText').textContent='FIREBASE KOSONG'; return;}
+    if(!raw){document.getElementById('connText').textContent='FIREBASE KOSONG - EA BELUM PUSH'; return;}
     const isWeekend=[0,6].includes(new Date().getDay());
     document.getElementById('connText').textContent=(isWeekend?'MARKET LIBUR - ':'EA RUNNING - ')+'TERKONEKSI LIVE '+(raw.lastUpdate||'');
     document.getElementById('dotStatus').style.background=isWeekend?'#e8a25a':'#0fa868';
@@ -191,7 +196,8 @@ function renderT(){
   document.getElementById('labT').textContent=filtered.length;
 }
 function renderChart(){
-  const daily=window._daily||[]; const ctx=document.getElementById('eqChart').getContext('2d');
+  const daily=window._daily||[];
+  const ctx=document.getElementById('eqChart').getContext('2d');
   const sortedDaily=[...daily].reverse();
   let totalProfit=0; sortedDaily.forEach(d=>totalProfit+=d.p);
   let startBalance=raw.balance - totalProfit;
@@ -200,7 +206,11 @@ function renderChart(){
   sortedDaily.forEach(d=>{ running+=d.p; labels.push(d.display.slice(0,6)); data.push(running); });
   if(labels.length===0){ labels=['Start','Now']; data=[startBalance,raw.balance]; }
   if(chart) chart.destroy();
-  chart=new Chart(ctx,{type:'line',data:{labels:labels,[STRIPPED]
+  chart=new Chart(ctx,{
+    type:'line',
+    data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.18)',borderWidth:2.5,tension:0.35,fill:true,pointRadius:0,pointHoverRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' $'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}
+  });
 }
 function setP(v,el){pTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderP();}
 function setT(v,el){tTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderT();}
