@@ -3,119 +3,88 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Daftar Bot Futures - Pilih OTP</title>
+<title>DAFTAR BOT FUTURES</title>
 <style>
   body{margin:0;background:#080a0f;color:#e5e7eb;font-family:Inter,system-ui,sans-serif;padding:14px}
   .card{background:#111827;border:1px solid #1f2937;border-radius:16px;padding:16px;margin-bottom:12px}
-  input{width:100%;padding:13px;background:#020617;border:1px solid #1f2937;color:#fff;border-radius:10px;margin:6px 0;box-sizing:border-box}
-  .btn{width:100%;padding:13px;border:0;border-radius:10px;font-weight:800;cursor:pointer}
-  .blue{background:#3b82f6;color:#fff}
-  .muted{font-size:12px;color:#9ca3af}
   .tabs{display:flex;gap:8px;margin:10px 0}
-  .tab{flex:1;padding:10px;border-radius:10px;border:1px solid #1f2937;background:#020617;color:#9ca3af;text-align:center;font-weight:700;cursor:pointer}
+  .tab{flex:1;padding:11px;border-radius:10px;border:1px solid #1f2937;background:#020617;color:#9ca3af;text-align:center;font-weight:800;cursor:pointer}
   .tab.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
+  input{width:100%;padding:13px;background:#020617;border:1px solid #1f2937;color:#fff;border-radius:10px;margin:6px 0;box-sizing:border-box}
+  .btn{width:100%;padding:13px;border:0;border-radius:10px;font-weight:800;cursor:pointer;background:#3b82f6;color:#fff}
+  .muted{font-size:12px;color:#9ca3af;text-align:center}
   .hidden{display:none}
+  .logo{text-align:center;font-size:26px;font-weight:900;margin:10px 0}
 </style>
 </head>
 <body>
 <div style="max-width:420px;margin:20px auto">
-<h2 style="text-align:center;margin:0">🚀 DAFTAR BOT FUTURES</h2>
-<p class="muted" style="text-align:center">Pilih metode OTP yang kamu punya</p>
+<div class="logo">🚀 DAFTAR BOT FUTURES</div>
+<p class="muted">Pilih metode OTP yang kamu punya</p>
 
 <div class="card" id="formBox">
   <input id="nama" placeholder="Nama Lengkap">
-  
   <div class="tabs">
-    <div id="tabWa" class="tab active" onclick="setMethod('wa')">📱 No WA</div>
-    <div id="tabEmail" class="tab" onclick="setMethod('email')">📧 Email</div>
+    <div id="tabWa" class="tab active" onclick="setM('wa')">📱 No WA</div>
+    <div id="tabEmail" class="tab" onclick="setM('email')">📧 Email</div>
   </div>
-
-  <div id="inputWa"><input id="wa" placeholder="No WA 62xxxxxx (contoh 62812xxxx)"></div>
-  <div id="inputEmail" class="hidden"><input id="email" placeholder="Email kamu (contoh gmail)"></div>
-
-  <input id="apiKey" placeholder="Binance API Key (Futures)">
-  <input id="apiSecret" placeholder="Binance Secret Key">
-  <div style="background:#020617;padding:8px;border-radius:8px;font-size:11px;margin:6px 0;color:#9ca3af">API: Binance > API Management > Create > Aktifkan Futures Only > Paste disini</div>
-  
-  <button class="btn blue" onclick="daftar()">DAFTAR & KIRIM OTP</button>
-  <div id="msg" class="muted" style="text-align:center;margin-top:8px"></div>
+  <div id="inWa"><input id="wa" placeholder="No WA 089660276661"></div>
+  <div id="inEmail" class="hidden"><input id="email" placeholder="Email kamu"></div>
+  <button class="btn" onclick="daftar()">DAFTAR & KIRIM OTP</button>
+  <div id="msg" class="muted" style="margin-top:8px"></div>
 </div>
 
 <div class="card hidden" id="otpBox">
-  <div style="text-align:center"><b id="otpTitle">Kode OTP Dikirim</b><br><span class="muted" id="otpInfo"></span></div>
-  <input id="otpInput" placeholder="6 digit OTP" maxlength="6" style="text-align:center;font-size:20px;letter-spacing:6px">
-  <button class="btn blue" onclick="verifOtp()">VERIFIKASI & AKTIFKAN</button>
+  <div style="text-align:center"><b id="otpTitle">Kode OTP</b><br><span class="muted" id="otpInfo"></span></div>
+  <input id="otpInput" placeholder="6 digit OTP" maxlength="6" style="text-align:center;font-size:22px;letter-spacing:6px">
+  <button class="btn" onclick="verif()">VERIFIKASI OTP</button>
   <div id="otpMsg" style="text-align:center;margin-top:10px"></div>
-  <button onclick="location.reload()" style="background:transparent;border:0;color:#9ca3af;width:100%;margin-top:10px;font-size:12px">Ganti No WA / Email</button>
 </div>
 
 <div class="card hidden" id="doneBox" style="text-align:center">
   <h3>✅ BERHASIL DAFTAR</h3>
-  <p class="muted">Tunggu admin approve + isi gas. Kamu akan dapat notif.</p>
-  <div style="background:#020617;padding:10px;border-radius:10px;font-size:13px;margin:10px 0">ID KAMU: <b id="myId" style="color:#22c55e"></b><br><span class="muted">Pakai No WA / Email buat login nanti</span></div>
-  <a id="dashLink" href="dashboard.html"><button class="btn blue">KE DASHBOARD</button></a>
+  <p class="muted">Akun kamu sudah jadi. Hubungi admin untuk aktifkan gas.</p>
+  <div style="background:#020617;padding:10px;border-radius:10px;font-size:13px">ID KAMU: <b id="myId" style="color:#22c55e"></b></div>
+  <a href="dashboard.html"><button class="btn" style="margin-top:10px">MASUK DASHBOARD</button></a>
 </div>
 </div>
 
 <script>
 const FB="https://mrdien-scalper-default-rtdb.firebaseio.com";
-let method='wa', tempData={}, genOtp="";
-
-function setMethod(m){
-  method=m;
-  document.getElementById('tabWa').classList.toggle('active',m==='wa');
-  document.getElementById('tabEmail').classList.toggle('active',m==='email');
-  document.getElementById('inputWa').classList.toggle('hidden',m!=='wa');
-  document.getElementById('inputEmail').classList.toggle('hidden',m!=='email');
-}
-
+let method='wa',temp={},genOtp="";
+function setM(m){method=m;document.getElementById('tabWa').classList.toggle('active',m=='wa');document.getElementById('tabEmail').classList.toggle('active',m=='email');document.getElementById('inWa').classList.toggle('hidden',m!='wa');document.getElementById('inEmail').classList.toggle('hidden',m!='email');}
 function genId(){return "CLIENT_"+Math.floor(100+Math.random()*900)}
-function genOtpCode(){return Math.floor(100000+Math.random()*900000).toString()}
-
+function genOtpC(){return Math.floor(100000+Math.random()*900000).toString()}
 async function daftar(){
   let nama=document.getElementById('nama').value.trim();
   let wa=document.getElementById('wa').value.trim().replace(/[^0-9]/g,'');
   let email=document.getElementById('email').value.trim();
-  let apiKey=document.getElementById('apiKey').value.trim();
-  let apiSecret=document.getElementById('apiSecret').value.trim();
-  
-  if(!nama||!apiKey||!apiSecret){document.getElementById('msg').innerText='Lengkapi nama & API bro';return}
-  if(method==='wa' && !wa){document.getElementById('msg').innerText='Isi No WA';return}
-  if(method==='email' && !email){document.getElementById('msg').innerText='Isi Email';return}
-
-  document.getElementById('msg').innerText='Membuat akun...';
-  let clientId=genId(); genOtp=genOtpCode();
-  tempData={client_id:clientId,nama,wa:wa||"",email:email||"",api_key:apiKey,api_secret:apiSecret,otp:genOtp,method,otp_verified:false,status:"PENDING_OTP",created_at:new Date().toISOString()};
-  
-  let key = method==='wa'? wa : email.replace(/\./g,'_');
-  await fetch(`${FB}/pending/${clientId}.json`,{method:'PUT',body:JSON.stringify(tempData)});
-  await fetch(`${FB}/otp/${key}.json`,{method:'PUT',body:JSON.stringify({code:genOtp,client_id:clientId,exp:Date.now()+10*60*1000,method})});
-
+  if(!nama){document.getElementById('msg').innerText='Isi nama dulu';return}
+  if(method=='wa'&&!wa){document.getElementById('msg').innerText='Isi No WA';return}
+  if(method=='email'&&!email){document.getElementById('msg').innerText='Isi Email';return}
+  let clientId=genId();genOtp=genOtpC();
+  temp={client_id:clientId,nama,wa,email,method,created_at:new Date().toISOString()};
+  let key=method=='wa'?wa:email.replace(/\./g,'_');
+  document.getElementById('msg').innerText='Mengirim OTP...';
+  await fetch(`${FB}/otp/${key}.json`,{method:'PUT',body:JSON.stringify({code:genOtp,client_id:clientId,exp:Date.now()+600000,method})});
+  await fetch(`${FB}/pending/${clientId}.json`,{method:'PUT',body:JSON.stringify(temp)});
   document.getElementById('formBox').classList.add('hidden');
   document.getElementById('otpBox').classList.remove('hidden');
-  document.getElementById('otpTitle').innerText=method==='wa'? 'OTP Dikirim ke WA' : 'OTP Dikirim ke Email';
-  document.getElementById('otpInfo').innerText=method==='wa'? `WA: ${wa} | ID: ${clientId}` : `Email: ${email} | ID: ${clientId}`;
-  // DEMO - tampilkan OTP, nanti ganti API beneran
-  document.getElementById('otpMsg').innerHTML=`<div class="muted">DEMO (hapus nanti):</div><div style="font-size:22px;font-weight:800;color:#fff;letter-spacing:4px">${genOtp}</div><div class="muted" style="margin-top:6px">${method==='wa'?'Akan auto kirim via API WA (Fonnte)':'Akan auto kirim via Email (EmailJS)'}</div>`;
-
-  // === DISINI PASANG API ASLI KALO UDAH ADA ===
-  // if(method==='wa'){ fetch(`https://api.fonnte.com/send?target=${wa}&message=OTP Bot: ${genOtp}`) }
-  // if(method==='email'){ emailjs.send("service_id","template_id",{to_email:email,otp:genOtp}) }
+  document.getElementById('otpTitle').innerText=method=='wa'?'OTP dikirim ke WA':'OTP dikirim ke Email';
+  document.getElementById('otpInfo').innerText=method=='wa'?wa:email;
+  document.getElementById('otpMsg').innerHTML=`DEMO OTP: <b style="font-size:24px;letter-spacing:4px;color:#fff">${genOtp}</b><br><span class="muted">Nanti auto kirim via WA/Email API</span>`;
 }
-
-async function verifOtp(){
+async function verif(){
   let inp=document.getElementById('otpInput').value.trim();
-  if(inp!==genOtp){document.getElementById('otpMsg').innerHTML='<span style="color:#ef4444">❌ OTP salah, cek lagi</span>';return}
-  
-  let lic={client_id:tempData.client_id,nama:tempData.nama,wa:tempData.wa,email:tempData.email,api_key:tempData.api_key,api_secret:tempData.api_secret,login_method:method,gas_balance:0,gas_per_day:3,status:"WAITING_PAYMENT",created_at:tempData.created_at};
+  if(inp!=genOtp){document.getElementById('otpMsg').innerHTML='<span style="color:#ef4444">❌ OTP salah</span>';return}
+  let lic={client_id:temp.client_id,nama:temp.nama,wa:temp.wa,email:temp.email,login_method:method,gas_balance:0,gas_per_day:3,status:"WAITING_PAYMENT",created_at:temp.created_at};
   await fetch(`${FB}/licenses/${lic.client_id}.json`,{method:'PUT',body:JSON.stringify(lic)});
-  await fetch(`${FB}/config/${lic.client_id}.json`,{method:'PUT',body:JSON.stringify({lot:1,mode:"single",jarak_tick:20,sl_tick:50,tp_tick:100,pair:"BTCUSDT",status:"PAUSED"})});
+  await fetch(`${FB}/config/${lic.client_id}.json`,{method:'PUT',body:JSON.stringify({lot:1,mode:"single",jarak_tick:20,sl_tick:50,tp_tick:100,pair:"BTCUSDT",status:"PAUSED",api_key:"",api_secret:""})});
   await fetch(`${FB}/live/${lic.client_id}.json`,{method:'PUT',body:JSON.stringify({balance:0,equity:0,profit_today:0,total_profit:0,open_positions:0})});
-
   document.getElementById('otpBox').classList.add('hidden');
   document.getElementById('doneBox').classList.remove('hidden');
   document.getElementById('myId').innerText=lic.client_id;
-  document.getElementById('dashLink').href=`dashboard.html`;
+  localStorage.setItem('futures_client_id',lic.client_id);
 }
 </script>
 </body>
