@@ -3,44 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CENTRAL GLOBAL CAPITAL - The best signal provider</title>
+<title>CENTRAL GLOBAL CAPITAL</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0a1512;--card:#0f211c;--border:#1cc89a;--green:#10d8a0;--gold:#d4c27a;--text:#e0f2ec;--dim:#6a8f85}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;padding:12px;max-width:480px;margin:auto}
-.live-badge{display:flex;align-items:center;justify-content:center;gap:10px;border:1.5px solid var(--border);border-radius:30px;padding:11px 18px;background:var(--card);color:var(--gold);font-weight:700;letter-spacing:1px;font-family:'JetBrains Mono',monospace}
+body{background:var(--bg);color:var(--text);font-family:"Times New Roman", Times, serif;padding:12px;max-width:480px;margin:auto}
+.live-badge{display:flex;align-items:center;justify-content:center;gap:10px;border:1.5px solid var(--border);border-radius:30px;padding:11px 18px;background:var(--card);color:var(--gold);font-weight:700;letter-spacing:1px;font-family:"Times New Roman", serif}
 .dot{width:12px;height:12px;border-radius:50%;background:#0f9d5a;box-shadow:0 0 12px #0f9d5a;animation:blink 1.2s infinite}
-@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.8)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .header{text-align:center;margin:18px 0 14px}
-.header h1{color:#2cc8a0;font-size:21px;letter-spacing:4px;font-weight:800}
-.header p{color:var(--gold);letter-spacing:2px;font-size:14px;margin-top:2px}
+.header h1{color:#2cc8a0;font-size:22px;letter-spacing:3px;font-weight:700;font-family:"Times New Roman", serif}
+.header p{color:var(--gold);letter-spacing:2px;font-size:15px;font-family:"Times New Roman", serif}
 .chart-card{border:1.5px solid var(--border);border-radius:18px;background:var(--card);padding:12px}
 .chart-wrap{height:240px}
-.chart-footer{display:flex;justify-content:space-between;font-size:11px;margin-top:8px;color:#9ec9bb;font-family:'JetBrains Mono',monospace;flex-wrap:wrap;gap:6px}
+.chart-footer{display:flex;justify-content:space-between;font-size:12px;margin-top:8px;color:#9ec9bb;font-family:"Times New Roman", serif}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.stat-box{border:1.5px solid var(--border);border-radius:16px;background:var(--card);padding:12px;text-align:center}
-.stat-label{background:#132a24;border-radius:20px;padding:3px 10px;font-size:11px;color:var(--dim);display:inline-block;margin-bottom:8px}
-.stat-val{font-size:18px;font-weight:700;font-family:'JetBrains Mono',monospace}
+/* KOTAK SAMA RATA */
+.stat-box{border:1.5px solid var(--border);border-radius:16px;background:var(--card);padding:12px;text-align:center;min-height:110px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.stat-box.equal{height:110px}
+.stat-label{background:#132a24;border-radius:20px;padding:4px 12px;font-size:11px;color:var(--dim);display:inline-block;margin-bottom:8px;font-family:"Times New Roman", serif;white-space:nowrap}
+.stat-val{font-size:20px;font-weight:700;font-family:"Times New Roman", serif}
 .balance-card{border:1.5px solid var(--border);border-radius:18px;background:var(--card);padding:16px;margin-top:12px}
-.balance-amount{font-size:34px;font-weight:800;font-family:'JetBrains Mono',monospace;margin:6px 0}
-.live-mini{display:inline-flex;align-items:center;gap:6px;background:#132a24;border-radius:8px;padding:6px 10px;font-size:12px;color:#2cc8a0}
-.section-title{color:#2cc8a0;font-weight:700;letter-spacing:1px;margin:18px 0 10px;font-size:14px;display:flex;align-items:center;gap:8px}
-.running-card{border:1.5px solid var(--border);border-radius:18px;background:var(--card);padding:18px;min-height:90px}
+.balance-amount{font-size:36px;font-weight:700;font-family:"Times New Roman", serif}
+.live-mini{display:inline-flex;gap:6px;background:#132a24;border-radius:8px;padding:6px 10px;font-size:12px;color:#2cc8a0;font-family:"Times New Roman", serif}
+.section-title{color:#2cc8a0;font-weight:700;letter-spacing:1px;margin:18px 0 10px;font-size:15px;display:flex;align-items:center;gap:8px;font-family:"Times New Roman", serif}
+.running-card{border:1.5px solid var(--border);border-radius:18px;background:var(--card);padding:18px;min-height:90px;display:flex;justify-content:center;align-items:center}
 .tabs{display:flex;gap:8px;margin-bottom:10px}
-.tab{flex:1;padding:10px;border-radius:30px;border:1.5px solid var(--border);background:transparent;color:var(--dim);font-weight:600;cursor:pointer;font-size:13px}
+.tab{flex:1;padding:10px;border-radius:30px;border:1.5px solid var(--border);background:transparent;color:var(--dim);font-weight:700;cursor:pointer;font-family:"Times New Roman", serif}
 .tab.active{background:var(--green);color:#0a1512;border-color:var(--green)}
-.table-wrap{border:1.5px solid var(--border);border-radius:18px;background:var(--card);overflow:hidden;margin-bottom:10px}
-.table-header{display:grid;grid-template-columns:1.2fr 1fr 0.5fr 0.5fr;padding:10px 14px;color:#2cc8a0;font-size:12px;border-bottom:1px solid #1a3a31}
-.table-row{display:grid;grid-template-columns:1.2fr 1fr 0.5fr 0.5fr;padding:11px 14px;border-bottom:1px solid #11221c;font-family:'JetBrains Mono',monospace;font-size:13px;align-items:center}
-.profit{color:#6bb8ff}.loss{color:#ff8a8a}.note{font-size:11px;color:var(--dim);text-align:center;padding:10px}
+.table-wrap{border:1.5px solid var(--border);border-radius:18px;background:var(--card);overflow:hidden;margin-bottom:12px}
+.table-header{display:grid;grid-template-columns:1.2fr 1fr 0.5fr 0.5fr;padding:10px 14px;color:#2cc8a0;font-size:13px;border-bottom:1px solid #1a3a31;font-family:"Times New Roman", serif;font-weight:700}
+.table-row{display:grid;grid-template-columns:1.2fr 1fr 0.5fr 0.5fr;padding:11px 14px;border-bottom:1px solid #11221c;font-family:"Times New Roman", serif;font-size:14px;align-items:center}
+.profit{color:#6bb8ff}.loss{color:#ff8a8a}.note{font-size:11px;color:var(--dim);text-align:center;padding:10px;font-family:"Times New Roman", serif}
 </style>
 </head>
 <body>
 
-<div class="live-badge"><span class="dot"></span><span id="connText">LIVE TERKONEKSI - OK</span></div>
+<div class="live-badge"><span class="dot"></span><span id="connText">TERKONEKSI - 17 OKTOBER 2026 - LIVE</span></div>
 
 <div class="header">
 <h1>CENTRAL GLOBAL CAPITAL</h1>
@@ -50,9 +51,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;paddi
 <div class="chart-card">
 <div class="chart-wrap"><canvas id="equityChart"></canvas></div>
 <div class="chart-footer">
-<span id="startInfo">Start $5000.00 (0 hari real)</span>
-<span id="equityInfo">Equity $0.00</span>
-<span style="display:flex;align-items:center;gap:6px"><span class="dot"></span>LIVE <span id="profitTotal">+$0.00</span></span>
+<span id="startInfo">Start $5000.00 (4 hari real)</span>
+<span id="equityInfo">Equity $7605.22</span>
+<span style="display:flex;align-items:center;gap:6px"><span class="dot"></span>LIVE <span id="profitTotal">+$2605.22</span></span>
 </div>
 </div>
 
@@ -60,18 +61,18 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;paddi
 
 <div class="balance-card">
 <div><span class="stat-label">Balance</span>
-<div class="balance-amount" id="balanceAmount">$0.00</div>
-<div class="live-mini">↗ Live dari MT5 - <span id="realDays">Real 0 Hari</span></div></div>
+<div class="balance-amount" id="balanceAmount">$7,605.22</div>
+<div class="live-mini">↗ Live dari MT5 - <span id="realDays">Real 4 Hari</span></div></div>
 <div class="grid2" style="margin-top:14px">
-<div class="stat-box"><div class="stat-label">Profit Hari Ini</div><div class="stat-val profit" id="profitToday">-</div></div>
-<div class="stat-box"><div class="stat-label">Max DD (100 Trade)</div><div class="stat-val" id="maxDD" style="color:#e8a25a">-</div><div style="font-size:10px;color:var(--dim)">30 trade terakhir</div></div>
-<div class="stat-box"><div class="stat-label">Consecutive (100 Trade)</div><div class="stat-val" style="font-size:12px" id="consec">-</div></div>
-<div class="stat-box"><div class="stat-label">AVG Hold / Floating</div><div class="stat-val" style="font-size:12px" id="avgHold">-</div></div>
+<div class="stat-box equal"><div class="stat-label">Profit Hari Ini</div><div class="stat-val profit" id="profitToday">+$800.16</div></div>
+<div class="stat-box equal"><div class="stat-label">Max DD (100 Trade)</div><div class="stat-val" id="maxDD" style="color:#e8a25a">$-427.68</div><div style="font-size:10px;color:var(--dim)">30 trade terakhir</div></div>
+<div class="stat-box equal"><div class="stat-label">Consecutive (100 Trade)</div><div class="stat-val" style="font-size:13px;line-height:1.4" id="consec">Wins 5<br><span style="color:#ff8a8a">Losses 4</span><br>Max: 5 / 4 dari 30 trade</div></div>
+<div class="stat-box equal"><div class="stat-label">AVG Hold / Floating</div><div class="stat-val" style="font-size:13px;line-height:1.4" id="avgHold">10m<br>Floating $0.00</div></div>
 </div>
 </div>
 
 <div class="section-title">POSISI RUNNING <span class="dot"></span> LIVE MT5</div>
-<div class="running-card" id="runningBox"><div style="text-align:center;color:var(--dim)">Tidak ada posisi running<br>Floating $0.00</div></div>
+<div class="running-card" id="runningBox">Tidak ada posisi running<br>Floating $0.00</div>
 
 <div class="section-title">HISTORI PROFIT HARIAN (<span id="profitTabLabel">7 Hari</span>)</div>
 <div class="table-wrap">
@@ -97,136 +98,39 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;paddi
 </div>
 
 <script>
-const DATA_URL = 'data.json';
-let rawData=null; let profitTab='7'; let transTab='today'; let chart=null;
-
-function fmtUSD(n){ return (n>=0?'+$':'-$')+Math.abs(n).toFixed(2); }
-function fmtDate(d){ return new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}); }
-
-async function loadData(){
-  try{
-    const res = await fetch(DATA_URL+'?t='+Date.now());
-    if(!res.ok) throw 'no';
-    rawData = await res.json();
-  }catch(e){ rawData = window.SAMPLE_DATA; }
-  renderAll();
-  const now = new Date();
-  document.getElementById('connText').textContent = 'TERKONEKSI - '+now.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})+' - LIVE';
-}
-
-function calcStats(trades){
-  const wins = trades.filter(t=>t.profit>0);
-  const losses = trades.filter(t=>t.profit<0);
-  const grossProfit = wins.reduce((a,b)=>a+b.profit,0);
-  const grossLoss = losses.reduce((a,b)=>a+b.profit,0);
-  const profitFactor = grossLoss!=0 ? Math.abs(grossProfit/grossLoss) : (grossProfit>0?grossProfit:0);
-  const winrate = trades.length? wins.length/trades.length*100 : 0;
-  const totalProfit = trades.reduce((a,b)=>a+b.profit,0);
-  let peak=0,eq=0,maxDD=0;
-  trades.slice(-100).forEach(t=>{ eq+=t.profit; if(eq>peak) peak=eq; const cur=eq-peak; if(cur<maxDD) maxDD=cur; });
-  let curW=0,curL=0,maxCW=0,maxCL=0;
-  trades.slice(-30).forEach(t=>{ if(t.profit>0){curW++;curL=0;if(curW>maxCW)maxCW=curW;}else{curL++;curW=0;if(curL>maxCL)maxCL=curL;} });
-  const holds = trades.filter(t=>t.hold_minutes).map(t=>t.hold_minutes);
-  const avgHold = holds.length? holds.reduce((a,b)=>a+b,0)/holds.length : 0;
-  return {total:trades.length,grossProfit,grossLoss,profitFactor,winrate,totalProfit,maxDD,maxCW,maxCL,avgHold}
-}
-
-function getRealDays(){ const t=rawData.trades||[]; return [...new Set(t.map(x=>x.close_date?.slice(0,10)))].length||0; }
-
-function getDailyGroups(){
-  const map={};
-  (rawData.trades||[]).forEach(t=>{ const d=t.close_date?.slice(0,10); if(!d) return; if(!map[d]) map[d]={profit:0,win:0,loss:0}; map[d].profit+=t.profit; if(t.profit>0) map[d].win++; else map[d].loss++; });
-  return Object.entries(map).sort((a,b)=>b[0].localeCompare(a[0])).map(([date,v])=>({date,...v}));
-}
-
+const DATA_URL='data.json';let rawData=null,profitTab='7',transTab='today',chart=null;
+function fmtUSD(n){return (n>=0?'+$':'-$')+Math.abs(n).toFixed(2);}
+function fmtDate(d){return new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});}
+async function loadData(){try{const r=await fetch(DATA_URL+'?t='+Date.now());if(!r.ok)throw'no';rawData=await r.json();}catch(e){rawData=window.SAMPLE_DATA;}renderAll();}
+function calcStats(t){const w=t.filter(x=>x.profit>0),l=t.filter(x=>x.profit<0);const gp=w.reduce((a,b)=>a+b.profit,0),gl=l.reduce((a,b)=>a+b.profit,0);const pf=gl!=0?Math.abs(gp/gl):gp;const wr=t.length?w.length/t.length*100:0,tot=t.reduce((a,b)=>a+b.profit,0);let peak=0,eq=0,mDD=0;t.slice(-100).forEach(x=>{eq+=x.profit;if(eq>peak)peak=eq;const cur=eq-peak;if(cur<mDD)mDD=cur;});let cW=0,cL=0,mCW=0,mCL=0;t.slice(-30).forEach(x=>{if(x.profit>0){cW++;cL=0;if(cW>mCW)mCW=cW;}else{cL++;cW=0;if(cL>mCL)mCL=cL;}});const h=t.filter(x=>x.hold_minutes).map(x=>x.hold_minutes);const avg=h.length?h.reduce((a,b)=>a+b,0)/h.length:0;return{total:t.length,grossProfit:gp,grossLoss:gl,profitFactor:pf,winrate:wr,totalProfit:tot,maxDD:mDD,maxCW:mCW,maxCL:mCL,avgHold:avg}}
+function getRealDays(){return [...new Set((rawData.trades||[]).map(x=>x.close_date?.slice(0,10)))].length||0;}
+function getDailyGroups(){const m={};(rawData.trades||[]).forEach(t=>{const d=t.close_date?.slice(0,10);if(!d)return;if(!m[d])m[d]={profit:0,win:0,loss:0};m[d].profit+=t.profit;if(t.profit>0)m[d].win++;else m[d].loss++;});return Object.entries(m).sort((a,b)=>b[0].localeCompare(a[0])).map(([date,v])=>({date,...v}));}
 function renderAll(){
-  const trades = (rawData.trades||[]).slice(-100);
-  const s = calcStats(trades);
-  document.getElementById('topStats').innerHTML = `
-    <div class="stat-box"><div class="stat-label">Total Trade (All Time)</div><div class="stat-val">${s.total||'-'}</div></div>
-    <div class="stat-box"><div class="stat-label">Gross Profit</div><div class="stat-val profit">${s.grossProfit?fmtUSD(s.grossProfit):'-'}</div></div>
-    <div class="stat-box"><div class="stat-label">Gross Loss</div><div class="stat-val loss">${s.grossLoss?fmtUSD(s.grossLoss):'-'}</div></div>
-    <div class="stat-box"><div class="stat-label">R:R</div><div class="stat-val">1:1.5</div></div>
-    <div class="stat-box"><div class="stat-label">Profit Factor (All)</div><div class="stat-val" style="color:#2cc8a0">${s.profitFactor? s.profitFactor.toFixed(2):'-'}</div></div>
-    <div class="stat-box"><div class="stat-label">Winrate (All)</div><div class="stat-val" style="color:#6bb8ff">${s.total? s.winrate.toFixed(1)+'%':'-'}</div></div>`;
-  document.getElementById('balanceAmount').textContent = '$'+(rawData.balance||0).toLocaleString('en-US',{minimumFractionDigits:2});
-  document.getElementById('startInfo').textContent = `Start $${(rawData.start_balance||5000).toFixed(2)} (${getRealDays()} hari real)`;
-  document.getElementById('equityInfo').textContent = `Equity $${(rawData.equity||rawData.balance||0).toFixed(2)}`;
-  document.getElementById('profitTotal').textContent = fmtUSD(s.totalProfit);
-  document.getElementById('realDays').textContent = 'Real '+getRealDays()+' Hari';
-
-  const groups=getDailyGroups();
-  const todayProfit = groups[0]?.profit||0;
-  document.getElementById('profitToday').textContent = groups.length? fmtUSD(todayProfit):'-';
-  document.getElementById('maxDD').textContent = s.maxDD? '$'+s.maxDD.toFixed(2):'-';
-  document.getElementById('consec').innerHTML = `Wins ${s.maxCW}<br><span style="color:#ff8a8a">Losses ${s.maxCL}</span><br>Max: ${s.maxCW} / ${s.maxCL} dari 30 trade`;
-  document.getElementById('avgHold').innerHTML = `${Math.round(s.avgHold)}m<br><span style="color:#7aa89d">Floating $${(rawData.floating||0).toFixed(2)}</span>`;
-
-  const runBox=document.getElementById('runningBox');
-  const running=rawData.running||[];
-  if(running.length===0){ runBox.innerHTML='<div style="text-align:center;color:var(--dim)">Tidak ada posisi running<br>Floating $'+(rawData.floating||0).toFixed(2)+'</div>'; }
-  else{ runBox.innerHTML=running.map(r=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #132a24"><span>${r.symbol} ${r.type} ${r.lots}lot</span><span class="${r.profit>=0?'profit':'loss'}">${fmtUSD(r.profit)} <span class="dot" style="display:inline-block;width:8px;height:8px"></span></span></div>`).join(''); }
-
-  renderDaily(); renderTrans(); renderChart();
-}
-
-function renderDaily(){
-  const groups=getDailyGroups();
-  let filtered=groups;
-  if(profitTab==='7') filtered=groups.slice(0,7);
-  if(profitTab==='30') filtered=groups.slice(0,30);
-  if(profitTab==='90') filtered=groups.slice(0,90);
-  document.getElementById('dailyProfitRows').innerHTML = filtered.map(g=>`<div class="table-row"><span>${fmtDate(g.date)}</span><span class="${g.profit>=0?'profit':'loss'}">${fmtUSD(g.profit)}</span><span style="text-align:center">${g.win}</span><span style="text-align:center">${g.loss}</span></div>`).join('');
-  document.getElementById('dailyNote').textContent = `Menampilkan ${filtered.length} hari dari ${groups.length} hari real`;
-  document.getElementById('profitTabLabel').textContent = profitTab+' Hari';
-}
-function renderTrans(){
-  let trades=(rawData.trades||[]).slice().reverse().slice(0,100);
-  const now=new Date();
-  if(transTab==='today'){ const t=now.toISOString().slice(0,10); trades=trades.filter(x=>x.close_date?.startsWith(t)); }
-  else if(transTab==='week'){ const w=new Date(now-7*86400000).toISOString().slice(0,10); trades=trades.filter(x=>x.close_date>=w); }
-  else if(transTab==='30'){ const m=new Date(now-30*86400000).toISOString().slice(0,10); trades=trades.filter(x=>x.close_date>=m); }
-  document.getElementById('transRows').innerHTML = trades.slice(0,30).map(t=>`<div class="table-row"><span>${t.close_date?.slice(5,16).replace('T',' ')}</span><span>${t.symbol}</span><span style="color:${t.type==='BUY'?'#6bb8ff':'#ff9d6b'}">${t.type}</span><span class="${t.profit>=0?'profit':'loss'}">${fmtUSD(t.profit)}</span></div>`).join('')||'<div class="note">Tidak ada data</div>';
-  document.getElementById('transCount').textContent = trades.length>30?30:trades.length;
-}
-function renderChart(){
-  const ctx=document.getElementById('equityChart').getContext('2d');
-  const trades=rawData.trades||[];
-  let equity=rawData.start_balance||5000; const labels=[]; const data=[equity];
-  labels.push('Start');
-  trades.forEach(t=>{ equity+=t.profit; labels.push(t.close_date.slice(5,10)); data.push(equity); });
-  if(chart) chart.destroy();
-  chart=new Chart(ctx,{
-    type:'line',
-    data:{labels:labels,datasets:[{data:data,borderColor:'#10d8a0',backgroundColor:'rgba(16,216,160,0.15)',fill:true,tension:0.4,pointRadius:0,borderWidth:2}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}
-  });
-}
-function setProfitTab(v,el){ profitTab=v; el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); el.classList.add('active'); renderDaily(); }
-function setTransTab(v,el){ transTab=v; el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); el.classList.add('active'); renderTrans(); }
-
-setInterval(loadData,15000);
-loadData();
+const trades=(rawData.trades||[]).slice(-100);const s=calcStats(trades);
+document.getElementById('topStats').innerHTML=`<div class="stat-box equal"><div class="stat-label">Total Trade (All Time)</div><div class="stat-val">${s.total||'-'}</div></div><div class="stat-box equal"><div class="stat-label">Gross Profit</div><div class="stat-val profit">${s.grossProfit?fmtUSD(s.grossProfit):'-'}</div></div><div class="stat-box equal"><div class="stat-label">Gross Loss</div><div class="stat-val loss">${s.grossLoss?fmtUSD(s.grossLoss):'-'}</div></div><div class="stat-box equal"><div class="stat-label">R:R</div><div class="stat-val">1:1.5</div></div><div class="stat-box equal"><div class="stat-label">Profit Factor (All)</div><div class="stat-val" style="color:#2cc8a0">${s.profitFactor?s.profitFactor.toFixed(2):'-'}</div></div><div class="stat-box equal"><div class="stat-label">Winrate (All)</div><div class="stat-val" style="color:#6bb8ff">${s.total?s.winrate.toFixed(1)+'%':'-'}</div></div>`;
+document.getElementById('balanceAmount').textContent='$'+(rawData.balance||0).toLocaleString('en-US',{minimumFractionDigits:2});
+document.getElementById('startInfo').textContent=`Start $${(rawData.start_balance||5000).toFixed(2)} (${getRealDays()} hari real)`;document.getElementById('equityInfo').textContent=`Equity $${(rawData.equity||0).toFixed(2)}`;document.getElementById('profitTotal').textContent=fmtUSD(s.totalProfit);document.getElementById('realDays').textContent='Real '+getRealDays()+' Hari';
+const groups=getDailyGroups();document.getElementById('profitToday').textContent=groups.length?fmtUSD(groups[0].profit):'-';document.getElementById('maxDD').textContent=s.maxDD?'$'+s.maxDD.toFixed(2):'-';document.getElementById('consec').innerHTML=`Wins ${s.maxCW}<br><span style="color:#ff8a8a">Losses ${s.maxCL}</span><br>Max: ${s.maxCW} / ${s.maxCL} dari 30 trade`;document.getElementById('avgHold').innerHTML=`${Math.round(s.avgHold)}m<br>Floating $${(rawData.floating||0).toFixed(2)}`;
+renderDaily();renderTrans();renderChart();
+const now=new Date();document.getElementById('connText').textContent='TERKONEKSI - '+now.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}).toUpperCase()+' - LIVE';}
+function renderDaily(){const g=getDailyGroups();let f=g;if(profitTab==='7')f=g.slice(0,7);if(profitTab==='30')f=g.slice(0,30);if(profitTab==='90')f=g.slice(0,90);document.getElementById('dailyProfitRows').innerHTML=f.map(x=>`<div class="table-row"><span>${fmtDate(x.date)}</span><span class="${x.profit>=0?'profit':'loss'}">${fmtUSD(x.profit)}</span><span style="text-align:center">${x.win}</span><span style="text-align:center">${x.loss}</span></div>`).join('');document.getElementById('dailyNote').textContent=`Menampilkan ${f.length} hari dari ${g.length} hari real`;document.getElementById('profitTabLabel').textContent=profitTab+' Hari';}
+function renderTrans(){let t=(rawData.trades||[]).slice().reverse().slice(0,100);const now=new Date();if(transTab==='today'){const d=now.toISOString().slice(0,10);t=t.filter(x=>x.close_date?.startsWith(d));}else if(transTab==='week'){const w=new Date(now-7*86400000).toISOString().slice(0,10);t=t.filter(x=>x.close_date>=w);}else if(transTab==='30'){const m=new Date(now-30*86400000).toISOString().slice(0,10);t=t.filter(x=>x.close_date>=m);}document.getElementById('transRows').innerHTML=t.slice(0,30).map(x=>`<div class="table-row"><span>${x.close_date?.slice(5,16).replace('T',' ')}</span><span>${x.symbol}</span><span style="color:${x.type==='BUY'?'#6bb8ff':'#ff9d6b'}">${x.type}</span><span class="${x.profit>=0?'profit':'loss'}">${fmtUSD(x.profit)}</span></div>`).join('')||'<div class="note">Tidak ada data</div>';document.getElementById('transCount').textContent=t.length>30?30:t.length;}
+function renderChart(){const ctx=document.getElementById('equityChart').getContext('2d');const tr=rawData.trades||[];let eq=rawData.start_balance||5000;const lb=['Start'],dt=[eq];tr.forEach(x=>{eq+=x.profit;lb.push(x.close_date.slice(5,10));dt.push(eq);});if(chart)chart.destroy();chart=new Chart(ctx,{type:'line',data:{labels:lb,datasets:[{data:dt,borderColor:'#10d8a0',backgroundColor:'rgba(16,216,160,0.15)',fill:true,tension:0.4,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}});}
+function setProfitTab(v,el){profitTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderDaily();}
+function setTransTab(v,el){transTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderTrans();}
+setInterval(loadData,15000);loadData();
 </script>
-
 <script>
-window.SAMPLE_DATA = {
-  start_balance:5000,
-  balance:7605.22,
-  equity:7605.22,
-  floating:0,
-  trades:[
-    {close_date:"2026-10-15T15:00:00",symbol:"XAUUSD",type:"BUY",profit:150.16,hold_minutes:8},
-    {close_date:"2026-10-15T13:20:00",symbol:"XAUUSD",type:"SELL",profit:200,hold_minutes:12},
-    {close_date:"2026-10-15T11:10:00",symbol:"XAUUSD",type:"BUY",profit:300,hold_minutes:5},
-    {close_date:"2026-10-15T09:00:00",symbol:"XAUUSD",type:"BUY",profit:150,hold_minutes:10},
-    {close_date:"2026-10-14T16:00:00",symbol:"XAUUSD",type:"SELL",profit:-120,hold_minutes:15},
-    {close_date:"2026-10-14T14:00:00",symbol:"XAUUSD",type:"BUY",profit:250.51,hold_minutes:9},
-    {close_date:"2026-10-13T10:00:00",symbol:"XAUUSD",type:"BUY",profit:601.32,hold_minutes:11},
-    {close_date:"2026-10-12T10:00:00",symbol:"XAUUSD",type:"SELL",profit:600.23,hold_minutes:7}
-  ],
-  running:[]
-};
+window.SAMPLE_DATA={start_balance:5000,balance:7605.22,equity:7605.22,floating:0,trades:[
+{close_date:"2026-10-15T15:00:00",symbol:"XAUUSD",type:"BUY",profit:150.16,hold_minutes:8},
+{close_date:"2026-10-15T13:20:00",symbol:"XAUUSD",type:"SELL",profit:200,hold_minutes:12},
+{close_date:"2026-10-15T11:10:00",symbol:"XAUUSD",type:"BUY",profit:300,hold_minutes:5},
+{close_date:"2026-10-15T09:00:00",symbol:"XAUUSD",type:"BUY",profit:150,hold_minutes:10},
+{close_date:"2026-10-14T16:00:00",symbol:"XAUUSD",type:"SELL",profit:-120,hold_minutes:15},
+{close_date:"2026-10-14T14:00:00",symbol:"XAUUSD",type:"BUY",profit:250.51,hold_minutes:9},
+{close_date:"2026-10-13T10:00:00",symbol:"XAUUSD",type:"BUY",profit:601.32,hold_minutes:11},
+{close_date:"2026-10-12T10:00:00",symbol:"XAUUSD",type:"SELL",profit:600.23,hold_minutes:7}
+],running:[]};
 </script>
 </body>
 </html>
