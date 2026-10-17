@@ -9,34 +9,39 @@
 :root{--bg:#0a1512;--card:#0f211c;--border:#1a8a6a;--green:#18d8a0;--gold:#d4c27a;--dim:#6d9187}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,serif;padding:6px;max-width:440px;margin:auto}
-.live-badge{display:flex;justify-content:center;align-items:center;gap:6px;border:1.2px solid var(--border);border-radius:20px;padding:6px;background:var(--card);color:var(--gold);font-weight:700;font-size:10px}
+.live-badge{display:flex;justify-content:center;align-items:center;gap:6px;border:1.2px solid var(--border);border-radius:20px;padding:7px;background:var(--card);color:var(--gold);font-weight:700;font-size:11px}
 .dot{width:6px;height:6px;border-radius:50%;background:#0fa868;box-shadow:0 0 6px #0fa868;animation:blink 1.2s infinite}
 @keyframes blink{50%{opacity:.3}}
-.header{text-align:center;margin:8px 0}
-.header h1{color:#2cc8a0;font-size:13px;letter-spacing:2.5px}
-.header p{color:var(--gold);font-size:9px;letter-spacing:1px}
-.chart-card{border:1.2px solid var(--border);border-radius:14px;background:var(--card);padding:6px}
-.chart-wrap{height:150px}
-.chart-footer{display:flex;justify-content:space-between;font-size:7.5px;color:#8dbbb0;margin-top:4px}
-.grid3{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:5px;margin-top:6px}
-.grid2{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:5px;margin-top:6px}
-.stat-box{border:1.2px solid var(--border);border-radius:10px;background:var(--card);height:58px;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:3px 1px;text-align:center}
-.stat-box.b2{height:68px}
-.stat-label{background:#132a24;border-radius:10px;padding:1px 5px;font-size:6.5px;color:var(--dim);margin-bottom:2px;white-space:nowrap;max-width:95%;overflow:hidden;text-overflow:ellipsis}
-.stat-val{font-size:11px;font-weight:700}
-.stat-val.sm{font-size:10px}
-.balance-card{border:1.2px solid var(--border);border-radius:14px;background:var(--card);padding:8px;margin-top:8px}
-.balance-amount{font-size:20px;font-weight:700}
-.live-mini{font-size:7.5px;background:#132a24;border-radius:5px;padding:2px 5px;color:#2cc8a0}
-.section-title{color:#2cc8a0;font-size:9px;font-weight:700;margin:10px 0 4px;display:flex;gap:5px;align-items:center}
-.running-card{border:1.2px solid var(--border);border-radius:12px;background:var(--card);padding:8px;min-height:48px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#6d9187;font-size:10px}
-.tabs{display:flex;gap:4px;margin-bottom:4px}
-.tab{flex:1;min-width:0;padding:5px 1px;border-radius:15px;border:1.2px solid var(--border);background:transparent;color:var(--dim);font-weight:700;font-size:9px;font-family:"Times New Roman";cursor:pointer}
+.header{text-align:center;margin:10px 0}
+.header h1{color:#2cc8a0;font-size:14px;letter-spacing:2.5px}
+.header p{color:var(--gold);font-size:10px;letter-spacing:1px}
+.chart-card{border:1.2px solid var(--border);border-radius:14px;background:var(--card);padding:8px;display:flex;gap:8px}
+.chart-main{flex:1.6;min-width:0}
+.chart-wrap{height:210px}
+.chart-side{flex:0.9;min-width:0;display:flex;flex-direction:column;gap:6px;justify-content:center}
+.side-box{border:1px solid #143a2f;border-radius:8px;background:#0e221c;padding:6px;text-align:center}
+.side-label{font-size:8px;color:var(--dim);background:#132a24;border-radius:10px;padding:1px 4px;display:inline-block;margin-bottom:3px}
+.side-val{font-size:13px;font-weight:700}
+.chart-footer{display:flex;justify-content:space-between;font-size:8.5px;color:#8dbbb0;margin-top:6px}
+.grid3{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:6px;margin-top:8px}
+.grid2{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:6px;margin-top:6px}
+.stat-box{border:1.2px solid var(--border);border-radius:10px;background:var(--card);height:62px;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:4px 2px;text-align:center}
+.stat-box.b2{height:72px}
+.stat-label{background:#132a24;border-radius:10px;padding:2px 6px;font-size:8px;color:var(--dim);margin-bottom:3px;white-space:nowrap;max-width:95%;overflow:hidden;text-overflow:ellipsis}
+.stat-val{font-size:13px;font-weight:700}
+.stat-val.sm{font-size:12px}
+.balance-card{border:1.2px solid var(--border);border-radius:14px;background:var(--card);padding:10px;margin-top:10px}
+.balance-amount{font-size:22px;font-weight:700}
+.live-mini{font-size:8.5px;background:#132a24;border-radius:5px;padding:3px 6px;color:#2cc8a0;display:inline-block;margin-top:4px}
+.section-title{color:#2cc8a0;font-size:11px;font-weight:700;margin:12px 0 6px;display:flex;gap:5px;align-items:center}
+.running-card{border:1.2px solid var(--border);border-radius:12px;background:var(--card);padding:10px;min-height:50px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#6d9187;font-size:11px}
+.tabs{display:flex;gap:5px;margin-bottom:5px}
+.tab{flex:1;min-width:0;padding:6px 2px;border-radius:15px;border:1.2px solid var(--border);background:transparent;color:var(--dim);font-weight:700;font-size:10px;font-family:"Times New Roman";cursor:pointer}
 .tab.active{background:var(--green);color:#06110e}
-.table-wrap{border:1.2px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden;margin-bottom:8px}
-.table-header{display:grid;grid-template-columns:1.2fr 1fr 0.5fr 0.5fr;padding:5px 8px;color:#2cc8a0;font-size:7.5px;font-weight:700;border-bottom:1px solid #143a2f}
-.table-row{display:grid;grid-template-columns:1.2fr 1fr 0.5fr 0.5fr;padding:6px 8px;border-bottom:1px solid #10241f;font-size:9.5px}
-.profit{color:#6fb8ff}.loss{color:#ff8a8a}.note{font-size:8px;color:var(--dim);text-align:center;padding:10px}
+.table-wrap{border:1.2px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden;margin-bottom:10px}
+.table-header{display:grid;grid-template-columns:1.2fr 1fr 0.5fr 0.5fr;padding:7px 10px;color:#2cc8a0;font-size:9px;font-weight:700;border-bottom:1px solid #143a2f}
+.table-row{display:grid;grid-template-columns:1.2fr 1fr 0.5fr 0.5fr;padding:8px 10px;border-bottom:1px solid #10241f;font-size:11px}
+.profit{color:#6fb8ff}.loss{color:#ff8a8a}.note{font-size:9px;color:var(--dim);text-align:center;padding:12px}
 </style>
 </head>
 <body>
@@ -44,7 +49,18 @@ body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,seri
 <div class="live-badge"><span class="dot" id="dotStatus"></span><span id="connText">EA RUNNING - MENGHUBUNGKAN FIREBASE...</span></div>
 <div class="header"><h1>CENTRAL GLOBAL CAPITAL</h1><p>The best signal provider</p></div>
 
-<div class="chart-card"><div class="chart-wrap"><canvas id="eqChart"></canvas></div><div class="chart-footer"><span id="fStart">-</span><span id="fEq">-</span><span style="display:flex;gap:3px;align-items:center"><span class="dot"></span><span id="fProfit">-</span></span></div></div>
+<div class="chart-card">
+  <div class="chart-main">
+    <div class="chart-wrap"><canvas id="eqChart"></canvas></div>
+    <div class="chart-footer"><span id="fStart">-</span><span id="fEq">-</span><span style="display:flex;gap:3px;align-items:center"><span class="dot"></span><span id="fProfit">-</span></span></div>
+  </div>
+  <div class="chart-side">
+    <div class="side-box"><div class="side-label">Balance</div><div class="side-val" id="sideBal">-</div></div>
+    <div class="side-box"><div class="side-label">Equity</div><div class="side-val" id="sideEq">-</div></div>
+    <div class="side-box"><div class="side-label">Floating</div><div class="side-val" id="sideFloat">-</div></div>
+    <div class="side-box"><div class="side-label">Hari Ini</div><div class="side-val profit" id="sideToday">-</div></div>
+  </div>
+</div>
 
 <div class="grid3">
 <div class="stat-box"><div class="stat-label">Total Trade (All Time)</div><div class="stat-val" id="cTotal">-</div></div>
@@ -60,9 +76,9 @@ body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,seri
 <div class="stat-label">Balance</div><div class="balance-amount" id="cBal">-</div><div class="live-mini">↗ <span id="cDays">-</span> | <span id="lastUpd">-</span></div>
 <div class="grid2">
 <div class="stat-box b2"><div class="stat-label">Profit Hari Ini</div><div class="stat-val profit sm" id="cToday">-</div></div>
-<div class="stat-box b2"><div class="stat-label">Max DD (100 Trade)</div><div class="stat-val sm" style="color:#e8a25a" id="cDD">-</div><div style="font-size:6px;color:var(--dim)">100 trade terakhir</div></div>
-<div class="stat-box b2"><div class="stat-label">Consecutive</div><div style="font-size:8px;line-height:1.2;text-align:center" id="cCons">-</div></div>
-<div class="stat-box b2"><div class="stat-label">AVG Hold / Floating</div><div style="font-size:8px;line-height:1.2;text-align:center" id="cHold">-</div></div>
+<div class="stat-box b2"><div class="stat-label">Max DD (100 Trade)</div><div class="stat-val sm" style="color:#e8a25a" id="cDD">-</div><div style="font-size:7px;color:var(--dim)">100 trade terakhir</div></div>
+<div class="stat-box b2"><div class="stat-label">Consecutive</div><div style="font-size:9px;line-height:1.3;text-align:center" id="cCons">-</div></div>
+<div class="stat-box b2"><div class="stat-label">AVG Hold / Floating</div><div style="font-size:9px;line-height:1.3;text-align:center" id="cHold">-</div></div>
 </div></div>
 
 <div class="section-title">POSISI RUNNING <span class="dot"></span> LIVE MT5</div>
@@ -94,114 +110,72 @@ body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,seri
 const FIREBASE_URL = "https://mrdien-scalper-default-rtdb.firebaseio.com/live/LIVE_MAIN.json";
 let pTab='7',tTab='today',chart=null,raw=null;
 const fmtUSD=n=> (n>=0?'+$':'-$')+Math.abs(n).toFixed(2);
-const fmtDate = d => d; // daily display sudah dari EA
 
 async function load(){
   try{
     const r=await fetch(FIREBASE_URL+'?t='+Date.now(),{cache:'no-store'});
-    if(!r.ok) throw 'Firebase HTTP '+r.status;
+    if(!r.ok) throw 'HTTP '+r.status;
     raw=await r.json();
-    if(!raw || !raw.balance) throw 'Firebase kosong - EA belum push (cek WebRequest)';
-    const isWeekend = [0,6].includes(new Date().getDay());
-    document.getElementById('connText').textContent = (isWeekend ? 'MARKET LIBUR - ' : 'EA RUNNING - ') + 'TERKONEKSI LIVE ' + (raw.lastUpdate||'').toUpperCase();
-    document.getElementById('dotStatus').style.background = isWeekend ? '#e8a25a' : '#0fa868';
-    document.getElementById('lastUpd').textContent = 'Last: '+(raw.lastUpdate||'-');
+    if(!raw || !raw.balance) throw 'Firebase kosong - EA belum push';
+    const isWeekend=[0,6].includes(new Date().getDay());
+    document.getElementById('connText').textContent=(isWeekend?'MARKET LIBUR - ':'EA RUNNING - ')+'TERKONEKSI LIVE '+(raw.lastUpdate||'');
+    document.getElementById('dotStatus').style.background=isWeekend?'#e8a25a':'#0fa868';
+    document.getElementById('lastUpd').textContent='Last: '+(raw.lastUpdate||'-');
     render();
   }catch(e){
-    document.getElementById('connText').textContent = 'GAGAL: '+e+' | Cek Firebase Rules harus public read';
-    document.getElementById('cRun').innerHTML = `<div class="note" style="color:#ff8a8a">Gagal baca Firebase<br>${e}<br><br>Buka https://mrdien-scalper-default-rtdb.firebaseio.com/live/LIVE_MAIN.json di browser, kalau 401 artinya Rules belum public.<br>Set Rules: {".read":true,".write":true}</div>`;
+    document.getElementById('connText').textContent='GAGAL: '+e;
   }
 }
-
 function render(){
-  const summary = raw.summary||{};
-  const daily = raw.daily||[];
-  const tx = raw.tx||[];
-  const running = raw.running||[];
-  const cons = raw.consecutive5||{};
-  
-  const total = summary.total||0;
-  const win = summary.win||0;
-  const loss = summary.loss||0;
-  const gp = summary.profit||0;
-  const gl = summary.lossSum||0;
-  const pf = summary.pf||0;
-  const wr = total>0 ? win/total*100 : 0;
-  const realDays = daily.length;
-
-  document.getElementById('cTotal').textContent = total;
-  document.getElementById('cGP').textContent = fmtUSD(gp);
-  document.getElementById('cGL').textContent = fmtUSD(gl);
-  document.getElementById('cWL').textContent = win+' / '+loss;
-  document.getElementById('cPF').textContent = pf.toFixed(2);
-  document.getElementById('cWR').textContent = wr.toFixed(1)+'%';
-
-  document.getElementById('cBal').textContent = '$'+raw.balance.toLocaleString('en-US',{minimumFractionDigits:2});
-  document.getElementById('fStart').textContent = `Balance $${raw.balance.toFixed(2)} (${realDays} hari)`;
-  document.getElementById('fEq').textContent = `Equity $${raw.equity.toFixed(2)}`;
-  document.getElementById('fProfit').textContent = fmtUSD(raw.profitToday||0);
-  document.getElementById('cDays').textContent = `Real ${realDays} Hari`;
-
-  document.getElementById('cToday').textContent = fmtUSD(raw.profitToday||0);
-  document.getElementById('cDD').textContent = raw.maxDD ? '$'+Math.abs(raw.maxDD).toFixed(2) : '-';
-  document.getElementById('cCons').innerHTML = `Cur: ${cons.curWin||0}W / ${cons.curLoss||0}L<br>Max: ${cons.maxWin||0}W / ${cons.maxLoss||0}L<br>Total 100: ${cons.total5||0}`;
-  document.getElementById('cHold').innerHTML = `${raw.avgHold||'7m'}<br>Floating $${(raw.floating||0).toFixed(2)}`;
-
-  document.getElementById('cRun').innerHTML = running.length ? running.map(r=>`<div style="display:flex;justify-content:space-between;width:100%;padding:2px 0"><span>${r.dt||''} ${r.symbol} ${r.pos} ${r.lot.toFixed(2)} lot</span><span class="${r.p>=0?'profit':'loss'}">${fmtUSD(r.p)}</span></div>`).join('') : `Tidak ada posisi running<br>Floating $${(raw.floating||0).toFixed(2)} - Status RUNNING`;
-
-  window._daily = daily;
-  window._tx = tx;
+  const s=raw.summary||{}, daily=raw.daily||[], tx=raw.tx||[], running=raw.running||[], cons=raw.consecutive5||{};
+  const total=s.total||0, win=s.win||0, loss=s.loss||0, gp=s.profit||0, gl=s.lossSum||0, pf=s.pf||0, wr=total>0?win/total*100:0;
+  document.getElementById('cTotal').textContent=total;
+  document.getElementById('cGP').textContent=fmtUSD(gp);
+  document.getElementById('cGL').textContent=fmtUSD(gl);
+  document.getElementById('cWL').textContent=win+' / '+loss;
+  document.getElementById('cPF').textContent=pf.toFixed(2);
+  document.getElementById('cWR').textContent=wr.toFixed(1)+'%';
+  document.getElementById('cBal').textContent='$'+raw.balance.toLocaleString('en-US',{minimumFractionDigits:2});
+  document.getElementById('sideBal').textContent='$'+raw.balance.toFixed(2);
+  document.getElementById('sideEq').textContent='$'+raw.equity.toFixed(2);
+  document.getElementById('sideFloat').textContent=fmtUSD(raw.floating||0);
+  document.getElementById('sideToday').textContent=fmtUSD(raw.profitToday||0);
+  document.getElementById('sideToday').className='side-val '+(raw.profitToday>=0?'profit':'loss');
+  document.getElementById('fStart').textContent=`Bal $${raw.balance.toFixed(0)}`;
+  document.getElementById('fEq').textContent=`Eq $${raw.equity.toFixed(0)}`;
+  document.getElementById('fProfit').textContent=fmtUSD(raw.profitToday||0);
+  document.getElementById('cDays').textContent=`Real ${daily.length} Hari`;
+  document.getElementById('cToday').textContent=fmtUSD(raw.profitToday||0);
+  document.getElementById('cDD').textContent=raw.maxDD? '$'+Math.abs(raw.maxDD).toFixed(2):'-';
+  document.getElementById('cCons').innerHTML=`Cur: ${cons.curWin||0}W / ${cons.curLoss||0}L<br>Max: ${cons.maxWin||0}W / ${cons.maxLoss||0}L`;
+  document.getElementById('cHold').innerHTML=`${raw.avgHold||'7m'}<br>Floating $${(raw.floating||0).toFixed(2)}`;
+  document.getElementById('cRun').innerHTML=running.length? running.map(r=>`<div style="display:flex;justify-content:space-between;width:100%;padding:2px 0"><span>${r.dt||''} ${r.symbol} ${r.pos} ${r.lot.toFixed(2)} lot</span><span class="${r.p>=0?'profit':'loss'}">${fmtUSD(r.p)}</span></div>`).join('') : `Tidak ada posisi running<br>Floating $${(raw.floating||0).toFixed(2)}`;
+  window._daily=daily; window._tx=tx;
   renderP(); renderT(); renderChart();
 }
-
 function renderP(){
-  const daily = window._daily||[];
-  let f=daily;
-  if(pTab==='7') f=daily.slice(0,7);
-  if(pTab==='30') f=daily.slice(0,30);
-  if(pTab==='90') f=daily.slice(0,90);
-  document.getElementById('rowsP').innerHTML = f.length ? f.map(x=>`<div class="table-row"><span>${x.display}</span><span class="${x.p>=0?'profit':'loss'}">${fmtUSD(x.p)}</span><span style="text-align:center">${x.w}</span><span style="text-align:center">${x.l}</span></div>`).join('') : '<div class="note">Belum ada history harian</div>';
-  document.getElementById('labP').textContent = pTab+' Hari';
+  const daily=window._daily||[]; let f=daily;
+  if(pTab==='7') f=daily.slice(0,7); if(pTab==='30') f=daily.slice(0,30); if(pTab==='90') f=daily.slice(0,90);
+  document.getElementById('rowsP').innerHTML=f.length? f.map(x=>`<div class="table-row"><span>${x.display}</span><span class="${x.p>=0?'profit':'loss'}">${fmtUSD(x.p)}</span><span style="text-align:center">${x.w}</span><span style="text-align:center">${x.l}</span></div>`).join('') : '<div class="note">Belum ada history harian</div>';
+  document.getElementById('labP').textContent=pTab+' Hari';
 }
-
 function renderT(){
-  let t = window._tx||[];
-  // t sudah dari EA 20 terbaru, filter by hari untuk tab
-  const now=new Date();
-  let filtered = t;
-  if(tTab==='today'){
-    const todayStr = now.toISOString().slice(0,10);
-    // EA daily pakai display beda format, jadi untuk today kita ambil 5 terbaru saja
-    filtered = t.slice(0,5);
-  } else if(tTab==='7'){
-    filtered = t.slice(0,7);
-  } else if(tTab==='30'){
-    filtered = t.slice(0,20);
-  }
-  document.getElementById('rowsT').innerHTML = filtered.length ? filtered.map(x=>`<div class="table-row"><span>${x.dt}</span><span>${x.symbol}</span><span style="color:${x.pos==='BUY'?'#6fb8ff':'#ff9d6b'}">${x.pos}</span><span class="${x.p>=0?'profit':'loss'}">${fmtUSD(x.p)}</span></div>`).join('') : '<div class="note">Tidak ada transaksi</div>';
-  document.getElementById('labT').textContent = filtered.length;
+  let t=window._tx||[]; let filtered=t;
+  if(tTab==='today') filtered=t.slice(0,5); else if(tTab==='7') filtered=t.slice(0,7); else if(tTab==='30') filtered=t.slice(0,20);
+  document.getElementById('rowsT').innerHTML=filtered.length? filtered.map(x=>`<div class="table-row"><span>${x.dt}</span><span>${x.symbol}</span><span style="color:${x.pos==='BUY'?'#6fb8ff':'#ff9d6b'}">${x.pos}</span><span class="${x.p>=0?'profit':'loss'}">${fmtUSD(x.p)}</span></div>`).join('') : '<div class="note">Tidak ada transaksi</div>';
+  document.getElementById('labT').textContent=filtered.length;
 }
-
 function renderChart(){
-  const daily = window._daily||[];
-  const ctx=document.getElementById('eqChart').getContext('2d');
-  let eq = raw.balance - (raw.profitToday||0);
-  // hitung mundur daily untuk equity curve
-  const labels = ['']; const data=[raw.balance];
-  // simple: balance history = balance - profitToday + daily reversed
-  let run = raw.balance;
-  const rev = [...daily].reverse();
-  rev.forEach(d=>{ run -= d.p; });
-  labels[0]=rev[0]?.display||'Start';
-  data[0]=run;
+  const daily=window._daily||[]; const ctx=document.getElementById('eqChart').getContext('2d');
+  let run=raw.balance - (raw.profitToday||0); const rev=[...daily].reverse(); rev.forEach(d=>{ run-=d.p; });
+  let labels=[rev[0]?.display?.slice(0,6)||'Start']; let data=[run];
   daily.slice().reverse().forEach(d=>{ run+=d.p; labels.push(d.display.slice(0,6)); data.push(run); });
   if(chart) chart.destroy();
-  chart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.15)',fill:true,tension:0.35,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}});
+  chart=new Chart(ctx,{type:'line',data:{labels:labels,[STRIPPED]
 }
 function setP(v,el){pTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderP();}
 function setT(v,el){tTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderT();}
-setInterval(load,2000);
-load();
+setInterval(load,2000); load();
 </script>
 </body>
 </html>
