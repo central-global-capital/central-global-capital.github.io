@@ -151,7 +151,7 @@ function renderChart(){
   sortedDaily.forEach(d=>{ running+=d.p; labels.push(d.display.slice(0,6)); data.push(running); });
   if(labels.length===0){ labels=['Start','Now']; data=[startBalance,raw.balance]; }
   if(chart) chart.destroy();
-  chart=new Chart(ctx,{type:'line',data:{labels:labels,[STRIPPED] $'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}});
+  chart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.18)',borderWidth:2.5,tension:0.35,fill:true,pointRadius:0,pointHoverRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' $'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}});
 }
 function setP(v,el){pTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderP();}
 function setT(v,el){tTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderT();}
