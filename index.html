@@ -1,139 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FUTUREBOT - ONE PAGE</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daftar Bot Futures - Pilih OTP</title>
 <style>
-body{background:#080a0f;color:#fff;font-family:Inter;margin:0;display:flex;flex-direction:column}
-.topbar{background:#0f131d;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1f2937}
-.card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:14px;margin-bottom:10px}
-.grid6{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;gap:8px}
-@media(max-width:900px){.grid6{grid-template-columns:1fr 1fr 1fr}}
-.stat{background:#0f172a;padding:12px;border-radius:10px;text-align:center}
-.val{font-size:16px;font-weight:800}.label{font-size:9px;color:#6b7280;margin-top:3px}
-.pos{color:#22c55e}.neg{color:#ef4444}.blue{color:#38bdf8}
-input,select{width:100%;background:#0f172a;border:1px solid #1f2937;color:#fff;padding:10px;border-radius:8px;box-sizing:border-box}
-.btn{width:100%;padding:12px;border-radius:8px;border:0;font-weight:bold;cursor:pointer}
-.btn-blue{background:#3b82f6;color:#fff}.btn-dark{background:#1f2937;color:#fff}
-.layout{display:grid;grid-template-columns:320px 1fr;gap:12px;padding:12px}
-@media(max-width:900px){.layout{grid-template-columns:1fr}}
-.active-mode{border:2px solid #3b82f6!important;background:#1e293b!important}
-.tab{display:flex;gap:6px;margin-bottom:10px}
-.tab button{flex:1;padding:7px;border-radius:20px;border:1px solid #1f2937;background:#0f172a;color:#6b7280;font-size:11px;cursor:pointer}
-.tab button.active{background:#3b82f6;color:#fff}
-canvas{background:#0f172a;border-radius:10px;padding:8px}
+  body{margin:0;background:#080a0f;color:#e5e7eb;font-family:Inter,system-ui,sans-serif;padding:14px}
+  .card{background:#111827;border:1px solid #1f2937;border-radius:16px;padding:16px;margin-bottom:12px}
+  input{width:100%;padding:13px;background:#020617;border:1px solid #1f2937;color:#fff;border-radius:10px;margin:6px 0;box-sizing:border-box}
+  .btn{width:100%;padding:13px;border:0;border-radius:10px;font-weight:800;cursor:pointer}
+  .blue{background:#3b82f6;color:#fff}
+  .muted{font-size:12px;color:#9ca3af}
+  .tabs{display:flex;gap:8px;margin:10px 0}
+  .tab{flex:1;padding:10px;border-radius:10px;border:1px solid #1f2937;background:#020617;color:#9ca3af;text-align:center;font-weight:700;cursor:pointer}
+  .tab.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
+  .hidden{display:none}
 </style>
 </head>
 <body>
-<div class="topbar">
-  <b>⚡ FUTUREBOT • Futures Trading Bot</b>
-  <div><span id="status" style="background:#22c55e;color:#000;padding:4px 10px;border-radius:20px;font-size:11px">● LIVE</span> <span id="balanceTop" style="margin-left:8px;font-weight:bold">$0</span></div>
+<div style="max-width:420px;margin:20px auto">
+<h2 style="text-align:center;margin:0">🚀 DAFTAR BOT FUTURES</h2>
+<p class="muted" style="text-align:center">Pilih metode OTP yang kamu punya</p>
+
+<div class="card" id="formBox">
+  <input id="nama" placeholder="Nama Lengkap">
+  
+  <div class="tabs">
+    <div id="tabWa" class="tab active" onclick="setMethod('wa')">📱 No WA</div>
+    <div id="tabEmail" class="tab" onclick="setMethod('email')">📧 Email</div>
+  </div>
+
+  <div id="inputWa"><input id="wa" placeholder="No WA 62xxxxxx (contoh 62812xxxx)"></div>
+  <div id="inputEmail" class="hidden"><input id="email" placeholder="Email kamu (contoh gmail)"></div>
+
+  <input id="apiKey" placeholder="Binance API Key (Futures)">
+  <input id="apiSecret" placeholder="Binance Secret Key">
+  <div style="background:#020617;padding:8px;border-radius:8px;font-size:11px;margin:6px 0;color:#9ca3af">API: Binance > API Management > Create > Aktifkan Futures Only > Paste disini</div>
+  
+  <button class="btn blue" onclick="daftar()">DAFTAR & KIRIM OTP</button>
+  <div id="msg" class="muted" style="text-align:center;margin-top:8px"></div>
 </div>
 
-<div class="layout">
-<!-- KIRI: SETTINGAN BOT -->
-<div>
-  <div class="card">
-    <h2 style="font-size:12px;color:#9ca3af;margin:0 0 10px">⚙️ EA SETTINGS CONTROL PANEL</h2>
-    <label style="font-size:11px;color:#6b7280">Mode Selection</label>
-    <div style="display:flex;gap:8px;margin:8px 0">
-      <div id="cardSingle" onclick="setMode('single')" style="flex:1;background:#0f172a;border:1px solid #1f2937;padding:12px;border-radius:10px;text-align:center;cursor:pointer"><b>Single</b></div>
-      <div id="cardAvg" onclick="setMode('averaging')" style="flex:1;background:#0f172a;border:1px solid #1f2937;padding:12px;border-radius:10px;text-align:center;cursor:pointer"><b>Averaging</b></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div>Lot Size<input id="lot" type="number" step="0.1" value="1"></div>
-      <div>Jarak Tick<input id="jarak" type="number" value="20"></div>
-      <div>SL Tick<input id="sl" type="number" value="50"></div>
-      <div>TP Tick<input id="tp" type="number" value="100"></div>
-      <div>Max Layer<input id="maxLayer" type="number" value="5"></div>
-      <div>Lot x<input id="lotX" type="number" step="0.1" value="1.5"></div>
-    </div>
-    <div style="height:10px"></div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-blue" onclick="saveConfig()" style="flex:2">APPLY CHANGES</button>
-      <button class="btn btn-dark" onclick="togglePause()" id="pauseBtn" style="flex:1">PAUSE</button>
-    </div>
-    <div style="font-size:10px;color:#6b7280;margin-top:8px;text-align:center">Changes apply on next tick • Auto-save to Firebase</div>
-  </div>
-
-  <div class="card">
-    <h2 style="font-size:11px;color:#6b7280">OPEN POSITIONS</h2>
-    <div id="openPos" style="font-size:12px;color:#94a3b8">No positions</div>
-  </div>
-
-  <div class="card">
-    <h2 style="font-size:11px;color:#6b7280">RISK LIMITS</h2>
-    <div style="font-size:11px;display:grid;grid-template-columns:1fr 1fr;gap:6px;color:#9ca3af">
-      <div>Risk/trade: 0.50%</div><div>Max DD: 12%</div>
-      <div>Leverage: 5x</div><div>Daily Loss: -$3000</div>
-    </div>
-  </div>
+<div class="card hidden" id="otpBox">
+  <div style="text-align:center"><b id="otpTitle">Kode OTP Dikirim</b><br><span class="muted" id="otpInfo"></span></div>
+  <input id="otpInput" placeholder="6 digit OTP" maxlength="6" style="text-align:center;font-size:20px;letter-spacing:6px">
+  <button class="btn blue" onclick="verifOtp()">VERIFIKASI & AKTIFKAN</button>
+  <div id="otpMsg" style="text-align:center;margin-top:10px"></div>
+  <button onclick="location.reload()" style="background:transparent;border:0;color:#9ca3af;width:100%;margin-top:10px;font-size:12px">Ganti No WA / Email</button>
 </div>
 
-<!-- KANAN: DATA STATISTIK LENGKAP -->
-<div>
-  <div class="grid6">
-    <div class="stat"><div class="label">BALANCE / EQUITY</div><div id="balance" class="val">$0</div><div id="balSub" class="label">+0% Today</div></div>
-    <div class="stat"><div class="label">PROFIT TODAY</div><div id="harian" class="val pos">+$0</div><div id="tradesToday" class="label">0 trades</div></div>
-    <div class="stat"><div class="label">GROSS PROFIT</div><div id="grossP" class="val pos">$0</div><div id="winC" class="label">0W</div></div>
-    <div class="stat"><div class="label">GROSS LOSS</div><div id="grossL" class="val neg">$0</div><div id="lossC" class="label">0L</div></div>
-    <div class="stat"><div class="label">PROFIT FACTOR</div><div id="pf" class="val blue">0.00</div><div class="label">Target >1.5</div></div>
-    <div class="stat"><div class="label">WINRATE</div><div id="wr" class="val blue">0%</div><div id="wrSub" class="label">0W / 0L</div></div>
-  </div>
-  <div class="grid6">
-    <div class="stat"><div class="label">AVG WIN</div><div id="avgWin" class="val pos">$0</div><div id="bestTrade" class="label">Best: $0</div></div>
-    <div class="stat"><div class="label">AVG LOSS</div><div id="avgLoss" class="val neg">$0</div><div id="worstTrade" class="label">Worst: $0</div></div>
-    <div class="stat"><div class="label">MAX DRAWDOWN</div><div id="maxDD" class="val" style="color:#fb923c">-0%</div><div id="maxDDVal" class="label">$0</div></div>
-    <div class="stat"><div class="label">AVG HOLD</div><div id="avgHold" class="val">0m</div><div class="label">Median 0m</div></div>
-    <div class="stat"><div class="label">TOTAL LOTS</div><div id="totalLots" class="val">0</div><div id="comm" class="label">Comm $0</div></div>
-    <div class="stat"><div class="label">RECOVERY FACTOR</div><div id="recov" class="val blue">0.00</div><div id="expPay" class="label">Exp: $0</div></div>
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-    <div class="card">
-      <h2>EQUITY CURVE & DRAWDOWN</h2>
-      <div class="tab"><button id="e7" onclick="setRange('eq',7)">7D</button><button id="e30" class="active" onclick="setRange('eq',30)">30D</button><button id="e90" onclick="setRange('eq',90)">90D</button></div>
-      <canvas id="equityChart" height="180"></canvas>
-    </div>
-    <div class="card">
-      <h2>DAILY PROFIT + MONTHLY RETURNS</h2>
-      <div class="tab"><button id="d7" class="active" onclick="setRange('daily',7)">7D</button><button id="d30" onclick="setRange('daily',30)">30D</button><button id="d90" onclick="setRange('daily',90)">90D</button></div>
-      <canvas id="dailyChart" height="180"></canvas>
-      <div id="monthly" style="font-size:10px;color:#9ca3af;margin-top:8px"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>TRANSACTION HISTORY</h2>
-    <div class="tab"><button id="tToday" class="active" onclick="setRange('tx','today')">HARI INI</button><button id="tWeek" onclick="setRange('tx','week')">1 MINGGU</button><button id="t3m" onclick="setRange('tx','3m')">3 BULAN</button></div>
-    <div style="max-height:260px;overflow:auto"><table style="width:100%;font-size:11px;border-collapse:collapse"><thead><tr style="color:#6b7280;text-align:left"><th>Time</th><th>Pair</th><th>Type</th><th>Size</th><th>PnL</th><th>Hold</th></tr></thead><tbody id="txBody"></tbody></table></div>
-  </div>
+<div class="card hidden" id="doneBox" style="text-align:center">
+  <h3>✅ BERHASIL DAFTAR</h3>
+  <p class="muted">Tunggu admin approve + isi gas. Kamu akan dapat notif.</p>
+  <div style="background:#020617;padding:10px;border-radius:10px;font-size:13px;margin:10px 0">ID KAMU: <b id="myId" style="color:#22c55e"></b><br><span class="muted">Pakai No WA / Email buat login nanti</span></div>
+  <a id="dashLink" href="dashboard.html"><button class="btn blue">KE DASHBOARD</button></a>
 </div>
 </div>
 
 <script>
-const CONFIG_URL="https://mrdien-scalper-default-rtdb.firebaseio.com/config/FUTURES_MAIN.json";
-const DATA_URL="https://mrdien-scalper-default-rtdb.firebaseio.com/live/FUTURES_MAIN.json";
-let mode="single",status="RUNNING",rangeEq=30,rangeDaily=7,rangeTx="today",allDaily=[],allTx=[],equityChart,dailyChart;
-function setMode(m){mode=m; document.getElementById('cardSingle').classList.toggle('active-mode',m=='single'); document.getElementById('cardAvg').classList.toggle('active-mode',m=='averaging');}
-setMode('single');
-function setRange(t,v){
-  if(t=='eq'){rangeEq=v; document.querySelectorAll('[id^=e]').forEach(b=>b.classList.remove('active')); document.getElementById('e'+v).classList.add('active'); renderEquity();}
-  if(t=='daily'){rangeDaily=v; document.querySelectorAll('[id^=d]').forEach(b=>b.classList.remove('active')); document.getElementById('d'+v).classList.add('active'); renderDaily();}
-  if(t=='tx'){rangeTx=v; document.querySelectorAll('[id^=t]').forEach(b=>b.classList.remove('active')); document.getElementById('t'+(v=='today'?'Today':v=='week'?'Week':'3m')).classList.add('active'); renderTx();}
+const FB="https://mrdien-scalper-default-rtdb.firebaseio.com";
+let method='wa', tempData={}, genOtp="";
+
+function setMethod(m){
+  method=m;
+  document.getElementById('tabWa').classList.toggle('active',m==='wa');
+  document.getElementById('tabEmail').classList.toggle('active',m==='email');
+  document.getElementById('inputWa').classList.toggle('hidden',m!=='wa');
+  document.getElementById('inputEmail').classList.toggle('hidden',m!=='email');
 }
-function initCharts(){
-  equityChart=new Chart(document.getElementById('equityChart'),{type:'line',data:{labels:[],[STRIPPED]
-  dailyChart=new Chart(document.getElementById('dailyChart'),{type:'bar',data:{labels:[],[STRIPPED]
-}initCharts();
-function renderEquity(){let data=allDaily.slice(-rangeEq);let cum=0,labels=[],eq=[];let base=parseFloat(document.getElementById('balance').innerText.replace(/[^0-9.-]/g,''))||0;let total=allDaily.reduce((a,b)=>a+b.profit,0);let start=base-total;data.forEach(d=>{cum+=d.profit;labels.push(d.date.slice(5));eq.push(start+cum);});equityChart.data.labels=labels;equityChart.data.datasets[0].data=eq;equityChart.update();}
-function renderDaily(){let data=allDaily.slice(-rangeDaily);dailyChart.data.labels=data.map(d=>d.date.slice(5));dailyChart.data.datasets[0].data=data.map(d=>d.profit);dailyChart.data.datasets[0].backgroundColor=data.map(d=>d.profit>=0?'#22c55e':'#ef4444');dailyChart.update();}
-function renderTx(){let now=new Date();let filtered=[];if(rangeTx=='today'){let s=now.toISOString().slice(0,10);filtered=allTx.filter(t=>t.time&&t.time.startsWith(s));}else if(rangeTx=='week'){let w=new Date(now-7*24*60*60*1000);filtered=allTx.filter(t=>new Date(t.time)>=w);}else filtered=allTx;let body=document.getElementById('txBody');if(filtered.length==0){body.innerHTML=`<tr><td colspan=6 style="text-align:center;color:#6b7280;padding:15px">No trades</td></tr>`;return;}body.innerHTML=filtered.slice(-50).reverse().map(t=>`<tr><td>${t.time?t.time.slice(11,16):'-'}</td><td>${t.symbol||t.pair||'-'}</td><td>${t.mode||t.side||'-'}</td><td>${t.lot||t.size||'-'}</td><td class="${t.pnl>=0?'pos':'neg'}">$${t.pnl}</td><td>${t.hold_minutes||12}m</td></tr>`).join('');}
-setInterval(async()=>{try{let d=await (await fetch(DATA_URL)).json();if(!d)return;allDaily=d.daily_history_90_hari||[];allTx=d.transaction_history_3_bulan||[];balance.innerText="$"+(d.balance||0).toFixed(2);balanceTop.innerText="$"+(d.equity||0).toFixed(2);harian.innerText="$"+(d.profit_harian||0).toFixed(2);grossP.innerText="$"+(d.grossProfit||0).toFixed(2);grossL.innerText="$"+(d.grossLoss||0).toFixed(2);let win=allTx.filter(t=>t.pnl>0).length;let loss=allTx.filter(t=>t.pnl<=0).length;winC.innerText=win+" Win";lossC.innerText=loss+" Loss";wr.innerText=(allTx.length? (win/allTx.length*100).toFixed(1):0)+"%";wrSub.innerText=win+"W / "+loss+"L";tradesToday.innerText=(d.daily_trades||allTx.length)+" trades";let pfVal=d.grossLoss!=0?(d.grossProfit/Math.abs(d.grossLoss)):0;pf.innerText=pfVal.toFixed(2);let avgW=allTx.filter(t=>t.pnl>0).reduce((a,b)=>a+b.pnl,0)/(win||1);let avgL=allTx.filter(t=>t.pnl<=0).reduce((a,b)=>a+b.pnl,0)/(loss||1);avgWin.innerText="$"+(avgW||0).toFixed(2);avgLoss.innerText="$"+(avgL||0).toFixed(2);bestTrade.innerText="Best: $"+(Math.max(...allTx.map(t=>t.pnl),0)).toFixed(0);worstTrade.innerText="Worst: $"+(Math.min(...allTx.map(t=>t.pnl),0)).toFixed(0);let avgMin=allTx.length?Math.round(allTx.reduce((a,b)=>a+(b.hold_minutes||12),0)/allTx.length):0;avgHold.innerText=avgMin+"m";totalLots.innerText=(allTx.reduce((a,b)=>a+(b.lot||0),0)).toFixed(1);maxDD.innerText="-"+(d.maxDrawdownPercent||8.42)+"%";maxDDVal.innerText="$"+(d.maxDrawdownValue||9860);recov.innerText=((d.grossProfit||0)/Math.abs(d.maxDrawdownValue||9860)).toFixed(2);expPay.innerText="Exp: $"+(allTx.length? (allTx.reduce((a,b)=>a+b.pnl,0)/allTx.length).toFixed(2):0);openPos.innerHTML=d.running_positions&&d.running_positions.length?d.running_positions.map(p=>`${p.symbol} • ${p.posisi} ${p.lot} lot • Float <span class="${p.floating>=0?'pos':'neg'}">$${p.floating}</span>`).join('<br>'):'No positions';renderEquity();renderDaily();renderTx();}catch(e){}},2500);
-async function saveConfig(){let cfg={mode:mode,lot:parseFloat(document.getElementById('lot').value),jarak_tick:parseInt(jarak.value),sl_tick:parseInt(sl.value),tp_tick:parseInt(tp.value),ts_tick:30,averaging:{max_layer:parseInt(maxLayer.value),jarak_layer_tick:30,lot_multiplier:parseFloat(lotX.value),imbalance_threshold:0.6},status:status};await fetch(CONFIG_URL,{method:'PUT',body:JSON.stringify(cfg)});alert('Setting EA terkirim ke VPS!');}
-async function togglePause(){status=status=="RUNNING"?"PAUSED":"RUNNING";document.getElementById('status').innerText="● "+status;let c=await (await fetch(CONFIG_URL)).json();c.status=status;await fetch(CONFIG_URL,{method:'PUT',body:JSON.stringify(c)});}
-fetch(CONFIG_URL).then(r=>r.json()).then(c=>{if(c){setMode(c.mode);lot.value=c.lot;jarak.value=c.jarak_tick;sl.value=c.sl_tick;tp.value=c.tp_tick;status=c.status;}});
+
+function genId(){return "CLIENT_"+Math.floor(100+Math.random()*900)}
+function genOtpCode(){return Math.floor(100000+Math.random()*900000).toString()}
+
+async function daftar(){
+  let nama=document.getElementById('nama').value.trim();
+  let wa=document.getElementById('wa').value.trim().replace(/[^0-9]/g,'');
+  let email=document.getElementById('email').value.trim();
+  let apiKey=document.getElementById('apiKey').value.trim();
+  let apiSecret=document.getElementById('apiSecret').value.trim();
+  
+  if(!nama||!apiKey||!apiSecret){document.getElementById('msg').innerText='Lengkapi nama & API bro';return}
+  if(method==='wa' && !wa){document.getElementById('msg').innerText='Isi No WA';return}
+  if(method==='email' && !email){document.getElementById('msg').innerText='Isi Email';return}
+
+  document.getElementById('msg').innerText='Membuat akun...';
+  let clientId=genId(); genOtp=genOtpCode();
+  tempData={client_id:clientId,nama,wa:wa||"",email:email||"",api_key:apiKey,api_secret:apiSecret,otp:genOtp,method,otp_verified:false,status:"PENDING_OTP",created_at:new Date().toISOString()};
+  
+  let key = method==='wa'? wa : email.replace(/\./g,'_');
+  await fetch(`${FB}/pending/${clientId}.json`,{method:'PUT',body:JSON.stringify(tempData)});
+  await fetch(`${FB}/otp/${key}.json`,{method:'PUT',body:JSON.stringify({code:genOtp,client_id:clientId,exp:Date.now()+10*60*1000,method})});
+
+  document.getElementById('formBox').classList.add('hidden');
+  document.getElementById('otpBox').classList.remove('hidden');
+  document.getElementById('otpTitle').innerText=method==='wa'? 'OTP Dikirim ke WA' : 'OTP Dikirim ke Email';
+  document.getElementById('otpInfo').innerText=method==='wa'? `WA: ${wa} | ID: ${clientId}` : `Email: ${email} | ID: ${clientId}`;
+  // DEMO - tampilkan OTP, nanti ganti API beneran
+  document.getElementById('otpMsg').innerHTML=`<div class="muted">DEMO (hapus nanti):</div><div style="font-size:22px;font-weight:800;color:#fff;letter-spacing:4px">${genOtp}</div><div class="muted" style="margin-top:6px">${method==='wa'?'Akan auto kirim via API WA (Fonnte)':'Akan auto kirim via Email (EmailJS)'}</div>`;
+
+  // === DISINI PASANG API ASLI KALO UDAH ADA ===
+  // if(method==='wa'){ fetch(`https://api.fonnte.com/send?target=${wa}&message=OTP Bot: ${genOtp}`) }
+  // if(method==='email'){ emailjs.send("service_id","template_id",{to_email:email,otp:genOtp}) }
+}
+
+async function verifOtp(){
+  let inp=document.getElementById('otpInput').value.trim();
+  if(inp!==genOtp){document.getElementById('otpMsg').innerHTML='<span style="color:#ef4444">❌ OTP salah, cek lagi</span>';return}
+  
+  let lic={client_id:tempData.client_id,nama:tempData.nama,wa:tempData.wa,email:tempData.email,api_key:tempData.api_key,api_secret:tempData.api_secret,login_method:method,gas_balance:0,gas_per_day:3,status:"WAITING_PAYMENT",created_at:tempData.created_at};
+  await fetch(`${FB}/licenses/${lic.client_id}.json`,{method:'PUT',body:JSON.stringify(lic)});
+  await fetch(`${FB}/config/${lic.client_id}.json`,{method:'PUT',body:JSON.stringify({lot:1,mode:"single",jarak_tick:20,sl_tick:50,tp_tick:100,pair:"BTCUSDT",status:"PAUSED"})});
+  await fetch(`${FB}/live/${lic.client_id}.json`,{method:'PUT',body:JSON.stringify({balance:0,equity:0,profit_today:0,total_profit:0,open_positions:0})});
+
+  document.getElementById('otpBox').classList.add('hidden');
+  document.getElementById('doneBox').classList.remove('hidden');
+  document.getElementById('myId').innerText=lic.client_id;
+  document.getElementById('dashLink').href=`dashboard.html`;
+}
 </script>
 </body>
- </html>
+</html>
