@@ -19,12 +19,12 @@ body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,seri
 .header p{color:var(--gold);font-size:10px}
 .chart-card{border:1.2px solid var(--border);border-radius:14px;background:var(--card);padding:8px;display:flex;gap:8px}
 .chart-main{flex:1.6;min-width:0}
-.chart-wrap{height:220px}
+.chart-wrap{height:250px}
 .chart-side{flex:0.9;min-width:0;display:flex;flex-direction:column;gap:6px;justify-content:center}
-.side-box{border:1px solid #143a2f;border-radius:8px;background:#0e221c;padding:6px;text-align:center}
-.side-label{font-size:8px;color:var(--dim);background:#132a24;border-radius:10px;padding:1px 4px;display:inline-block;margin-bottom:3px}
-.side-val{font-size:13px;font-weight:700}
-.chart-footer{display:flex;justify-content:space-between;font-size:8.5px;color:#8dbbb0;margin-top:6px}
+.side-box{border:1px solid #143a2f;border-radius:10px;background:#0e221c;padding:7px;text-align:center}
+.side-label{font-size:10px;color:var(--dim);background:#132a24;border-radius:10px;padding:2px 6px;display:inline-block;margin-bottom:4px}
+.side-val{font-size:15px;font-weight:700}
+.chart-footer{display:flex;justify-content:space-between;font-size:11px;color:#8dbbb0;margin-top:8px;font-weight:700}
 .grid3{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:6px;margin-top:8px}
 .grid2{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:6px;margin-top:6px}
 .stat-box{border:1.2px solid var(--border);border-radius:10px;background:var(--card);height:62px;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:4px 2px;text-align:center}
@@ -115,7 +115,6 @@ function listenFirebase(){
     render();
   },err=>{
     document.getElementById('connText').textContent='FIREBASE ERROR: '+err.message;
-    document.getElementById('cRun').innerHTML=`<div class="note" style="color:#ff8a8a">Permission Denied<br>Firebase Rules harus public read<br>Error: ${err.message}</div>`;
   });
 }
 function render(){
@@ -133,9 +132,9 @@ function render(){
   document.getElementById('sideFloat').textContent=fmtUSD(raw.floating||0);
   document.getElementById('sideToday').textContent=fmtUSD(raw.profitToday||0);
   document.getElementById('sideToday').className='side-val '+(raw.profitToday>=0?'profit':'loss');
-  document.getElementById('fStart').textContent=`Bal $${raw.balance.toFixed(0)}`;
-  document.getElementById('fEq').textContent=`Eq $${raw.equity.toFixed(0)}`;
-  document.getElementById('fProfit').textContent=fmtUSD(raw.profitToday||0);
+  document.getElementById('fStart').textContent=`Start $5000.00`;
+  document.getElementById('fEq').textContent=`Equity $${raw.equity.toFixed(0)}`;
+  document.getElementById('fProfit').textContent=fmtUSD(raw.equity-5000);
   document.getElementById('cDays').textContent=`Real ${daily.length} Hari`;
   document.getElementById('cToday').textContent=fmtUSD(raw.profitToday||0);
   document.getElementById('cDD').textContent=raw.maxDD? '$'+Math.abs(raw.maxDD).toFixed(2):'-';
@@ -162,7 +161,7 @@ function renderChart(){
   let labels=[rev[0]?.display?.slice(0,6)||'Start']; let data=[run];
   daily.slice().reverse().forEach(d=>{run+=d.p; labels.push(d.display.slice(0,6)); data.push(run);});
   if(chart) chart.destroy();
-  chart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.15)',fill:true,tension:0.35,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}});
+  chart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.18)',fill:true,tension:0.4,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:10}}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:10}}}}}});
 }
 function setP(v,el){pTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderP();}
 function setT(v,el){tTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderT();}
