@@ -11,16 +11,16 @@
 :root{--bg:#0a1512;--card:#0f211c;--border:#1a8a6a;--green:#18d8a0;--gold:#d4c27a;--dim:#6d9187}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,serif;padding:6px;max-width:440px;margin:auto}
-.live-badge{display:flex;justify-content:center;align-items:center;gap:6px;border:1.2px solid var(--border);border-radius:20px;padding:8px;background:var(--card);color:var(--gold);font-weight:700;font-size:11px;text-align:center}
+.live-badge{display:flex;justify-content:center;align-items:center;gap:6px;border:1.2px solid var(--border);border-radius:20px;padding:8px;background:var(--card);color:var(--gold);font-weight:700;font-size:11px;text-align:center;margin-bottom:6px}
 .dot{width:8px;height:8px;border-radius:50%;background:#0fa868;box-shadow:0 0 8px #0fa868;animation:blink 1.2s infinite}
 @keyframes blink{50%{opacity:.3}}
-.header{text-align:center;margin:10px 0}
-.header h1{color:#2cc8a0;font-size:15px;letter-spacing:2.5px}
-.header p{color:var(--gold);font-size:10px;letter-spacing:1px}
-.chart-card{border:1.2px solid var(--border);border-radius:14px;background:var(--card);padding:10px}
-.chart-wrap{height:260px}
-.chart-footer{display:flex;justify-content:space-between;font-size:11px;color:#8dbbb0;margin-top:8px;font-weight:700}
-.grid3{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:6px;margin-top:8px}
+.header{text-align:center;margin:14px 0 18px 0}
+.header h1{color:#2cc8a0;font-size:15px;letter-spacing:2.5px;margin-bottom:6px}
+.header p{color:var(--gold);font-size:13px;letter-spacing:0.8px;font-weight:700}
+.chart-card{border:1.2px solid var(--border);border-radius:14px;background:var(--card);padding:10px;margin-top:8px}
+.chart-wrap{height:190px}
+.chart-footer{display:flex;justify-content:space-between;font-size:11px;color:#8dbbb0;margin-top:10px;font-weight:700}
+.grid3{display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:6px;margin-top:10px}
 .grid2{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:6px;margin-top:6px}
 .stat-box{border:1.2px solid var(--border);border-radius:12px;background:var(--card);height:70px;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:4px;text-align:center}
 .stat-box.b2{height:80px}
@@ -103,11 +103,8 @@ function listenFirebase(){
     document.getElementById('dotStatus').style.background=isWeekend?'#e8a25a':'#0fa868';
     document.getElementById('lastUpd').textContent='Last: '+(raw.lastUpdate||'-');
     render();
-  },err=>{
-    document.getElementById('connText').textContent='FIREBASE ERROR: '+err.message;
   });
 }
-
 function render(){
   const s=raw.summary||{}, daily=raw.daily||[], tx=raw.tx||[], running=raw.running||[], cons=raw.consecutive5||{};
   const total=s.total||0, win=s.win||0, loss=s.loss||0, gp=s.profit||0, gl=s.lossSum||0, pf=s.pf||0, wr=total>0?win/total*100:0;
@@ -130,68 +127,39 @@ function render(){
   document.getElementById('cRun').innerHTML=running.length? running.map(r=>'<div style="display:flex;justify-content:space-between;width:100%;padding:2px 0"><span>'+(r.dt||'')+' '+r.symbol+' '+r.pos+' '+r.lot.toFixed(2)+' lot</span><span class="'+(r.p>=0?'profit':'loss')+'">'+fmtUSD(r.p)+'</span></div>').join('') : 'Tidak ada posisi running<br>Floating $'+(raw.floating||0).toFixed(2);
   window._daily=daily; window._tx=tx; renderP(); renderT(); renderChart();
 }
-
 function renderP(){
   const daily=window._daily||[]; let f=daily;
   if(pTab==='7') f=daily.slice(0,7); if(pTab==='30') f=daily.slice(0,30); if(pTab==='90') f=daily.slice(0,90);
   document.getElementById('rowsP').innerHTML=f.length? f.map(x=>'<div class="table-row"><span>'+x.display+'</span><span class="'+(x.p>=0?'profit':'loss')+'">'+fmtUSD(x.p)+'</span><span style="text-align:center">'+x.w+'</span><span style="text-align:center">'+x.l+'</span></div>').join('') : '<div class="note">Belum ada history harian</div>';
   document.getElementById('labP').textContent=pTab+' Hari';
 }
-
 function renderT(){
   let t=window._tx||[]; let filtered=t;
   if(tTab==='today') filtered=t.slice(0,5); else if(tTab==='7') filtered=t.slice(0,7); else if(tTab==='30') filtered=t.slice(0,20);
   document.getElementById('rowsT').innerHTML=filtered.length? filtered.map(x=>'<div class="table-row"><span>'+x.dt+'</span><span>'+x.symbol+'</span><span style="color:'+(x.pos==='BUY'?'#6fb8ff':'#ff9d6b')+'">'+x.pos+'</span><span class="'+(x.p>=0?'profit':'loss')+'">'+fmtUSD(x.p)+'</span></div>').join('') : '<div class="note">Tidak ada transaksi</div>';
   document.getElementById('labT').textContent=filtered.length;
 }
-
 function renderChart(){
   const daily=window._daily||[];
   const ctx=document.getElementById('eqChart').getContext('2d');
-  
-  // FIX PERTUMBUHAN YANG BENER - cumulative dari daily, bukan balance - profitToday double
-  const sortedDaily=[...daily].reverse(); // dari lama -> baru (11 Okt -> 16 Okt)
+  const sortedDaily=[...daily].reverse();
   let totalProfit=0; sortedDaily.forEach(d=>totalProfit+=d.p);
   let startBalance=raw.balance - totalProfit;
-  if(startBalance < 3000 || startBalance > 7000) startBalance=5000; // fallback modal awal $5000
-
+  if(startBalance < 3000 || startBalance > 7000) startBalance=5000;
   let labels=[]; let data=[]; let running=startBalance;
   sortedDaily.forEach(d=>{
     running+=d.p;
     labels.push(d.display.slice(0,6));
     data.push(running);
   });
-
   if(labels.length===0){ labels=['Start','Now']; data=[startBalance,raw.balance]; }
-
   if(chart) chart.destroy();
   chart=new Chart(ctx,{
     type:'line',
-    data:{
-      labels:labels,
-      datasets:[{
-        data:data,
-        borderColor:'#18d8a0',
-        backgroundColor:'rgba(24,216,160,0.18)',
-        borderWidth:2.5,
-        tension:0.35,
-        fill:true,
-        pointRadius:0,
-        pointHoverRadius:5
-      }]
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' $'+ctx.parsed.y.toFixed(2)}}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},
-        y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}
-      }
-    }
+    data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.18)',borderWidth:2.5,tension:0.35,fill:true,pointRadius:0,pointHoverRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' $'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}
   });
 }
-
 function setP(v,el){pTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderP();}
 function setT(v,el){tTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderT();}
 listenFirebase();
