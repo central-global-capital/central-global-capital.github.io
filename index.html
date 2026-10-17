@@ -32,10 +32,10 @@ body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,seri
 .live-mini{font-size:9px;background:#132a24;border-radius:6px;padding:4px 8px;color:#2cc8a0;display:inline-block;margin-top:4px}
 .section-title{color:#2cc8a0;font-size:11px;font-weight:700;margin:12px 0 6px;display:flex;gap:5px;align-items:center}
 .running-card{border:1.2px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden}
-.run-header{display:grid;grid-template-columns:1.3fr 0.9fr 0.6fr 0.5fr 0.8fr;padding:8px 8px;color:#2cc8a0;font-size:8.5px;font-weight:700;border-bottom:1px solid #143a2f;background:#0e221c}
-.run-item{display:grid;grid-template-columns:1.3fr 0.9fr 0.6fr 0.5fr 0.8fr;padding:10px 8px;border-bottom:1px solid #10241f;font-size:10.5px;align-items:center}
+.run-header{display:grid;grid-template-columns:1.35fr 0.85fr 0.55fr 0.5fr 0.75fr;padding:8px 8px;color:#2cc8a0;font-size:8px;font-weight:700;border-bottom:1px solid #143a2f;background:#0e221c;letter-spacing:0.3px}
+.run-item{display:grid;grid-template-columns:1.35fr 0.85fr 0.55fr 0.5fr 0.75fr;padding:10px 8px;border-bottom:1px solid #10241f;font-size:10px;align-items:center}
 .run-item:last-child{border-bottom:none}
-.run-time{font-size:9.5px;color:#e6f5f0;line-height:1.2}
+.run-time{font-size:9px;color:#e6f5f0;line-height:1.2}
 .run-symbol{font-size:11px;font-weight:700}
 .run-pos{font-size:9px;font-weight:700;padding:2px 5px;border-radius:6px;text-align:center}
 .run-pos.BUY{color:#6fb8ff;background:rgba(111,184,255,0.12);border:1px solid rgba(111,184,255,0.2)}
@@ -103,29 +103,30 @@ const db=firebase.database();
 let pTab='7',tTab='today',chart=null,raw=null;
 const fmtUSD=n=> (n>=0?'+$':'-$')+Math.abs(n).toFixed(2);
 
+function formatTanggalBulanTahun(dateStr){
+  try{
+    let d,m,y;
+    if(dateStr.includes('.')){ const p=dateStr.split('.'); y=p[0]; m=p[1]; d=p[2]; }
+    else if(dateStr.includes('-')){ const p=dateStr.split('-'); y=p[0]; m=p[1]; d=p[2]; }
+    else if(dateStr.includes('/')){ const p=dateStr.split('/'); d=p[0]; m=p[1]; y=p[2]; return d+'/'+m+'/'+y; }
+    else { return dateStr; }
+    const bulan=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+    const mInt=parseInt(m);
+    return d+' '+bulan[mInt-1]+' '+y;
+  }catch(e){ return dateStr; }
+}
+
 function listenFirebase(){
-  db.ref('live/LIVE_MAIN').on('value',snap=>{
+  const ref=db.ref('live/LIVE_MAIN');
+  ref.on('value',snap=>{
     raw=snap.val();
-    if(!raw){document.getElementById('connText').textContent='FIREBASE KOSONG'; return;}
+    if(!raw){document.getElementById('connText').textContent='FIREBASE KOSONG - EA BELUM PUSH'; return;}
     const isWeekend=[0,6].includes(new Date().getDay());
     document.getElementById('connText').textContent=(isWeekend?'MARKET LIBUR - ':'EA RUNNING - ')+'TERKONEKSI LIVE '+(raw.lastUpdate||'');
     document.getElementById('dotStatus').style.background=isWeekend?'#e8a25a':'#0fa868';
     document.getElementById('lastUpd').textContent='Last: '+(raw.lastUpdate||'-');
     render();
   });
-}
-
-function formatTanggalBulanTahun(dateStr){
-  // dateStr dari EA: 2026.10.16 atau 2026-10-16 atau 16/10/2026
-  try{
-    let d,m,y;
-    if(dateStr.includes('.')){ const p=dateStr.split('.'); y=p[0]; m=p[1]; d=p[2]; }
-    else if(dateStr.includes('-')){ const p=dateStr.split('-'); y=p[0]; m=p[1]; d=p[2]; }
-    else { return dateStr; }
-    const bulan=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
-    const mInt=parseInt(m);
-    return d+' '+bulan[mInt-1]+' '+y;
-  }catch(e){ return dateStr; }
 }
 
 function render(){
@@ -148,20 +149,25 @@ function render(){
   document.getElementById('cCons').innerHTML='Cur: '+(cons.curWin||0)+'W / '+(cons.curLoss||0)+'L<br>Max: '+(cons.maxWin||0)+'W / '+(cons.maxLoss||0)+'L';
   document.getElementById('cHold').innerHTML=(raw.avgHold||'7m')+'<br>Floating $'+(raw.floating||0).toFixed(2);
 
-  // TANGGAL BULAN TAHUN + WAKTU - URUTAN: Waktu, Symbol, Posisi, Lot, Floating
+  // FIX URUTAN: Tanggal Bulan Tahun + Waktu, Symbol, Posisi, Lot, Floating
   if(running.length){
-    const lastDateFull = raw.lastUpdate ? raw.lastUpdate.split(' ')[0] : '2026.10.16';
-    const lastTime = raw.lastUpdate ? (raw.lastUpdate.split(' ')[1]||'') : '';
-    const tglBulanTahun = formatTanggalBulanTahun(lastDateFull); // 16 Okt 2026
+    const fullDateTime = raw.lastUpdate || '2026.10.16 23:22';
+    const parts = fullDateTime.split(' ');
+    const datePart = parts[0] || '2026.10.16';
+    const tglBulanTahun = formatTanggalBulanTahun(datePart);
 
     document.getElementById('cRun').innerHTML=
       '<div class="run-header"><span>Tanggal Bulan Tahun</span><span>Symbol</span><span>Posisi</span><span>Lot</span><span>Floating</span></div>'+
       running.map(r=>{
-        let jam = r.dt || lastTime || '23:22';
-        // r.dt cuma jam, kita bikin jadi 16 Okt 2026 23:22
-        let tglWaktu = tglBulanTahun + ' ' + jam;
-        // kalau r.dt sudah ada tanggal lengkap, pakai itu
-        if(r.dt && r.dt.includes('.')){ tglWaktu = formatTanggalBulanTahun(r.dt.split(' ')[0]) + ' ' + (r.dt.split(' ')[1]||''); }
+        let jam = r.dt || (parts[1]||'23:22');
+        // kalau r.dt sudah ada tanggal, pakai tanggalnya
+        let tglFinal = tglBulanTahun;
+        if(r.dt && r.dt.includes('.')){
+           const rp = r.dt.split(' ');
+           tglFinal = formatTanggalBulanTahun(rp[0]);
+           jam = rp[1] || jam;
+        }
+        const tglWaktu = tglFinal + ' ' + jam;
         return `<div class="run-item">
           <span class="run-time">${tglWaktu}</span>
           <span class="run-symbol">${r.symbol}</span>
@@ -190,7 +196,8 @@ function renderT(){
   document.getElementById('labT').textContent=filtered.length;
 }
 function renderChart(){
-  const daily=window._daily||[]; const ctx=document.getElementById('eqChart').getContext('2d');
+  const daily=window._daily||[];
+  const ctx=document.getElementById('eqChart').getContext('2d');
   const sortedDaily=[...daily].reverse();
   let totalProfit=0; sortedDaily.forEach(d=>totalProfit+=d.p);
   let startBalance=raw.balance - totalProfit;
@@ -199,7 +206,11 @@ function renderChart(){
   sortedDaily.forEach(d=>{ running+=d.p; labels.push(d.display.slice(0,6)); data.push(running); });
   if(labels.length===0){ labels=['Start','Now']; data=[startBalance,raw.balance]; }
   if(chart) chart.destroy();
-  chart=new Chart(ctx,{type:'line',data:{labels:labels,[STRIPPED] New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}});
+  chart=new Chart(ctx,{
+    type:'line',
+    data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.18)',borderWidth:2.5,tension:0.35,fill:true,pointRadius:0,pointHoverRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' $'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}
+  });
 }
 function setP(v,el){pTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderP();}
 function setT(v,el){tTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderT();}
