@@ -31,28 +31,30 @@ body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,seri
 .balance-amount{font-size:26px;font-weight:700}
 .live-mini{font-size:9px;background:#132a24;border-radius:6px;padding:4px 8px;color:#2cc8a0;display:inline-block;margin-top:4px}
 .section-title{color:#2cc8a0;font-size:11px;font-weight:700;margin:12px 0 6px;display:flex;gap:5px;align-items:center}
+
+/* === FIX TOTAL ALIGNMENT === */
 .running-card{border:1.2px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden}
-.run-header{display:grid;grid-template-columns:36% 22% 14% 10% 18%;padding:9px 10px;color:#2cc8a0;font-size:9.5px;font-weight:700;border-bottom:1px solid #143a2f;background:#0e221c}
-.run-item{display:grid;grid-template-columns:36% 22% 14% 10% 18%;padding:11px 10px;border-bottom:1px solid #10241f;font-size:11px;align-items:center}
+.run-header{display:grid;grid-template-columns:36% 20% 14% 10% 20%;padding:10px 6px;background:#0e221c;border-bottom:1px solid #143a2f}
+.run-header span{color:#2cc8a0;font-size:9.5px;font-weight:700;text-align:center}
+.run-item{display:grid;grid-template-columns:36% 20% 14% 10% 20%;padding:11px 6px;border-bottom:1px solid #10241f;align-items:center}
 .run-item:last-child{border-bottom:none}
-.run-header span:nth-child(1), .run-item .run-time{text-align:left}
-.run-header span:nth-child(2), .run-item .run-symbol{text-align:left}
-.run-header span:nth-child(3), .run-item .run-pos-wrap{text-align:center}
-.run-header span:nth-child(4), .run-item .run-lot{text-align:center}
-.run-header span:nth-child(5), .run-item .run-float{text-align:right}
-.run-time{font-size:9.5px;color:#e6f5f0;line-height:1.2;white-space:nowrap}
-.run-symbol{font-size:12px;font-weight:700;white-space:nowrap}
-.run-pos{font-size:9px;font-weight:700;padding:3px 7px;border-radius:7px;display:inline-block;min-width:38px}
+.run-item span{text-align:left;padding-left:4px}
+.run-time{font-size:9.5px;white-space:nowrap}
+.run-symbol{font-size:11px;font-weight:700}
+.run-pos{font-size:9px;font-weight:700;padding:3px 6px;border-radius:6px;display:inline-block;min-width:36px;text-align:center}
 .run-pos.BUY{color:#6fb8ff;background:rgba(111,184,255,0.12);border:1px solid rgba(111,184,255,0.25)}
 .run-pos.SELL{color:#ff8a8a;background:rgba(255,138,138,0.12);border:1px solid rgba(255,138,138,0.25)}
 .run-lot{font-size:11px}
-.run-float{font-size:12px;font-weight:700}
+.run-float{font-size:11px;font-weight:700}
+
 .tabs{display:flex;gap:5px;margin-bottom:5px}
 .tab{flex:1;min-width:0;padding:6px 2px;border-radius:15px;border:1.2px solid var(--border);background:transparent;color:var(--dim);font-weight:700;font-size:10px;font-family:"Times New Roman";cursor:pointer}
 .tab.active{background:var(--green);color:#06110e}
 .table-wrap{border:1.2px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden;margin-bottom:10px}
-.table-header{display:grid;grid-template-columns:1.2fr 1fr 0.5fr 0.5fr;padding:7px 10px;color:#2cc8a0;font-size:10px;font-weight:700;border-bottom:1px solid #143a2f}
-.table-row{display:grid;grid-template-columns:1.2fr 1fr 0.5fr 0.5fr;padding:8px 10px;border-bottom:1px solid #10241f;font-size:11px}
+.table-header{display:grid;grid-template-columns:28% 28% 22% 22%;padding:10px 6px;background:#0e221c;border-bottom:1px solid #143a2f}
+.table-header span{color:#2cc8a0;font-size:10px;font-weight:700;text-align:center}
+.table-row{display:grid;grid-template-columns:28% 28% 22% 22%;padding:11px 6px;border-bottom:1px solid #10241f;align-items:center}
+.table-row span{font-size:11px;text-align:left;padding-left:6px}
 .profit{color:#6fb8ff}.loss{color:#ff8a8a}.note{font-size:10px;color:var(--dim);text-align:center;padding:12px}
 </style>
 </head>
@@ -115,8 +117,7 @@ function formatTanggalBulanTahun(dateStr){
     else if(dateStr.includes('-')){ const p=dateStr.split('-'); y=p[0]; m=p[1]; d=p[2]; }
     else { return dateStr; }
     const bulan=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
-    const mInt=parseInt(m);
-    return d+' '+bulan[mInt-1]+' '+y;
+    return d+' '+bulan[parseInt(m)-1]+' '+y;
   }catch(e){ return dateStr; }
 }
 
@@ -155,24 +156,18 @@ function render(){
   if(running.length){
     const fullDateTime = raw.lastUpdate || '2026.10.16 23:22';
     const parts = fullDateTime.split(' ');
-    const datePart = parts[0] || '2026.10.16';
+    const datePart = parts[0];
     const tglBulanTahun = formatTanggalBulanTahun(datePart);
-
     document.getElementById('cRun').innerHTML=
       '<div class="run-header"><span>Tanggal & Waktu</span><span>Symbol</span><span>Posisi</span><span>Lot</span><span>Floating</span></div>'+
       running.map(r=>{
         let jam = r.dt || (parts[1]||'23:22');
         let tglFinal = tglBulanTahun;
-        if(r.dt && r.dt.includes('.')){
-           const rp = r.dt.split(' ');
-           tglFinal = formatTanggalBulanTahun(rp[0]);
-           jam = rp[1] || jam;
-        }
-        const tglWaktu = tglFinal + ' ' + jam;
+        if(r.dt && r.dt.includes('.')){ const rp=r.dt.split(' '); tglFinal=formatTanggalBulanTahun(rp[0]); jam=rp[1]||jam; }
         return `<div class="run-item">
-          <span class="run-time">${tglWaktu}</span>
+          <span class="run-time">${tglFinal} ${jam}</span>
           <span class="run-symbol">${r.symbol}</span>
-          <span class="run-pos-wrap"><span class="run-pos ${r.pos}">${r.pos}</span></span>
+          <span><span class="run-pos ${r.pos}">${r.pos}</span></span>
           <span class="run-lot">${r.lot.toFixed(2)}</span>
           <span class="run-float ${r.p>=0?'profit':'loss'}">${fmtUSD(r.p)}</span>
         </div>`;
@@ -182,10 +177,11 @@ function render(){
   }
   window._daily=daily; window._tx=tx; renderP(); renderT(); renderChart();
 }
+
 function renderP(){
   const daily=window._daily||[]; let f=daily;
   if(pTab==='7') f=daily.slice(0,7); if(pTab==='30') f=daily.slice(0,30); if(pTab==='90') f=daily.slice(0,90);
-  document.getElementById('rowsP').innerHTML=f.length? f.map(x=>'<div class="table-row"><span>'+x.display+'</span><span class="'+(x.p>=0?'profit':'loss')+'">'+fmtUSD(x.p)+'</span><span style="text-align:center">'+x.w+'</span><span style="text-align:center">'+x.l+'</span></div>').join('') : '<div class="note">Belum ada history harian</div>';
+  document.getElementById('rowsP').innerHTML=f.length? f.map(x=>'<div class="table-row"><span>'+x.display+'</span><span class="'+(x.p>=0?'profit':'loss')+'">'+fmtUSD(x.p)+'</span><span>'+x.w+'</span><span>'+x.l+'</span></div>').join('') : '<div class="note">Belum ada history harian</div>';
   document.getElementById('labP').textContent=pTab+' Hari';
 }
 function renderT(){
@@ -204,7 +200,7 @@ function renderChart(){
   sortedDaily.forEach(d=>{ running+=d.p; labels.push(d.display.slice(0,6)); data.push(running); });
   if(labels.length===0){ labels=['Start','Now']; data=[startBalance,raw.balance]; }
   if(chart) chart.destroy();
-  chart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.18)',borderWidth:2.5,tension:0.35,fill:true,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}});
+  chart=new Chart(ctx,{type:'line',data:{labels:labels,[STRIPPED]
 }
 function setP(v,el){pTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderP();}
 function setT(v,el){tTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderT();}
