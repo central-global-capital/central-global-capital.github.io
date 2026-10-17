@@ -32,16 +32,21 @@ body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,seri
 .live-mini{font-size:9px;background:#132a24;border-radius:6px;padding:4px 8px;color:#2cc8a0;display:inline-block;margin-top:4px}
 .section-title{color:#2cc8a0;font-size:11px;font-weight:700;margin:12px 0 6px;display:flex;gap:5px;align-items:center}
 .running-card{border:1.2px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden}
-.run-header{display:grid;grid-template-columns:1.35fr 0.85fr 0.55fr 0.5fr 0.75fr;padding:8px 8px;color:#2cc8a0;font-size:8px;font-weight:700;border-bottom:1px solid #143a2f;background:#0e221c;letter-spacing:0.3px}
-.run-item{display:grid;grid-template-columns:1.35fr 0.85fr 0.55fr 0.5fr 0.75fr;padding:10px 8px;border-bottom:1px solid #10241f;font-size:10px;align-items:center}
+.run-header{display:grid;grid-template-columns:36% 22% 14% 10% 18%;padding:9px 10px;color:#2cc8a0;font-size:9.5px;font-weight:700;border-bottom:1px solid #143a2f;background:#0e221c}
+.run-item{display:grid;grid-template-columns:36% 22% 14% 10% 18%;padding:11px 10px;border-bottom:1px solid #10241f;font-size:11px;align-items:center}
 .run-item:last-child{border-bottom:none}
-.run-time{font-size:9px;color:#e6f5f0;line-height:1.2}
-.run-symbol{font-size:11px;font-weight:700}
-.run-pos{font-size:9px;font-weight:700;padding:2px 5px;border-radius:6px;text-align:center}
-.run-pos.BUY{color:#6fb8ff;background:rgba(111,184,255,0.12);border:1px solid rgba(111,184,255,0.2)}
-.run-pos.SELL{color:#ff8a8a;background:rgba(255,138,138,0.12);border:1px solid rgba(255,138,138,0.2)}
-.run-lot{font-size:10px;text-align:center}
-.run-float{font-size:11px;font-weight:700;text-align:right}
+.run-header span:nth-child(1), .run-item .run-time{text-align:left}
+.run-header span:nth-child(2), .run-item .run-symbol{text-align:left}
+.run-header span:nth-child(3), .run-item .run-pos-wrap{text-align:center}
+.run-header span:nth-child(4), .run-item .run-lot{text-align:center}
+.run-header span:nth-child(5), .run-item .run-float{text-align:right}
+.run-time{font-size:9.5px;color:#e6f5f0;line-height:1.2;white-space:nowrap}
+.run-symbol{font-size:12px;font-weight:700;white-space:nowrap}
+.run-pos{font-size:9px;font-weight:700;padding:3px 7px;border-radius:7px;display:inline-block;min-width:38px}
+.run-pos.BUY{color:#6fb8ff;background:rgba(111,184,255,0.12);border:1px solid rgba(111,184,255,0.25)}
+.run-pos.SELL{color:#ff8a8a;background:rgba(255,138,138,0.12);border:1px solid rgba(255,138,138,0.25)}
+.run-lot{font-size:11px}
+.run-float{font-size:12px;font-weight:700}
 .tabs{display:flex;gap:5px;margin-bottom:5px}
 .tab{flex:1;min-width:0;padding:6px 2px;border-radius:15px;border:1.2px solid var(--border);background:transparent;color:var(--dim);font-weight:700;font-size:10px;font-family:"Times New Roman";cursor:pointer}
 .tab.active{background:var(--green);color:#06110e}
@@ -108,7 +113,6 @@ function formatTanggalBulanTahun(dateStr){
     let d,m,y;
     if(dateStr.includes('.')){ const p=dateStr.split('.'); y=p[0]; m=p[1]; d=p[2]; }
     else if(dateStr.includes('-')){ const p=dateStr.split('-'); y=p[0]; m=p[1]; d=p[2]; }
-    else if(dateStr.includes('/')){ const p=dateStr.split('/'); d=p[0]; m=p[1]; y=p[2]; return d+'/'+m+'/'+y; }
     else { return dateStr; }
     const bulan=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
     const mInt=parseInt(m);
@@ -117,10 +121,9 @@ function formatTanggalBulanTahun(dateStr){
 }
 
 function listenFirebase(){
-  const ref=db.ref('live/LIVE_MAIN');
-  ref.on('value',snap=>{
+  db.ref('live/LIVE_MAIN').on('value',snap=>{
     raw=snap.val();
-    if(!raw){document.getElementById('connText').textContent='FIREBASE KOSONG - EA BELUM PUSH'; return;}
+    if(!raw){document.getElementById('connText').textContent='FIREBASE KOSONG'; return;}
     const isWeekend=[0,6].includes(new Date().getDay());
     document.getElementById('connText').textContent=(isWeekend?'MARKET LIBUR - ':'EA RUNNING - ')+'TERKONEKSI LIVE '+(raw.lastUpdate||'');
     document.getElementById('dotStatus').style.background=isWeekend?'#e8a25a':'#0fa868';
@@ -149,7 +152,6 @@ function render(){
   document.getElementById('cCons').innerHTML='Cur: '+(cons.curWin||0)+'W / '+(cons.curLoss||0)+'L<br>Max: '+(cons.maxWin||0)+'W / '+(cons.maxLoss||0)+'L';
   document.getElementById('cHold').innerHTML=(raw.avgHold||'7m')+'<br>Floating $'+(raw.floating||0).toFixed(2);
 
-  // FIX URUTAN: Tanggal Bulan Tahun + Waktu, Symbol, Posisi, Lot, Floating
   if(running.length){
     const fullDateTime = raw.lastUpdate || '2026.10.16 23:22';
     const parts = fullDateTime.split(' ');
@@ -157,10 +159,9 @@ function render(){
     const tglBulanTahun = formatTanggalBulanTahun(datePart);
 
     document.getElementById('cRun').innerHTML=
-      '<div class="run-header"><span>Tanggal Bulan Tahun</span><span>Symbol</span><span>Posisi</span><span>Lot</span><span>Floating</span></div>'+
+      '<div class="run-header"><span>Tanggal & Waktu</span><span>Symbol</span><span>Posisi</span><span>Lot</span><span>Floating</span></div>'+
       running.map(r=>{
         let jam = r.dt || (parts[1]||'23:22');
-        // kalau r.dt sudah ada tanggal, pakai tanggalnya
         let tglFinal = tglBulanTahun;
         if(r.dt && r.dt.includes('.')){
            const rp = r.dt.split(' ');
@@ -171,18 +172,16 @@ function render(){
         return `<div class="run-item">
           <span class="run-time">${tglWaktu}</span>
           <span class="run-symbol">${r.symbol}</span>
-          <span class="run-pos ${r.pos}">${r.pos}</span>
+          <span class="run-pos-wrap"><span class="run-pos ${r.pos}">${r.pos}</span></span>
           <span class="run-lot">${r.lot.toFixed(2)}</span>
           <span class="run-float ${r.p>=0?'profit':'loss'}">${fmtUSD(r.p)}</span>
         </div>`;
       }).join('');
   }else{
-    document.getElementById('cRun').innerHTML='<div class="run-header"><span>Tanggal Bulan Tahun</span><span>Symbol</span><span>Posisi</span><span>Lot</span><span>Floating</span></div><div class="note">Tidak ada posisi running<br>Floating $'+(raw.floating||0).toFixed(2)+'</div>';
+    document.getElementById('cRun').innerHTML='<div class="run-header"><span>Tanggal & Waktu</span><span>Symbol</span><span>Posisi</span><span>Lot</span><span>Floating</span></div><div class="note">Tidak ada posisi running<br>Floating $'+(raw.floating||0).toFixed(2)+'</div>';
   }
-
   window._daily=daily; window._tx=tx; renderP(); renderT(); renderChart();
 }
-
 function renderP(){
   const daily=window._daily||[]; let f=daily;
   if(pTab==='7') f=daily.slice(0,7); if(pTab==='30') f=daily.slice(0,30); if(pTab==='90') f=daily.slice(0,90);
@@ -196,8 +195,7 @@ function renderT(){
   document.getElementById('labT').textContent=filtered.length;
 }
 function renderChart(){
-  const daily=window._daily||[];
-  const ctx=document.getElementById('eqChart').getContext('2d');
+  const daily=window._daily||[]; const ctx=document.getElementById('eqChart').getContext('2d');
   const sortedDaily=[...daily].reverse();
   let totalProfit=0; sortedDaily.forEach(d=>totalProfit+=d.p);
   let startBalance=raw.balance - totalProfit;
@@ -206,11 +204,7 @@ function renderChart(){
   sortedDaily.forEach(d=>{ running+=d.p; labels.push(d.display.slice(0,6)); data.push(running); });
   if(labels.length===0){ labels=['Start','Now']; data=[startBalance,raw.balance]; }
   if(chart) chart.destroy();
-  chart=new Chart(ctx,{
-    type:'line',
-    data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.18)',borderWidth:2.5,tension:0.35,fill:true,pointRadius:0,pointHoverRadius:5}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' $'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}
-  });
+  chart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.18)',borderWidth:2.5,tension:0.35,fill:true,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}});
 }
 function setP(v,el){pTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderP();}
 function setT(v,el){tTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderT();}
