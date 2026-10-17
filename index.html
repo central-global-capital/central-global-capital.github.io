@@ -32,19 +32,29 @@ body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,seri
 .live-mini{font-size:9px;background:#132a24;border-radius:6px;padding:4px 8px;color:#2cc8a0;display:inline-block;margin-top:4px}
 .section-title{color:#2cc8a0;font-size:11px;font-weight:700;margin:12px 0 6px;display:flex;gap:5px;align-items:center}
 
-/* === FIX ANTI PONCANG PAKAI TABLE FIXED === */
-.card-table{border:1.2px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden;margin-bottom:10px}
-table.data-table{width:100%;border-collapse:collapse;table-layout:fixed}
-table.data-table th{padding:10px 2px;background:#0e221c;color:#2cc8a0;font-size:9px;font-weight:700;text-align:center;border-bottom:1px solid #143a2f;white-space:nowrap}
-table.data-table td{padding:11px 2px;font-size:10.5px;text-align:center;border-bottom:1px solid #10241f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-table.data-table tr:last-child td{border-bottom:none}
+/* === FIX ANTI PONCANG - GRID SAMA PERSIS === */
+.running-card{border:1.2px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden}
+.run-header{display:grid;grid-template-columns:36% 20% 14% 10% 20%;padding:10px 2px;background:#0e221c;border-bottom:1px solid #143a2f}
+.run-header span{color:#2cc8a0;font-size:9px;font-weight:700;text-align:center}
+.run-item{display:grid;grid-template-columns:36% 20% 14% 10% 20%;padding:11px 2px;border-bottom:1px solid #10241f;align-items:center}
+.run-item:last-child{border-bottom:none}
+.run-item span{font-size:10px;text-align:center}
+.run-time{font-size:9px !important;white-space:nowrap}
+.run-symbol{font-size:10px !important;font-weight:700}
 .run-pos{font-size:9px;font-weight:700;padding:3px 6px;border-radius:6px;display:inline-block;min-width:36px;text-align:center}
 .run-pos.BUY{color:#6fb8ff;background:rgba(111,184,255,0.12);border:1px solid rgba(111,184,255,0.25)}
 .run-pos.SELL{color:#ff8a8a;background:rgba(255,138,138,0.12);border:1px solid rgba(255,138,138,0.25)}
+.run-lot{font-size:10px}
+.run-float{font-size:10px;font-weight:700}
 
 .tabs{display:flex;gap:5px;margin-bottom:5px}
 .tab{flex:1;min-width:0;padding:6px 2px;border-radius:15px;border:1.2px solid var(--border);background:transparent;color:var(--dim);font-weight:700;font-size:10px;font-family:"Times New Roman";cursor:pointer}
 .tab.active{background:var(--green);color:#06110e}
+.table-wrap{border:1.2px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden;margin-bottom:10px}
+.table-header{display:grid;grid-template-columns:28% 28% 22% 22%;padding:10px 2px;background:#0e221c;border-bottom:1px solid #143a2f}
+.table-header span{color:#2cc8a0;font-size:10px;font-weight:700;text-align:center}
+.table-row{display:grid;grid-template-columns:28% 28% 22% 22%;padding:11px 2px;border-bottom:1px solid #10241f;align-items:center}
+.table-row span{font-size:11px;text-align:center}
 .profit{color:#6fb8ff}.loss{color:#ff8a8a}.note{font-size:10px;color:var(--dim);text-align:center;padding:12px}
 </style>
 </head>
@@ -77,18 +87,20 @@ table.data-table tr:last-child td{border-bottom:none}
 </div></div>
 
 <div class="section-title">POSISI RUNNING <span class="dot"></span> LIVE MT5</div>
-<div class="card-table" id="cRun"><div class="note">Menunggu EA...</div></div>
+<div class="running-card" id="cRun"><div class="note">Menunggu EA...</div></div>
 
 <div class="section-title">HISTORI PROFIT HARIAN (<span id="labP">7 Hari</span>)</div>
-<div class="card-table">
+<div class="table-wrap">
 <div style="padding:6px"><div class="tabs"><button class="tab active" onclick="setP('7',this)">7 Hari</button><button class="tab" onclick="setP('30',this)">30 Hari</button><button class="tab" onclick="setP('90',this)">90 Hari</button></div></div>
-<table class="data-table"><thead><tr><th style="width:28%">Tanggal</th><th style="width:28%">Profit</th><th style="width:22%">Win</th><th style="width:22%">Loss</th></tr></thead><tbody id="rowsP"><tr><td colspan="4" class="note">Menunggu Firebase...</td></tr></tbody></table>
+<div class="table-header"><span>Tanggal</span><span>Profit</span><span>Win</span><span>Loss</span></div>
+<div id="rowsP"><div class="note">Menunggu Firebase...</div></div>
 </div>
 
-<div class="section-title">HISTORI <span id="labT">5</span> TRANSAKSI</div>
-<div class="card-table">
+<div class="section-title">HISTORI <span id="labT">30</span> TRANSAKSI</div>
+<div class="table-wrap">
 <div style="padding:6px"><div class="tabs"><button class="tab active" onclick="setT('today',this)">Hari Ini</button><button class="tab" onclick="setT('7',this)">7 Hari</button><button class="tab" onclick="setT('30',this)">30 Hari</button></div></div>
-<table class="data-table"><thead><tr><th style="width:28%">Waktu</th><th style="width:28%">Symbol</th><th style="width:22%">Type</th><th style="width:22%">Profit</th></tr></thead><tbody id="rowsT"><tr><td colspan="4" class="note">Menunggu Firebase...</td></tr></tbody></table>
+<div class="table-header"><span>Waktu</span><span>Symbol</span><span>Type</span><span>Profit</span></div>
+<div id="rowsT"><div class="note">Menunggu Firebase...</div></div>
 </div>
 
 <script>
@@ -97,6 +109,7 @@ firebase.initializeApp(firebaseConfig);
 const db=firebase.database();
 let pTab='7',tTab='today',chart=null,raw=null;
 const fmtUSD=n=> (n>=0?'+$':'-$')+Math.abs(n).toFixed(2);
+
 function formatTanggalBulanTahun(dateStr){
   try{
     let d,m,y;
@@ -107,10 +120,12 @@ function formatTanggalBulanTahun(dateStr){
     return d+' '+bulan[parseInt(m)-1]+' '+y;
   }catch(e){ return dateStr; }
 }
+
 function listenFirebase(){
-  db.ref('live/LIVE_MAIN').on('value',snap=>{
+  const ref=db.ref('live/LIVE_MAIN');
+  ref.on('value',snap=>{
     raw=snap.val();
-    if(!raw){document.getElementById('connText').textContent='FIREBASE KOSONG'; return;}
+    if(!raw){document.getElementById('connText').textContent='FIREBASE KOSONG - EA BELUM PUSH'; return;}
     const isWeekend=[0,6].includes(new Date().getDay());
     document.getElementById('connText').textContent=(isWeekend?'MARKET LIBUR - ':'EA RUNNING - ')+'TERKONEKSI LIVE '+(raw.lastUpdate||'');
     document.getElementById('dotStatus').style.background=isWeekend?'#e8a25a':'#0fa868';
@@ -118,6 +133,7 @@ function listenFirebase(){
     render();
   });
 }
+
 function render(){
   const s=raw.summary||{}, daily=raw.daily||[], tx=raw.tx||[], running=raw.running||[], cons=raw.consecutive5||{};
   const total=s.total||0, win=s.win||0, loss=s.loss||0, gp=s.profit||0, gl=s.lossSum||0, pf=s.pf||0, wr=total>0?win/total*100:0;
@@ -138,39 +154,47 @@ function render(){
   document.getElementById('cCons').innerHTML='Cur: '+(cons.curWin||0)+'W / '+(cons.curLoss||0)+'L<br>Max: '+(cons.maxWin||0)+'W / '+(cons.maxLoss||0)+'L';
   document.getElementById('cHold').innerHTML=(raw.avgHold||'7m')+'<br>Floating $'+(raw.floating||0).toFixed(2);
 
-  // POSISI RUNNING PAKAI TABLE FIXED - ANTI PONCANG
   if(running.length){
     const fullDateTime = raw.lastUpdate || '2026.10.16 23:22';
     const parts = fullDateTime.split(' ');
-    const tglBulanTahun = formatTanggalBulanTahun(parts[0]);
-    let html = '<table class="data-table"><thead><tr><th style="width:34%">Tanggal & Waktu</th><th style="width:20%">Symbol</th><th style="width:14%">Posisi</th><th style="width:12%">Lot</th><th style="width:20%">Floating</th></tr></thead><tbody>';
-    running.forEach(r=>{
-      let jam = r.dt || (parts[1]||'23:22');
-      let tglFinal = tglBulanTahun;
-      if(r.dt && r.dt.includes('.')){ const rp=r.dt.split(' '); tglFinal=formatTanggalBulanTahun(rp[0]); jam=rp[1]||jam; }
-      html+= `<tr><td>${tglFinal} ${jam}</td><td style="font-weight:700">${r.symbol}</td><td><span class="run-pos ${r.pos}">${r.pos}</span></td><td>${r.lot.toFixed(2)}</td><td class="${r.p>=0?'profit':'loss'}" style="font-weight:700">${fmtUSD(r.p)}</td></tr>`;
-    });
-    html+='</tbody></table>';
-    document.getElementById('cRun').innerHTML=html;
+    const datePart = parts[0];
+    const tglBulanTahun = formatTanggalBulanTahun(datePart);
+    document.getElementById('cRun').innerHTML=
+      '<div class="run-header"><span>Tanggal & Waktu</span><span>Symbol</span><span>Posisi</span><span>Lot</span><span>Floating</span></div>'+
+      running.map(r=>{
+        let jam = r.dt || (parts[1]||'23:22');
+        let tglFinal = tglBulanTahun;
+        if(r.dt && r.dt.includes('.')){ const rp=r.dt.split(' '); tglFinal=formatTanggalBulanTahun(rp[0]); jam=rp[1]||jam; }
+        return `<div class="run-item">
+          <span class="run-time">${tglFinal} ${jam}</span>
+          <span class="run-symbol">${r.symbol}</span>
+          <span><span class="run-pos ${r.pos}">${r.pos}</span></span>
+          <span class="run-lot">${r.lot.toFixed(2)}</span>
+          <span class="run-float ${r.p>=0?'profit':'loss'}">${fmtUSD(r.p)}</span>
+        </div>`;
+      }).join('');
   }else{
-    document.getElementById('cRun').innerHTML='<table class="data-table"><thead><tr><th>Tanggal & Waktu</th><th>Symbol</th><th>Posisi</th><th>Lot</th><th>Floating</th></tr></thead><tbody><tr><td colspan="5" class="note">Tidak ada posisi running<br>Floating $'+(raw.floating||0).toFixed(2)+'</td></tr></tbody></table>';
+    document.getElementById('cRun').innerHTML='<div class="run-header"><span>Tanggal & Waktu</span><span>Symbol</span><span>Posisi</span><span>Lot</span><span>Floating</span></div><div class="note">Tidak ada posisi running<br>Floating $'+(raw.floating||0).toFixed(2)+'</div>';
   }
+
   window._daily=daily; window._tx=tx; renderP(); renderT(); renderChart();
 }
+
 function renderP(){
   const daily=window._daily||[]; let f=daily;
   if(pTab==='7') f=daily.slice(0,7); if(pTab==='30') f=daily.slice(0,30); if(pTab==='90') f=daily.slice(0,90);
-  document.getElementById('rowsP').innerHTML=f.length? f.map(x=>`<tr><td>${x.display}</td><td class="${x.p>=0?'profit':'loss'}">${fmtUSD(x.p)}</td><td>${x.w}</td><td>${x.l}</td></tr>`).join('') : '<tr><td colspan="4" class="note">Belum ada history harian</td></tr>';
+  document.getElementById('rowsP').innerHTML=f.length? f.map(x=>'<div class="table-row"><span>'+x.display+'</span><span class="'+(x.p>=0?'profit':'loss')+'">'+fmtUSD(x.p)+'</span><span>'+x.w+'</span><span>'+x.l+'</span></div>').join('') : '<div class="note">Belum ada history harian</div>';
   document.getElementById('labP').textContent=pTab+' Hari';
 }
 function renderT(){
   let t=window._tx||[]; let filtered=t;
   if(tTab==='today') filtered=t.slice(0,5); else if(tTab==='7') filtered=t.slice(0,7); else if(tTab==='30') filtered=t.slice(0,20);
-  document.getElementById('rowsT').innerHTML=filtered.length? filtered.map(x=>`<tr><td>${x.dt}</td><td>${x.symbol}</td><td style="color:${x.pos==='BUY'?'#6fb8ff':'#ff9d6b'}">${x.pos}</td><td class="${x.p>=0?'profit':'loss'}">${fmtUSD(x.p)}</td></tr>`).join('') : '<tr><td colspan="4" class="note">Tidak ada transaksi</td></tr>';
+  document.getElementById('rowsT').innerHTML=filtered.length? filtered.map(x=>'<div class="table-row"><span>'+x.dt+'</span><span>'+x.symbol+'</span><span style="color:'+(x.pos==='BUY'?'#6fb8ff':'#ff9d6b')+'">'+x.pos+'</span><span class="'+(x.p>=0?'profit':'loss')+'">'+fmtUSD(x.p)+'</span></div>').join('') : '<div class="note">Tidak ada transaksi</div>';
   document.getElementById('labT').textContent=filtered.length;
 }
 function renderChart(){
-  const daily=window._daily||[]; const ctx=document.getElementById('eqChart').getContext('2d');
+  const daily=window._daily||[];
+  const ctx=document.getElementById('eqChart').getContext('2d');
   const sortedDaily=[...daily].reverse();
   let totalProfit=0; sortedDaily.forEach(d=>totalProfit+=d.p);
   let startBalance=raw.balance - totalProfit;
@@ -179,7 +203,11 @@ function renderChart(){
   sortedDaily.forEach(d=>{ running+=d.p; labels.push(d.display.slice(0,6)); data.push(running); });
   if(labels.length===0){ labels=['Start','Now']; data=[startBalance,raw.balance]; }
   if(chart) chart.destroy();
-  chart=new Chart(ctx,{type:'line',data:{labels:labels,[STRIPPED]
+  chart=new Chart(ctx,{
+    type:'line',
+    data:{labels:labels,[STRIPPED]
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' $'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}
+  });
 }
 function setP(v,el){pTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderP();}
 function setT(v,el){tTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderT();}
