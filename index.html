@@ -63,7 +63,7 @@ body{background:var(--bg);color:#e6f5f0;font-family:"Times New Roman",Times,seri
 <div class="section-title">BALANCE & TODAY</div><div class="balance-card"><div class="stat-label">Balance</div><div class="balance-amount" id="cBal">-</div><div class="live-mini">↗ <span id="cDays">-</span> | <span id="lastUpd">-</span></div><div class="grid2"><div class="stat-box b2"><div class="stat-label">Profit Hari Ini</div><div class="stat-val profit sm" id="cToday">-</div></div><div class="stat-box b2"><div class="stat-label">Max DD</div><div class="stat-val sm" style="color:#e8a25a" id="cDD">-</div><div style="font-size:7px;color:var(--dim)">100 trade terakhir</div></div><div class="stat-box b2"><div class="stat-label">Consecutive</div><div style="font-size:9px;line-height:1.3;text-align:center" id="cCons">-</div></div><div class="stat-box b2"><div class="stat-label">AVG Hold / Floating</div><div style="font-size:9px;line-height:1.3;text-align:center" id="cHold">-</div></div></div></div>
 <div class="section-title">POSISI RUNNING <span class="dot"></span> LIVE MT5</div><div class="running-card" id="cRun"><div class="note">Menunggu EA...</div></div>
 <div class="section-title">HISTORI PROFIT HARIAN (<span id="labP">7 Hari</span>)</div><div class="table-wrap"><div style="padding:6px"><div class="tabs"><button class="tab active" onclick="setP('7',this)">7 Hari</button><button class="tab" onclick="setP('30',this)">30 Hari</button><button class="tab" onclick="setP('90',this)">90 Hari</button></div></div><div class="table-header"><span>Tanggal</span><span>Profit</span><span>Win</span><span>Loss</span></div><div id="rowsP"><div class="note">Menunggu Firebase...</div></div></div>
-<div class="section-title">HISTORI <span id="labT">HARI INI</span> TRANSAKSI</div><div class="table-wrap"><div style="padding:6px"><div class="tabs"><button class="tab active" onclick="setT('today',this)">Hari Ini</button><button class="tab" onclick="setT('7',this)">7 Hari</button><button class="tab" onclick="setT('30',this)">30 Hari</button></div></div><div class="table-header"><span>Waktu</span><span>Symbol</span><span>Type</span><span>Profit</span></div><div id="rowsT"><div class="note">Menunggu Firebase...</div></div></div>
+<div class="section-title">HISTORI <span id="labT">HARI INI</span> TRANSAKSI</div><div class="table-wrap"><div style="padding:6px"><div class="tabs"><button class="tab active" onclick="setT('today',this)">Hari Ini (Tgl 19)</button><button class="tab" onclick="setT('7',this)">7 Hari</button><button class="tab" onclick="setT('30',this)">30 Hari</button></div></div><div class="table-header"><span>Waktu</span><span>Symbol</span><span>Type</span><span>Profit</span></div><div id="rowsT"><div class="note">Menunggu Firebase...</div></div></div>
 <script>
 const firebaseConfig={databaseURL:"https://mrdien-scalper-default-rtdb.firebaseio.com"};
 firebase.initializeApp(firebaseConfig);
@@ -151,43 +151,38 @@ function renderP(){
 }
 function renderT(){
   let t=window._tx||[]; 
-  // --- FIX UTAMA: HARI INI = TANGGAL 19 SEMUA DIMUNCULKAN ---
   let filtered=[];
   if(tTab==='today'){
-    // Ambil tanggal hari ini dari lastUpdate atau dari transaksi terbaru
-    let todayStr = "";
+    let todayDay = "19";
     if(raw && raw.lastUpdate){
-      const parts = raw.lastUpdate.split(' ')[0]; // 2026.10.19 atau 2026-10-19
-      if(parts.includes('.')) todayStr = parts.split('.')[2]; // ambil tgl 19
-      else if(parts.includes('-')) todayStr = parts.split('-')[2];
+      const datePart = raw.lastUpdate.split(' ')[0];
+      if(datePart.includes('.')) todayDay = datePart.split('.')[2];
+      else if(datePart.includes('-')) todayDay = datePart.split('-')[2];
     }
-    // Fallback: ambil hari dari transaksi pertama
-    if(!todayStr && t.length>0 && t[0].dtFull){
-      const d = t[0].dtFull.split(' ')[0];
-      if(d.includes('-')) todayStr = d.split('-')[2];
-      else if(d.includes('.')) todayStr = d.split('.')[2];
-    }
-    if(!todayStr) todayStr = "19"; // default sesuai screenshot lu tanggal 19
-    
-    // Filter semua transaksi yang tanggalnya 19
     filtered = t.filter(x=>{
-      const dt = (x.dtFull||"") + " " + (x.dt||"");
-      return dt.includes("19 Okt") || dt.includes("19/10") || dt.includes("-19") || dt.includes(".19") || dt.includes("19 ");
+      const full = (x.dtFull||"") + " " + (x.dt||"");
+      return full.includes(todayDay+" Okt") || full.includes("19 Okt") || full.includes("19 ");
     });
-    // Jika filter tanggal gagal, tampilkan minimal 100 transaksi terbaru biar semua tanggal 19 keliatan
-    if(filtered.length===0) filtered = t.slice(0, 200);
+    if(filtered.length===0) filtered = t.slice(0,200);
   } else if(tTab==='7'){
     filtered=t.slice(0,150);
   } else if(tTab==='30'){
     filtered=t.slice(0,1000);
   }
-  
   document.getElementById('rowsT').innerHTML=filtered.length? filtered.map(x=>{
     let waktu = x.dt||"";
-    if(x.dtFull){ const p=x.dtFull.split(' '); const d=p[0]; const jam=p[1]||""; waktu = d.slice(5).replace('-',' Okt ')+" "+jam; }
+    if(x.dtFull){
+      const p=x.dtFull.split(' ');
+      const d=p[0]; const jam=p[1]||"";
+      const bulan=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+      let day="", mon="";
+      if(d.includes('-')){ day=d.split('-')[2]; mon=d.split('-')[1]; }
+      else if(d.includes('.')){ day=d.split('.')[2]; mon=d.split('.')[1]; }
+      waktu = day+" "+bulan[parseInt(mon)-1]+" "+jam;
+    }
     return '<div class="table-row"><span>'+waktu+'</span><span>'+(x.symbol||'XAUUSD.cent')+'</span><span style="color:'+(x.pos==='BUY'?'#6fb8ff':'#ff9d6b')+'">'+x.pos+'</span><span class="'+(x.p>=0?'profit':'loss')+'">'+fmtUSD(x.p)+'</span></div>';
   }).join('') : '<div class="note">Tidak ada transaksi</div>';
-  document.getElementById('labT').textContent = tTab==='today' ? filtered.length+' (Tgl 19)' : filtered.length;
+  document.getElementById('labT').textContent=filtered.length + (tTab==='today'?' (Tgl '+ (raw&&raw.lastUpdate?raw.lastUpdate.split(' ')[0].split('.')[2]:'19') +')':'');
 }
 function renderChart(){
   const daily=window._daily||[];
@@ -207,7 +202,7 @@ function renderChart(){
     if(labels.length===0){ labels=['Start','Now']; data=[startBalance,raw.balance]; }
   }
   if(chart) chart.destroy();
-  chart=new Chart(ctx,{type:'line',data:{labels:labels,[STRIPPED] ' Equity $'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}});
+  chart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.18)',fill:true,tension:0.35,borderWidth:2.2,pointRadius:0,pointHoverRadius:5}]},options:{responsive:true,maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#0f211c',titleColor:'#8dbbb0',bodyColor:'#e6f5f0',borderColor:'#1a8a6a',borderWidth:1,displayColors:false,callbacks:{label:ctx=> ' Equity $'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}});
 }
 function setP(v,el){pTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderP();}
 function setT(v,el){tTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderT();}
