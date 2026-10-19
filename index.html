@@ -92,24 +92,45 @@ function listenFirebase(){
   });
 }
 function render(){
-  const s=raw.summary||{}, daily=raw.daily||[], tx=raw.tx||[], running=raw.running||[], cons=raw.consecutive5||{};
-  const total=s.total||0, win=s.win||0, loss=s.loss||0, gp=s.profit||0, gl=s.lossSum||0, pf=s.pf||0, wr=total>0?win/total*100:0;
+  const s=raw.summary||{}, daily=raw.daily||[], tx=raw.tx||[], running=raw.running||[];
+  const stats = raw.stats || {};
+  const cons = raw.consecutive5 || stats || {};
+  
+  const total=s.total||0, win=s.win||0, loss=s.loss||0;
+  const gp = s.grossProfit!==undefined ? s.grossProfit : (s.profit||0);
+  const gl = s.grossLoss!==undefined ? s.grossLoss : (s.lossSum||0);
+  const pf = s.pf||0;
+  const wr = s.winrate!==undefined ? s.winrate : (total>0?win/total*100:0);
+  
   document.getElementById('cTotal').textContent=total;
   document.getElementById('cGP').textContent=fmtUSD(gp);
-  document.getElementById('cGL').textContent=fmtUSD(gl);
+  document.getElementById('cGL').textContent=fmtUSD(-Math.abs(gl));
   document.getElementById('cWL').textContent=win+' / '+loss;
   document.getElementById('cPF').textContent=pf.toFixed(2);
   document.getElementById('cWR').textContent=wr.toFixed(1)+'%';
-  document.getElementById('cBal').textContent='$'+raw.balance.toLocaleString('en-US',{minimumFractionDigits:2});
-  document.getElementById('fStart').textContent='Start $5000.00';
-  document.getElementById('fEq').textContent='Equity $'+raw.equity.toFixed(0);
-  document.getElementById('fProfit').textContent=fmtUSD(raw.equity-5000);
-  document.getElementById('cDays').textContent='Real '+daily.length+' Hari';
+  
+  document.getElementById('cBal').textContent='$'+(raw.balance||0).toLocaleString('en-US',{minimumFractionDigits:2});
+  document.getElementById('fStart').textContent='Start $'+(raw.startBalance||5000).toFixed(2);
+  document.getElementById('fEq').textContent='Equity $'+(raw.equity||0).toFixed(0);
+  document.getElementById('fProfit').textContent=fmtUSD((raw.totalLive!==undefined?raw.totalLive:(raw.equity-(raw.startBalance||5000))));
+  document.getElementById('cDays').textContent='Real '+daily.length+' Hari | '+(raw.totalTx||tx.length)+' Tx';
   document.getElementById('cToday').textContent=fmtUSD(raw.profitToday||0);
   document.getElementById('cToday').className='stat-val sm '+(raw.profitToday>=0?'profit':'loss');
-  document.getElementById('cDD').textContent=raw.maxDD? '$'+Math.abs(raw.maxDD).toFixed(2):'-';
-  document.getElementById('cCons').innerHTML='Cur: '+(cons.curWin||0)+'W / '+(cons.curLoss||0)+'L<br>Max: '+(cons.maxWin||0)+'W / '+(cons.maxLoss||0)+'L';
-  document.getElementById('cHold').innerHTML=(raw.avgHold||'7m')+'<br>Floating $'+(raw.floating||0).toFixed(2);
+  
+  const maxDDVal = stats.maxDD!==undefined ? stats.maxDD : (raw.maxDD||0);
+  document.getElementById('cDD').textContent= maxDDVal? '$'+Math.abs(maxDDVal).toFixed(2):'$0.00';
+  
+  const curW = cons.curWin!==undefined ? cons.curWin : (stats.curConWin||0);
+  const curL = cons.curLoss!==undefined ? cons.curLoss : (stats.curConLoss||0);
+  const maxW = cons.maxWin!==undefined ? cons.maxWin : (stats.maxConWin||0);
+  const maxL = cons.maxLoss!==undefined ? cons.maxLoss : (stats.maxConLoss||0);
+  document.getElementById('cCons').innerHTML='Cur: '+curW+'W / '+curL+'L<br>Max: '+maxW+'W / '+maxL+'L';
+  
+  const avgHoldVal = stats.avgHold||raw.avgHold||'7m';
+  const floatingVal = stats.floating!==undefined ? stats.floating : (raw.floating||0);
+  const avgStr = typeof avgHoldVal === 'number' ? avgHoldVal.toFixed(0)+'m' : avgHoldVal;
+  document.getElementById('cHold').innerHTML=avgStr+'<br>Floating $'+floatingVal.toFixed(2);
+  
   if(running.length){
     const fullDateTime = raw.lastUpdate || '2026.10.16 23:22';
     const parts = fullDateTime.split(' ');
@@ -121,37 +142,45 @@ function render(){
         let jam = r.dt || (parts[1]||'23:22');
         let tglFinal = tglBulanTahun;
         if(r.dt && r.dt.includes('.')){ const rp=r.dt.split(' '); tglFinal=formatTanggalBulanTahun(rp[0]); jam=rp[1]||jam; }
-        return `<div class="run-item"><span class="run-time">${tglFinal} ${jam}</span><span class="run-symbol">${r.symbol}</span><span><span class="run-pos ${r.pos}">${r.pos}</span></span><span class="run-lot">${r.lot.toFixed(2)}</span><span class="run-float ${r.p>=0?'profit':'loss'}">${fmtUSD(r.p)}</span></div>`;
+        if(r.dtFull){ const d = r.dtFull.split(' '); tglFinal = formatTanggalBulanTahun(d[0]); jam = d[1]||jam; }
+        return `<div class="run-item"><span class="run-time">${tglFinal} ${jam}</span><span class="run-symbol">${r.symbol||'GOLD'}</span><span><span class="run-pos ${r.pos}">${r.pos}</span></span><span class="run-lot">${(r.lot||0).toFixed(2)}</span><span class="run-float ${r.p>=0?'profit':'loss'}">${fmtUSD(r.p)}</span></div>`;
       }).join('');
   }else{
-    document.getElementById('cRun').innerHTML='<div class="run-header"><span>Tanggal & Waktu</span><span>Symbol</span><span>Posisi</span><span>Lot</span><span>Floating</span></div><div class="note">Tidak ada posisi running<br>Floating $'+(raw.floating||0).toFixed(2)+'</div>';
+    document.getElementById('cRun').innerHTML='<div class="run-header"><span>Tanggal & Waktu</span><span>Symbol</span><span>Posisi</span><span>Lot</span><span>Floating</span></div><div class="note">Tidak ada posisi running<br>Floating $'+(raw.floating||stats.floating||0).toFixed(2)+'</div>';
   }
   window._daily=daily; window._tx=tx; renderP(); renderT(); renderChart();
 }
 function renderP(){
   const daily=window._daily||[]; let f=daily;
-  if(pTab==='7') f=daily.slice(0,7); if(pTab==='30') f=daily.slice(0,30); if(pTab==='90') f=daily.slice(0,90);
-  document.getElementById('rowsP').innerHTML=f.length? f.map(x=>'<div class="table-row"><span>'+x.display+'</span><span class="'+(x.p>=0?'profit':'loss')+'">'+fmtUSD(x.p)+'</span><span>'+x.w+'</span><span>'+x.l+'</span></div>').join('') : '<div class="note">Belum ada history harian</div>';
+  if(pTab==='7') f=daily.slice(-7).reverse(); else if(pTab==='30') f=daily.slice(-30).reverse(); else if(pTab==='90') f=daily.slice(-90).reverse();
+  document.getElementById('rowsP').innerHTML=f.length? f.map(x=>'<div class="table-row"><span>'+(x.display||x.date)+'</span><span class="'+(x.p>=0?'profit':'loss')+'">'+fmtUSD(x.p)+'</span><span>'+x.w+'</span><span>'+x.l+'</span></div>').join('') : '<div class="note">Belum ada history harian</div>';
   document.getElementById('labP').textContent=pTab+' Hari';
 }
 function renderT(){
   let t=window._tx||[]; let filtered=t;
-  if(tTab==='today') filtered=t.slice(0,5); else if(tTab==='7') filtered=t.slice(0,7); else if(tTab==='30') filtered=t.slice(0,20);
-  document.getElementById('rowsT').innerHTML=filtered.length? filtered.map(x=>'<div class="table-row"><span>'+x.dt+'</span><span>'+x.symbol+'</span><span style="color:'+(x.pos==='BUY'?'#6fb8ff':'#ff9d6b')+'">'+x.pos+'</span><span class="'+(x.p>=0?'profit':'loss')+'">'+fmtUSD(x.p)+'</span></div>').join('') : '<div class="note">Tidak ada transaksi</div>';
+  if(tTab==='today') filtered=t.slice(0,10); else if(tTab==='7') filtered=t.slice(0,50); else if(tTab==='30') filtered=t.slice(0,200);
+  document.getElementById('rowsT').innerHTML=filtered.length? filtered.map(x=>'<div class="table-row"><span>'+(x.dt||'')+'</span><span>'+(x.symbol||'GOLD')+'</span><span style="color:'+(x.pos==='BUY'?'#6fb8ff':'#ff9d6b')+'">'+x.pos+'</span><span class="'+(x.p>=0?'profit':'loss')+'">'+fmtUSD(x.p)+'</span></div>').join('') : '<div class="note">Tidak ada transaksi</div>';
   document.getElementById('labT').textContent=filtered.length;
 }
 function renderChart(){
   const daily=window._daily||[];
   const ctx=document.getElementById('eqChart').getContext('2d');
-  const sortedDaily=[...daily].reverse();
-  let totalProfit=0; sortedDaily.forEach(d=>totalProfit+=d.p);
-  let startBalance=raw.balance - totalProfit;
-  if(startBalance < 3000 || startBalance > 7000) startBalance=5000;
-  let labels=[]; let data=[]; let running=startBalance;
-  sortedDaily.forEach(d=>{ running+=d.p; labels.push(d.display.slice(0,6)); data.push(running); });
-  if(labels.length===0){ labels=['Start','Now']; data=[startBalance,raw.balance]; }
+  if(daily.length===0 && (!raw.equityChart||raw.equityChart.length===0)){ if(chart) chart.destroy(); return; }
+  let labels=[], data=[];
+  if(raw.equityChart && raw.equityChart.length>0){
+    labels = raw.equityChart.map(d=>d.display);
+    data = raw.equityChart.map(d=>d.equity);
+  } else {
+    const sortedDaily=[...daily].sort((a,b)=> new Date(a.date)-new Date(b.date));
+    let totalProfit=0; sortedDaily.forEach(d=>totalProfit+=d.p);
+    let startBalance=raw.startBalance || (raw.balance - totalProfit);
+    if(startBalance < 1000 || startBalance > 20000) startBalance=5000;
+    let running=startBalance;
+    sortedDaily.forEach(d=>{ running+=d.p; labels.push((d.display||d.date).slice(0,6)); data.push(running); });
+    if(labels.length===0){ labels=['Start','Now']; data=[startBalance,raw.balance]; }
+  }
   if(chart) chart.destroy();
-  chart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.18)',borderWidth:2.5,tension:0.35,fill:true,pointRadius:0,pointHoverRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' $'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}});
+  chart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{data:data,borderColor:'#18d8a0',backgroundColor:'rgba(24,216,160,0.18)',fill:true,tension:0.35,borderWidth:2.2,pointRadius:0,pointHoverRadius:5}]},options:{responsive:true,maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#0f211c',titleColor:'#8dbbb0',bodyColor:'#e6f5f0',borderColor:'#1a8a6a',borderWidth:1,displayColors:false,callbacks:{label:ctx=> ' Equity $'+ctx.parsed.y.toFixed(2)}}},scales:{x:{grid:{display:false},ticks:{color:'#6d9187',font:{size:11,family:'Times New Roman'},maxRotation:35}},y:{grid:{color:'rgba(26,138,106,0.15)'},ticks:{color:'#6d9187',font:{size:11}},border:{display:false}}}}});
 }
 function setP(v,el){pTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderP();}
 function setT(v,el){tTab=v;el.parentElement.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderT();}
