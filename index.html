@@ -19,7 +19,6 @@ button,input{font:inherit;color:inherit}
 .btn.pri{background:var(--acc);color:var(--accfg);border-color:var(--acc);box-shadow:0 0 28px color-mix(in srgb,var(--acc) 35%,transparent)}
 .btn.sm{width:auto;height:44px;padding:0 20px}
 a{color:var(--acc);text-decoration:none}
-/* AUTH */
 #auth{min-height:100vh;display:grid;place-items:center;padding:24px 16px;background:radial-gradient(ellipse at 20% 0,color-mix(in srgb,var(--acc) 14%,transparent),transparent 55%),var(--bg)}
 .wrap{width:100%;max-width:420px}
 .logo{width:68px;height:68px;border-radius:20px;background:var(--acc);display:grid;place-items:center;margin:0 auto 14px;color:var(--accfg)}
@@ -46,7 +45,6 @@ label.l{display:block;font-size:12px;letter-spacing:.08em;color:var(--mute);marg
 .switch button{background:none;border:0;color:var(--acc);font-weight:500;cursor:pointer}
 .legal{text-align:center;font-size:12px;color:var(--mute);margin-top:16px}
 .legal a{color:var(--mute);text-decoration:underline}
-/* APP */
 #app{display:grid;grid-template-columns:272px 1fr;min-height:100vh}
 aside{position:sticky;top:0;height:100vh;overflow:auto;background:var(--card);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:6px}
 .side-top{display:flex;align-items:center;gap:12px;padding:4px 8px 18px}
@@ -140,8 +138,6 @@ dialog::backdrop{background:#000a}
 </style>
 </head>
 <body>
-
-<!-- LOGIN / DAFTAR -->
 <main id="auth">
   <div class="wrap">
     <div class="brand">
@@ -153,26 +149,21 @@ dialog::backdrop{background:#000a}
       <form id="form" novalidate>
         <h2 id="ttl">Selamat datang kembali</h2>
         <p class="sub" id="sub">Masuk ke akun Anda</p>
-
         <div id="nameBox" hidden>
           <label class="l" for="name">Nama lengkap</label>
           <div class="field"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
           <input id="name" autocomplete="name" placeholder="Nama Anda"></div>
         </div>
-
         <label class="l" for="email">Email atau username</label>
         <div class="field"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg>
         <input id="email" autocomplete="username" placeholder="anda@contoh.com"></div>
-
         <label class="l" for="pw">Kata sandi</label>
         <div class="field"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
         <input id="pw" type="password" autocomplete="current-password" placeholder="Minimal 8 karakter">
         <button type="button" class="eye" id="eye" aria-label="Tampilkan kata sandi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
         <div class="err" id="err" role="alert"></div>
-
         <div class="row" id="rem"><label><input type="checkbox"> Ingat saya</label><a href="#" onclick="return false">Lupa kata sandi?</a></div>
         <button class="btn pri" id="go" type="submit">Masuk</button>
-
         <div class="or">atau lanjut dengan</div>
         <button class="btn" type="button" id="google"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M21.6 12.2c0-.7-.1-1.3-.2-1.9H12v3.6h5.4a4.6 4.6 0 01-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.2z"/><path fill="currentColor" opacity=".7" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.7-5.600-4.100H3.100v2.600A10 10 0 0012 22z"/><path fill="currentColor" opacity=".5" d="M6.400 14c-.2-.6-.3-1.300-.3-2s.1-1.400.3-2V7.400H3.100a10 10 0 000 9.200z"/><path fill="currentColor" opacity=".85" d="M12 5.900c1.500 0 2.800.5 3.800 1.500l2.900-2.900A10 10 0 003.100 7.400L6.400 10c.8-2.400 3-4.100 5.600-4.100z"/></svg><span id="gtxt">Masuk dengan Google</span></button>
       </form>
@@ -182,8 +173,6 @@ dialog::backdrop{background:#000a}
     <p class="legal">Dengan melanjutkan, Anda menyetujui <a href="#" onclick="return false">Ketentuan Layanan</a> &amp; <a href="#" onclick="return false">Kebijakan Privasi</a></p>
   </div>
 </main>
-
-<!-- DASHBOARD -->
 <div id="app" hidden>
   <div class="scrim" id="scrim"></div>
   <aside aria-label="Navigasi">
@@ -197,40 +186,10 @@ dialog::backdrop{background:#000a}
       <button class="ic" id="menu" aria-label="Buka menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
       <div class="av"><button class="ic" id="theme" aria-label="Ganti tema"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.500 1.500M17.500 17.500L19 19M5 19l1.500-1.500M17.500 6.500L19 5"/></svg></button><span id="ini">RO</span></div>
     </header>
-    <section class="content pg" id="pg-order" hidden>
-      <h2>Notifikasi pesanan</h2>
-      <p>Pengajuan sewa EA dari client yang menunggu persetujuan.</p>
-      <div class="tw"><table><thead><tr><th>Tanggal/jam</th><th>No akun client</th><th>Nama client</th><th>Aksi</th></tr></thead><tbody id="tb-order"></tbody></table><div class="empty" id="e-order">Tidak ada pesanan baru.</div></div>
-    </section>
-
-    <section class="content pg" id="pg-pay" hidden>
-      <h2>Notifikasi pembayaran</h2>
-      <p>Deposit client yang menunggu verifikasi.</p>
-      <div class="tw"><table><thead><tr><th>Tanggal/jam</th><th>No transaksi</th><th>Jumlah uang</th><th>Aksi</th></tr></thead><tbody id="tb-pay"></tbody></table><div class="empty" id="e-pay">Tidak ada pembayaran yang menunggu.</div></div>
-    </section>
-
-    <section class="content pg" id="pg-ctrl" hidden>
-      <h2>Control EA client</h2>
-      <p>Kelola masa sewa dan status EA setiap client.</p>
-      <div class="warn" id="warn" hidden><span><b>Mode darurat aktif.</b> Semua EA client dihentikan.</span></div>
-      <div class="card" style="max-width:none;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><b>Stop EA darurat (semua client)</b><div style="color:var(--mute);font-size:14px">Aktifkan untuk menghentikan seluruh EA sekaligus.</div></div><label class="sw"><input type="checkbox" id="master" aria-label="Stop EA darurat semua client"><i></i></label></div>
-      <div class="grid" style="margin-bottom:18px"><div class="stat hl"><small>Total balance semua client</small><strong id="tot-bal">$0.00</strong><em>jumlah dari seluruh akun</em></div><div class="stat"><small>Jumlah akun client</small><strong id="tot-cl">0</strong><em>terdaftar</em></div></div>
-      <div class="tw"><table style="min-width:1140px"><thead><tr><th>No akun trade</th><th>Nama client</th><th>Tanggal expired</th><th>Sponsor</th><th>Balance</th><th>Status</th><th>EA</th><th>Aksi</th></tr></thead><tbody id="tb-ctrl"></tbody></table><div class="empty" id="e-ctrl">Belum ada client aktif. Approve pesanan terlebih dahulu.</div></div>
-    </section>
-
-    <dialog id="dlg">
-      <form id="f-edit" novalidate>
-        <h2 style="margin:0 0 4px;font-size:20px">Edit client</h2>
-        <label class="l" for="e-akun">No akun trade</label><div class="field"><input id="e-akun" inputmode="numeric" style="padding-left:16px"></div>
-        <label class="l" for="e-nama">Nama client</label><div class="field"><input id="e-nama" style="padding-left:16px"></div>
-        <label class="l" for="e-spon">Sponsor</label><div class="field"><input id="e-spon" style="padding-left:16px"></div>
-        <label class="l" for="e-bal">Balance (USD)</label><div class="field"><input id="e-bal" inputmode="decimal" style="padding-left:16px"></div>
-        <label class="l" for="e-exp">Tanggal expired</label><div class="field"><input id="e-exp" type="date" style="padding-left:16px"></div>
-        <div class="msg e" id="m-edit" role="alert"></div>
-        <div style="display:flex;gap:10px;margin-top:8px"><button class="btn" type="button" id="e-cancel">Batal</button><button class="btn pri" type="submit">Simpan</button></div>
-      </form>
-    </dialog>
-
+    <section class="content pg" id="pg-order" hidden><h2>Notifikasi pesanan</h2><p>Pengajuan sewa EA dari client yang menunggu persetujuan.</p><div class="tw"><table><thead><tr><th>Tanggal/jam</th><th>No akun client</th><th>Nama client</th><th>Aksi</th></tr></thead><tbody id="tb-order"></tbody></table><div class="empty" id="e-order">Tidak ada pesanan baru.</div></div></section>
+    <section class="content pg" id="pg-pay" hidden><h2>Notifikasi pembayaran</h2><p>Deposit client yang menunggu verifikasi.</p><div class="tw"><table><thead><tr><th>Tanggal/jam</th><th>No transaksi</th><th>Jumlah uang</th><th>Aksi</th></tr></thead><tbody id="tb-pay"></tbody></table><div class="empty" id="e-pay">Tidak ada pembayaran yang menunggu.</div></div></section>
+    <section class="content pg" id="pg-ctrl" hidden><h2>Control EA client</h2><p>Kelola masa sewa dan status EA setiap client.</p><div class="warn" id="warn" hidden><span><b>Mode darurat aktif.</b> Semua EA client dihentikan.</span></div><div class="card" style="max-width:none;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><b>Stop EA darurat (semua client)</b><div style="color:var(--mute);font-size:14px">Aktifkan untuk menghentikan seluruh EA sekaligus.</div></div><label class="sw"><input type="checkbox" id="master" aria-label="Stop EA darurat semua client"><i></i></label></div><div class="grid" style="margin-bottom:18px"><div class="stat hl"><small>Total balance semua client</small><strong id="tot-bal">$0.00</strong><em>jumlah dari seluruh akun</em></div><div class="stat"><small>Jumlah akun client</small><strong id="tot-cl">0</strong><em>terdaftar</em></div></div><div class="tw"><table style="min-width:1140px"><thead><tr><th>No akun trade</th><th>Nama client</th><th>Tanggal expired</th><th>Sponsor</th><th>Balance</th><th>Status</th><th>EA</th><th>Aksi</th></tr></thead><tbody id="tb-ctrl"></tbody></table><div class="empty" id="e-ctrl">Belum ada client aktif. Approve pesanan terlebih dahulu.</div></div></section>
+    <dialog id="dlg"><form id="f-edit" novalidate><h2 style="margin:0 0 4px;font-size:20px">Edit client</h2><label class="l" for="e-akun">No akun trade</label><div class="field"><input id="e-akun" inputmode="numeric" style="padding-left:16px"></div><label class="l" for="e-nama">Nama client</label><div class="field"><input id="e-nama" style="padding-left:16px"></div><label class="l" for="e-spon">Sponsor</label><div class="field"><input id="e-spon" style="padding-left:16px"></div><label class="l" for="e-bal">Balance (USD)</label><div class="field"><input id="e-bal" inputmode="decimal" style="padding-left:16px"></div><label class="l" for="e-exp">Tanggal expired</label><div class="field"><input id="e-exp" type="date" style="padding-left:16px"></div><div class="msg e" id="m-edit" role="alert"></div><div style="display:flex;gap:10px;margin-top:8px"><button class="btn" type="button" id="e-cancel">Batal</button><button class="btn pri" type="submit">Simpan</button></div></form></dialog>
     <section class="content pg" id="pg-dash" hidden>
       <h2>Dasbor</h2>
       <p>Statistik performa akun master. <span class="bd wait" id="feed-badge">Data contoh</span></p>
@@ -263,53 +222,12 @@ dialog::backdrop{background:#000a}
         <div class="tw" style="margin-top:16px;max-height:320px;overflow:auto"><table style="min-width:420px"><thead><tr><th>Tanggal</th><th>Jumlah trade</th><th>Profit</th></tr></thead><tbody id="tb-daily"></tbody></table></div>
       </div>
     </section>
-
-    <section class="content pg" id="pg-sewa" hidden>
-      <h2>Sewa EA</h2>
-      <p>Isi data akun trading Anda untuk mengajukan sewa EA.</p>
-      <form class="card" id="f-sewa" novalidate>
-        <label class="l" for="s-akun">No akun trade</label>
-        <div class="field"><input id="s-akun" inputmode="numeric" placeholder="Contoh: 12345678"></div>
-        <label class="l" for="s-nama">Nama lengkap</label>
-        <div class="field"><input id="s-nama" autocomplete="name" placeholder="Sesuai identitas"></div>
-        <label class="l" for="s-spon">Nama sponsor</label>
-        <div class="field"><input id="s-spon" placeholder="Nama sponsor Anda"></div>
-        <div class="msg" id="m-sewa" role="status"></div>
-        <button class="btn pri" type="submit" style="margin-top:10px">Ajukan sewa</button>
-      </form>
-    </section>
-
-    <section class="content pg" id="pg-dep" hidden>
-      <h2>Deposit dana</h2>
-      <p>Transfer ke DANA admin, lalu unggah bukti transfer.</p>
-      <form class="card" id="f-dep" novalidate>
-        <div class="pay">
-          <div><small>DANA admin</small><b id="dana">089660276661</b></div>
-          <button class="btn sm" type="button" id="cp">Salin nomor</button>
-        </div>
-        <label class="l" for="d-amt">Jumlah deposit (Rp)</label>
-        <div class="field"><input id="d-amt" inputmode="numeric" placeholder="Contoh: 500000"></div>
-        <label class="l" for="d-file">Bukti transfer</label>
-        <label class="drop"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg><span id="d-name">Pilih foto bukti TF</span><input id="d-file" type="file" accept="image/*"></label>
-        <div class="msg" id="m-dep" role="status"></div>
-        <button class="btn pri" type="submit" style="margin-top:10px">Pembayaran selesai</button>
-      </form>
-    </section>
-
-    <section class="content pg" id="pg-status" hidden>
-      <h2>Status transaksi</h2>
-      <p>Pantau deposit Anda yang sedang diproses admin.</p>
-      <div class="tw"><table><thead><tr><th>Tanggal/waktu</th><th>No transaksi</th><th>Jumlah deposit</th><th>Status</th></tr></thead><tbody id="tb-status"></tbody></table><div class="empty" id="empty-status">Belum ada deposit. Buka menu Deposit dana untuk memulai.</div></div>
-    </section>
-
-    <section class="content pg" id="pg-hist" hidden>
-      <h2>History transaksi</h2>
-      <p>Semua deposit dan pengajuan sewa EA Anda.</p>
-      <div class="tw"><table><thead><tr><th>Tanggal/waktu</th><th>No transaksi</th><th>Jenis</th><th>Jumlah</th><th>Status</th></tr></thead><tbody id="tb-hist"></tbody></table><div class="empty" id="empty-hist">Belum ada transaksi.</div></div>
-    </section>
+    <section class="content pg" id="pg-sewa" hidden><h2>Sewa EA</h2><p>Isi data akun trading Anda untuk mengajukan sewa EA.</p><form class="card" id="f-sewa" novalidate><label class="l" for="s-akun">No akun trade</label><div class="field"><input id="s-akun" inputmode="numeric" placeholder="Contoh: 12345678"></div><label class="l" for="s-nama">Nama lengkap</label><div class="field"><input id="s-nama" autocomplete="name" placeholder="Sesuai identitas"></div><label class="l" for="s-spon">Nama sponsor</label><div class="field"><input id="s-spon" placeholder="Nama sponsor Anda"></div><div class="msg" id="m-sewa" role="status"></div><button class="btn pri" type="submit" style="margin-top:10px">Ajukan sewa</button></form></section>
+    <section class="content pg" id="pg-dep" hidden><h2>Deposit dana</h2><p>Transfer ke DANA admin, lalu unggah bukti transfer.</p><form class="card" id="f-dep" novalidate><div class="pay"><div><small>DANA admin</small><b id="dana">089660276661</b></div><button class="btn sm" type="button" id="cp">Salin nomor</button></div><label class="l" for="d-amt">Jumlah deposit (Rp)</label><div class="field"><input id="d-amt" inputmode="numeric" placeholder="Contoh: 500000"></div><label class="l" for="d-file">Bukti transfer</label><label class="drop"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg><span id="d-name">Pilih foto bukti TF</span><input id="d-file" type="file" accept="image/*"></label><div class="msg" id="m-dep" role="status"></div><button class="btn pri" type="submit" style="margin-top:10px">Pembayaran selesai</button></form></section>
+    <section class="content pg" id="pg-status" hidden><h2>Status transaksi</h2><p>Pantau deposit Anda yang sedang diproses admin.</p><div class="tw"><table><thead><tr><th>Tanggal/waktu</th><th>No transaksi</th><th>Jumlah deposit</th><th>Status</th></tr></thead><tbody id="tb-status"></tbody></table><div class="empty" id="empty-status">Belum ada deposit. Buka menu Deposit dana untuk memulai.</div></div></section>
+    <section class="content pg" id="pg-hist" hidden><h2>History transaksi</h2><p>Semua deposit dan pengajuan sewa EA Anda.</p><div class="tw"><table><thead><tr><th>Tanggal/waktu</th><th>No transaksi</th><th>Jenis</th><th>Jumlah</th><th>Status</th></tr></thead><tbody id="tb-hist"></tbody></table><div class="empty" id="empty-hist">Belum ada transaksi.</div></div></section>
   </div>
 </div>
-
 <script>
 var $=function(i){return document.getElementById(i)};
 var mode="login";
@@ -345,8 +263,6 @@ $("form").onsubmit=function(e){
 };
 $("google").onclick=function(){enter("Pengguna")};
 $("logout").onclick=function(){$("app").hidden=true;$("auth").hidden=false;$("form").reset();setMode("login")};
-
-/* Sidebar: bab + sub bab */
 var chev='<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
 var cm='<button type="button" class="item" data-pg="dash">Dasbor</button><button type="button" class="item" data-pg="sewa">Sewa EA</button><button type="button" class="item" data-pg="dep">Deposit dana</button><button type="button" class="item" data-pg="status">Status transaksi</button><button type="button" class="item" data-pg="hist">History transaksi</button><div style="height:10px"></div>';
 var am='<button type="button" class="item" data-pg="order">Notifikasi pesanan</button><button type="button" class="item" data-pg="pay">Notifikasi pembayaran</button><button type="button" class="item" data-pg="ctrl">Control EA client</button>';
@@ -355,7 +271,6 @@ $("nav").addEventListener("click",function(e){
   if(b.dataset.pg){show(b.dataset.pg);return}
   if(b.parentElement.classList.contains("grp")){var g=b.parentElement;g.classList.toggle("open");b.setAttribute("aria-expanded",g.classList.contains("open"));return}
   document.querySelectorAll(".item.on").forEach(function(x){x.classList.remove("on")});
-  
 });
 function show(pg){
   document.querySelectorAll(".pg").forEach(function(s){s.hidden=s.id!=="pg-"+pg});
@@ -400,7 +315,6 @@ $("f-dep").onsubmit=function(e){
   tx.unshift({id:newId("DP"),at:Date.now(),type:"Deposit",amount:amt,status:"Menunggu"});save();render();
   this.reset();$("d-name").textContent="Pilih foto bukti TF";msg("m-dep","");show("status");
 };
-/* PERFORMA MASTER (data contoh) */
 function rng(s){return function(){s=(s*1664525+1013904223)%4294967296;return s/4294967296}}
 function usds(n){return (n<0?"-":"")+usd(Math.abs(n))}
 function demoFeed(){
@@ -439,7 +353,6 @@ function renderPerf(data){
   g+='<text x="'+L+'" y="'+(H-8)+'">'+lbl(0)+'</text><text x="'+X(mid).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle">'+lbl(mid)+'</text><text x="'+(W-R)+'" y="'+(H-8)+'" text-anchor="end">'+lbl(curve.length-1)+'</text>';
   $("chart").innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Grafik pertumbuhan equity akun master dari '+usd(start)+' menjadi '+usd(eq)+'">'+g+'<polygon points="'+L+','+(H-B)+' '+pts+' '+(W-R)+','+(H-B)+'" fill="var(--acc)" fill-opacity=".12"/><polyline points="'+pts+'" fill="none" stroke="var(--acc)" stroke-width="2.2" stroke-linejoin="round"/></svg>';
 }
-/* HISTORY PROFIT HARIAN */
 var lastTrades=[],curRange=7;
 function sdate(d){return new Date(Date.now()-d*864e5).toLocaleDateString("id-ID",{day:"2-digit",month:"short"})}
 function sg(n){return (n>0?"+":"")+usds(n)}
@@ -477,23 +390,21 @@ document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(
   renderDaily();
 }});
 
-/* FEED REAL-TIME MT4/MT5
-   Isi FEED_URL dengan endpoint API server Anda. Format JSON yang diharapkan:
-   {"start":10000,"trades":[{"t":1760000000000,"p":123.45}, ...]}
-   t = waktu trade ditutup (ms epoch), p = profit/loss. Diperbarui tiap 5 detik. */
-var FEED_URL="";
+// === BAGIAN YANG DIBENAHI - FIREBASE CGC ===
+var FEED_URL="https://mrdien-scalper-default-rtdb.firebaseio.com/CGC.json";
 function setFeed(cls,txt){var b=$("feed-badge");b.className="bd "+cls;b.textContent=txt}
 function loadFeed(){
   if(!FEED_URL){renderPerf(demoFeed());setFeed("wait","Data contoh");return}
   fetch(FEED_URL,{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
+    if(!j || !j.trades || j.trades.length===0){renderPerf(demoFeed());setFeed("wait","Data contoh - Firebase kosong");return}
     var t0=new Date().setHours(0,0,0,0);
-    renderPerf({start:+j.start||0,trades:(j.trades||[]).map(function(x){return {d:Math.max(0,Math.round((t0-new Date(x.t).setHours(0,0,0,0))/864e5)),p:+x.p||0}})});
-    setFeed("ok","Live MT5");
-  }).catch(function(){setFeed("no","Feed terputus")});
+    // Format CGC: {t: ms, p: profit} -> convert ke {d: hari lalu, p}
+    renderPerf({start:+j.start||10000,trades:(j.trades||[]).map(function(x){return {d:Math.max(0,Math.round((t0-new Date(x.t).setHours(0,0,0,0))/864e5)),p:+x.p||0}})});
+    setFeed("ok","Live MT5 - Dien");
+  }).catch(function(e){console.log(e);renderPerf(demoFeed());setFeed("no","Feed terputus")});
 }
-loadFeed();if(FEED_URL)setInterval(loadFeed,5000);
+loadFeed();setInterval(loadFeed,5000);
 
-/* ADMIN */
 var clients=[],master=false,editing=null;
 try{clients=JSON.parse(localStorage.getItem("clients")||"[]");master=localStorage.getItem("ea_master")==="1"}catch(e){}
 function saveC(){try{localStorage.setItem("clients",JSON.stringify(clients));localStorage.setItem("ea_master",master?"1":"0")}catch(e){}}
