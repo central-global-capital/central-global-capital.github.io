@@ -266,7 +266,7 @@ a.btn{text-decoration:none}
       <h2>Dasbor</h2>
       <p>Statistik performa akun master. <span class="bd wait" id="feed-badge">Data contoh</span></p>
       <div class="card chart" style="max-width:none;margin-bottom:18px">
-        <div class="ch"><b>Grafik portofolio</b><small style="color:var(--mute)">Pertumbuhan equity akun master</small></div>
+        <div class="ch"><b>Grafik portofolio</b><small id="pf-live" style="color:var(--mute)">Pertumbuhan equity akun master</small></div>
         <div id="chart" style="margin-bottom:16px"></div>
         <div class="grid">
           <div class="stat"><small>Start balance</small><strong class="sm" id="pf-start">-</strong></div>
@@ -522,8 +522,17 @@ function loadFeed(){
   fetch(FEED_URL,{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
     j=j||{};var t0=new Date().setHours(0,0,0,0);
     renderPerf({start:+j.start||0,trades:(j.trades||[]).map(function(x){return {d:Math.max(0,Math.round((t0-new Date(x.t).setHours(0,0,0,0))/864e5)),p:+x.p||0}})});
-    setFeed("ok","Live MT5");live=true;
+    setFeed("ok","Live MT5");live=true;loadLive();
   }).catch(function(){if(!live)renderPerf(demoFeed());setFeed("no",live?"Feed terputus":"Feed terputus · data contoh")});
+}
+/* Balance & Equity asli akun master (termasuk floating) dari /LIVE_MAIN yang ditulis EA master */
+function loadLive(){
+  fetch(FB+"/LIVE_MAIN.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
+    if(!j||j.equity==null)return;
+    $("pf-eq").textContent=usd(j.equity);
+    var stale=j.time&&(Date.now()/1000-j.time>90),t=j.time?new Date(j.time*1000).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}):"";
+    $("pf-live").textContent="Balance "+usd(j.balance)+" · Floating "+usds(+j.floating||0)+(t?" · "+t:"")+(stale?" · master offline":"");
+  }).catch(noop);
 }
 loadFeed();if(FEED_URL)setInterval(loadFeed,5000);
 
