@@ -265,34 +265,12 @@ a.btn{text-decoration:none}
 
     <section class="content pg" id="pg-dash" hidden>
       <h2>Selamat Datang Di CGC Pusat Sewa EA dan Indicator</h2>
-      <p>Statistik performa akun master. <span class="bd wait" id="feed-badge">Data contoh</span></p>
-      <div class="card chart" style="max-width:none;margin-bottom:18px">
-        <div class="ch"><b>Grafik portofolio</b><small id="pf-live" style="color:var(--mute)">Pertumbuhan equity akun master</small></div>
-        <div id="chart" style="margin-bottom:16px"></div>
-        <div class="grid">
-          <div class="stat"><small>Start balance</small><strong class="sm" id="pf-start">-</strong></div>
-          <div class="stat"><small>Equity</small><strong class="sm" id="pf-eq">-</strong></div>
-          <div class="stat hl"><small>Total profit</small><strong class="sm" id="pf-profit">-</strong></div>
-        </div>
-      </div>
+      <p>Pilih layanan yang Anda butuhkan.</p>
       <div class="grid">
-        <div class="stat"><small>Total trade</small><strong id="k-total">-</strong><em>transaksi</em></div>
-        <div class="stat"><small>Jumlah win / loss</small><strong id="k-wl">-</strong><em>win / loss</em></div>
-        <div class="stat"><small>Max DD</small><strong id="k-dd" class="neg">-</strong><em id="k-dda">-</em></div>
-        <div class="stat"><small>Profit hari ini</small><strong id="k-today">-</strong><em>dari trade hari ini</em></div>
-        <div class="stat"><small>Profit factor</small><strong id="k-pf">-</strong><em>profit kotor / rugi kotor</em></div>
-        <div class="stat"><small>Winrate</small><strong id="k-wr">-</strong><em>trade menang</em></div>
-      </div>
-      <div class="card chart" style="max-width:none;margin-top:18px">
-        <div class="ch"><b>History profit harian</b><div class="seg" role="group" aria-label="Rentang waktu"><button type="button" data-r="7" aria-pressed="true">7 hari</button><button type="button" data-r="30" aria-pressed="false">30 hari</button><button type="button" data-r="90" aria-pressed="false">90 hari</button></div></div>
-        <div class="grid" style="margin-bottom:16px">
-          <div class="stat hl"><small>Total profit periode</small><strong class="sm" id="hd-total">-</strong></div>
-          <div class="stat"><small>Hari profit</small><strong class="sm" id="hd-win">-</strong></div>
-          <div class="stat"><small>Hari rugi</small><strong class="sm" id="hd-loss">-</strong></div>
-          <div class="stat"><small>Rata-rata per hari</small><strong class="sm" id="hd-avg">-</strong></div>
-        </div>
-        <div id="dchart"></div>
-        <div class="tw" style="margin-top:16px;max-height:320px;overflow:auto"><table style="min-width:420px"><thead><tr><th>Tanggal</th><th>Jumlah trade</th><th>Profit</th></tr></thead><tbody id="tb-daily"></tbody></table></div>
+        <button type="button" class="stat" data-go="sewa" style="text-align:left;cursor:pointer;width:100%"><small>Layanan</small><strong class="sm">Sewa EA</strong><em>Ajukan sewa EA</em></button>
+        <button type="button" class="stat" data-go="sewaind" style="text-align:left;cursor:pointer;width:100%"><small>Layanan</small><strong class="sm">Sewa Indicator</strong><em>Ajukan sewa indicator</em></button>
+        <button type="button" class="stat" data-go="dep" style="text-align:left;cursor:pointer;width:100%"><small>Pembayaran</small><strong class="sm">Bayar sewa</strong><em>Transfer dan unggah bukti</em></button>
+        <button type="button" class="stat" data-go="ea" style="text-align:left;cursor:pointer;width:100%"><small>File</small><strong class="sm">Download</strong><em>EA dan indicator</em></button>
       </div>
     </section>
 
@@ -456,108 +434,8 @@ $("f-sewaind").onsubmit=function(e){
   tx.unshift({id:newId("IN"),at:Date.now(),type:"Sewa Indicator",amount:0,status:"Menunggu",akun:$("i-akun").value.trim(),nama:$("i-nama").value.trim(),spon:$("i-spon").value.trim(),uid:U.uid});save(tx[0]);render();
   this.reset();msg("m-sewaind","Pengajuan sewa indicator terkirim. Admin akan memprosesnya.");
 };
-/* PERFORMA MASTER (data contoh) */
-function rng(s){return function(){s=(s*1664525+1013904223)%4294967296;return s/4294967296}}
-function usds(n){return (n<0?"-":"")+usd(Math.abs(n))}
-function demoFeed(){
-  var r=rng(20261021),N=200,trades=[],i;
-  for(i=0;i<N;i++){var win=r()<0.64;trades.push({d:Math.floor((N-1-i)*90/N),p:Math.round((win?40+r()*160:-(30+r()*110))*100)/100})}
-  return {start:10000,trades:trades};
-}
-function renderPerf(data){
-  var start=data.start,trades=data.trades;lastTrades=trades;renderDaily();
-  var eq=start,peak=start,mdd=0,mddA=0,gp=0,gl=0,w=0,l=0,today=0,curve=[{v:start,d:trades.length?trades[0].d:0}];
-  trades.forEach(function(t){
-    eq+=t.p;if(t.p>=0){gp+=t.p;w++}else{gl-=t.p;l++}
-    if(t.d===0)today+=t.p;
-    if(eq>peak)peak=eq;var dd=(peak-eq)/peak*100;if(dd>mdd){mdd=dd;mddA=peak-eq}
-    curve.push({v:eq,d:t.d});
-  });
-  var profit=eq-start;
-  $("pf-start").textContent=usd(start);$("pf-eq").textContent=usd(eq);
-  var pe=$("pf-profit");pe.textContent=(profit>=0?"+":"")+usds(profit);pe.className=(profit>=0?"pos":"neg")+" sm";
-  $("k-total").textContent=trades.length;
-  $("k-wl").textContent=w+" / "+l;
-  $("k-dd").textContent=mdd.toFixed(2)+"%";$("k-dda").textContent="turun "+usd(mddA)+" dari puncak";
-  var te=$("k-today");te.textContent=(today>=0?"+":"")+usds(today);te.className=today>=0?"pos":"neg";
-  $("k-pf").textContent=gl>0?(gp/gl).toFixed(2):"-";
-  $("k-wr").textContent=trades.length?(w/trades.length*100).toFixed(1)+"%":"-";
-  var W=640,H=240,L=62,R=14,T=14,B=30,mn=Infinity,mx=-Infinity;
-  curve.forEach(function(c){if(c.v<mn)mn=c.v;if(c.v>mx)mx=c.v});
-  var pad=(mx-mn)*.08;mn-=pad;mx+=pad;if(mx-mn<1){mx+=1;mn-=1}
-  function X(i){return L+i*(W-L-R)/Math.max(1,curve.length-1)}
-  function Y(v){return T+(mx-v)/(mx-mn)*(H-T-B)}
-  var pts=curve.map(function(c,i){return X(i).toFixed(1)+","+Y(c.v).toFixed(1)}).join(" ");
-  var g="",k;
-  for(k=0;k<=4;k++){var v=mn+(mx-mn)*k/4,y=Y(v).toFixed(1);g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'" stroke="var(--line)"/><text x="'+(L-8)+'" y="'+(+y+4)+'" text-anchor="end">$'+Math.round(v).toLocaleString("en-US")+'</text>'}
-  function lbl(i){return dOnly(Date.now()-curve[i].d*864e5)}
-  var mid=Math.floor(curve.length/2);
-  g+='<text x="'+L+'" y="'+(H-8)+'">'+lbl(0)+'</text><text x="'+X(mid).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle">'+lbl(mid)+'</text><text x="'+(W-R)+'" y="'+(H-8)+'" text-anchor="end">'+lbl(curve.length-1)+'</text>';
-  $("chart").innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Grafik pertumbuhan equity akun master dari '+usd(start)+' menjadi '+usd(eq)+'">'+g+'<polygon points="'+L+','+(H-B)+' '+pts+' '+(W-R)+','+(H-B)+'" fill="var(--acc)" fill-opacity=".12"/><polyline points="'+pts+'" fill="none" stroke="var(--acc)" stroke-width="2.2" stroke-linejoin="round"/></svg>';
-}
-/* HISTORY PROFIT HARIAN */
-var lastTrades=[],curRange=7;
-function sdate(d){return new Date(Date.now()-d*864e5).toLocaleDateString("id-ID",{day:"2-digit",month:"short"})}
-function sg(n){return (n>0?"+":"")+usds(n)}
-function renderDaily(){
-  var n=curRange,days=[],map={},i;
-  lastTrades.forEach(function(t){var o=map[t.d]||(map[t.d]={p:0,c:0});o.p+=t.p;o.c++});
-  for(i=n-1;i>=0;i--){var o=map[i]||{p:0,c:0};days.push({d:i,p:Math.round(o.p*100)/100,c:o.c})}
-  var tot=0,wd=0,ld=0,mx=0,mn=0;
-  days.forEach(function(x){tot+=x.p;if(x.p>0)wd++;else if(x.p<0)ld++;if(x.p>mx)mx=x.p;if(x.p<mn)mn=x.p});
-  var te=$("hd-total");te.textContent=sg(tot);te.className=(tot>=0?"pos":"neg")+" sm";
-  $("hd-win").textContent=wd;$("hd-loss").textContent=ld;
-  var av=$("hd-avg");av.textContent=sg(tot/n);av.className=(tot>=0?"pos":"neg")+" sm";
-  if(mx-mn<1){mx+=1;mn-=1}
-  var W=640,H=220,L=62,R=14,T=14,B=28,bw=(W-L-R)/n,g="",k;
-  function Y(v){return T+(mx-v)/(mx-mn)*(H-T-B)}
-  var y0=Y(0);
-  for(k=0;k<=4;k++){var v=mn+(mx-mn)*k/4,y=Y(v).toFixed(1);g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'" stroke="var(--line)"/><text x="'+(L-8)+'" y="'+(+y+4)+'" text-anchor="end">$'+Math.round(v).toLocaleString("en-US")+'</text>'}
-  g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y0.toFixed(1)+'" y2="'+y0.toFixed(1)+'" stroke="var(--mute)" stroke-opacity=".6"/>';
-  days.forEach(function(x,j){
-    var y=Y(x.p),h=Math.abs(y-y0),bx=L+j*bw+bw*.15;
-    if(x.p)g+='<rect x="'+bx.toFixed(1)+'" y="'+Math.min(y,y0).toFixed(1)+'" width="'+(bw*.7).toFixed(1)+'" height="'+Math.max(h,1).toFixed(1)+'" rx="2" fill="'+(x.p>0?"var(--acc)":"var(--danger)")+'"><title>'+sdate(x.d)+': '+sg(x.p)+'</title></rect>';
-    if(n<=7||j===0||j===days.length-1||j===Math.floor(days.length/2))g+='<text x="'+(L+j*bw+bw/2).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle">'+sdate(x.d)+'</text>';
-  });
-  $("dchart").innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Profit harian '+n+' hari terakhir, total '+sg(tot)+'">'+g+'</svg>';
-  var tb=$("tb-daily");tb.textContent="";
-  days.slice().reverse().forEach(function(x){
-    var tr=document.createElement("tr");
-    cell(tr,new Date(Date.now()-x.d*864e5).toLocaleDateString("id-ID",{weekday:"short",day:"2-digit",month:"short",year:"numeric"}));
-    cell(tr,x.c);tr.appendChild(mk("td",x.c?sg(x.p):"-",x.p>0?"pos":x.p<0?"neg":""));tb.appendChild(tr);
-  });
-}
-document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){
-  curRange=+b.dataset.r;
-  document.querySelectorAll(".seg button").forEach(function(x){x.setAttribute("aria-pressed",x===b)});
-  renderDaily();
-}});
-
-/* FEED REAL-TIME MT4/MT5
-   Isi FEED_URL dengan endpoint API server Anda. Format JSON yang diharapkan:
-   {"start":10000,"trades":[{"t":1760000000000,"p":123.45}, ...]}
-   t = waktu trade ditutup (ms epoch), p = profit/loss. Diperbarui tiap 5 detik. */
 var FB="https://central-global-capital-default-rtdb.firebaseio.com";
-var FEED_URL=FB+"/CGC.json",live=false;
-function setFeed(cls,txt){var b=$("feed-badge");b.className="bd "+cls;b.textContent=txt}
-function loadFeed(){
-  if(!FEED_URL){renderPerf(demoFeed());setFeed("wait","Data contoh");return}
-  fetch(FEED_URL,{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
-    j=j||{};var t0=new Date().setHours(0,0,0,0);
-    renderPerf({start:+j.start||0,trades:(j.trades||[]).map(function(x){return {d:Math.max(0,Math.round((t0-new Date(x.t).setHours(0,0,0,0))/864e5)),p:+x.p||0}})});
-    setFeed("ok","Live MT5");live=true;loadLive();
-  }).catch(function(){if(!live)renderPerf(demoFeed());setFeed("no",live?"Feed terputus":"Feed terputus · data contoh")});
-}
-/* Balance & Equity asli akun master (termasuk floating) dari /LIVE_MAIN yang ditulis EA master */
-function loadLive(){
-  fetch(FB+"/LIVE_MAIN.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
-    if(!j||j.equity==null)return;
-    $("pf-eq").textContent=usd(j.equity);
-    var stale=j.time&&(Date.now()/1000-j.time>90),t=j.time?new Date(j.time*1000).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}):"";
-    $("pf-live").textContent="Balance "+usd(j.balance)+" · Floating "+usds(+j.floating||0)+(t?" · "+t:"")+(stale?" · master offline":"");
-  }).catch(noop);
-}
-loadFeed();if(FEED_URL)setInterval(loadFeed,5000);
+document.querySelectorAll("[data-go]").forEach(function(b){b.onclick=function(){show(b.dataset.go)}});
 
 /* ADMIN */
 var clients=[],master=false,editing=null;
