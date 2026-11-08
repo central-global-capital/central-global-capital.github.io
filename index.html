@@ -6,10 +6,10 @@
 <title>CGC Central Global Capital</title>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#150b26;--card:#1f1337;--line:#3a2860;--text:#f5f1fc;--mute:#ac9fc8;--acc:#19c3ad;--accfg:#04201c;--danger:#ff6b6b;--r:22px;
+:root{--bg:#0a0c0f;--card:#101318;--line:#232830;--text:#f2f5f7;--mute:#8a929c;--acc:#19c3ad;--accfg:#04201c;--danger:#ff6b6b;--r:22px;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-:root[data-theme="light"]{--bg:#f3eefb;--card:#fff;--line:#e2d8f2;--text:#1b1031;--mute:#6b5d86;--acc:#0aa994;--accfg:#fff}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f3eefb;--card:#fff;--line:#e2d8f2;--text:#1b1031;--mute:#6b5d86;--acc:#0aa994;--accfg:#fff}}
+:root[data-theme="light"]{--bg:#f4f6f8;--card:#fff;--line:#dde2e7;--text:#10151a;--mute:#5d6670;--acc:#0aa994;--accfg:#fff}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4f6f8;--card:#fff;--line:#dde2e7;--text:#10151a;--mute:#5d6670;--acc:#0aa994;--accfg:#fff}}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--text);font:400 15px/1.5 Lexend,system-ui,sans-serif;min-height:100vh}
 button,input{font:inherit;color:inherit}
@@ -138,6 +138,7 @@ dialog::backdrop{background:#000a}
 .tw thead th{position:sticky;top:0;background:var(--card)}
 .wa{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 6px 18px #0006;z-index:30}
 a.btn{text-decoration:none}
+.field select{width:100%;height:52px;border-radius:16px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg) 60%,var(--card));padding:0 16px;color:inherit;font:inherit}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -207,23 +208,27 @@ a.btn{text-decoration:none}
     <section class="content pg" id="pg-pay" hidden>
       <h2>Notifikasi pembayaran</h2>
       <p>Pembayaran sewa client yang menunggu verifikasi.</p>
-      <div class="tw"><table><thead><tr><th>Tanggal/jam</th><th>No transaksi</th><th>Jumlah uang</th><th>Aksi</th></tr></thead><tbody id="tb-pay"></tbody></table><div class="empty" id="e-pay">Tidak ada pembayaran yang menunggu.</div></div>
+      <div class="tw"><table><thead><tr><th>Tanggal/jam</th><th>No transaksi</th><th>Jenis</th><th>Jumlah uang</th><th>Aksi</th></tr></thead><tbody id="tb-pay"></tbody></table><div class="empty" id="e-pay">Tidak ada pembayaran yang menunggu.</div></div>
+      <div class="msg e" id="m-pay" role="alert"></div>
     </section>
 
     <section class="content pg" id="pg-ctrl" hidden>
-      <h2>Control EA client</h2>
+      <h2>Control EA</h2>
       <p>Kelola masa sewa dan status EA setiap client.</p>
       <div class="warn" id="warn" hidden><span><b>Mode darurat aktif.</b> Semua EA client dihentikan.</span></div>
       <div class="card" style="max-width:none;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><b>Stop EA darurat (semua client)</b><div style="color:var(--mute);font-size:14px">Aktifkan untuk menghentikan seluruh EA sekaligus.</div></div><label class="sw"><input type="checkbox" id="master" aria-label="Stop EA darurat semua client"><i></i></label></div>
       <div class="card" style="max-width:none;margin-bottom:18px"><b>Status koneksi</b><div id="conn-body" style="color:var(--mute);font-size:14px;margin-top:6px">Memuat...</div></div>
       <div class="grid" style="margin-bottom:18px"><div class="stat hl"><small>Total balance semua client</small><strong id="tot-bal">$0.00</strong><em>jumlah dari seluruh akun</em></div><div class="stat"><small>Jumlah akun client</small><strong id="tot-cl">0</strong><em>terdaftar</em></div></div>
-      <div class="tw"><table style="min-width:1140px"><thead><tr><th>No akun trade</th><th>Nama client</th><th>Tanggal expired</th><th>Sponsor</th><th>Balance</th><th>Status</th><th>EA</th><th>Aksi</th></tr></thead><tbody id="tb-ctrl"></tbody></table><div class="empty" id="e-ctrl">Belum ada client aktif. Approve pesanan terlebih dahulu.</div></div>
+      <div class="tw"><table style="min-width:1140px"><thead><tr><th>No akun trade</th><th>Nama client</th><th>Tanggal expired</th><th>ID sponsor</th><th>Balance</th><th>Status</th><th>EA</th><th>Aksi</th></tr></thead><tbody id="tb-ctrl"></tbody></table><div class="empty" id="e-ctrl">Belum ada client aktif. Approve pesanan terlebih dahulu.</div></div>
     </section>
 
     <section class="content pg" id="pg-cind" hidden>
       <h2>Control indikator</h2>
-      <p>Kelola masa sewa indikator setiap client. Indikator di MT4 client membaca status ini lewat EA pembantu KERAMAT_License.</p>
-      <div class="tw"><table style="min-width:860px"><thead><tr><th>No akun trade</th><th>Nama client</th><th>Tanggal expired</th><th>Sponsor</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="tb-cind"></tbody></table><div class="empty" id="e-cind">Belum ada client indikator. Approve pesanan sewa indikator terlebih dahulu.</div></div>
+      <p>Kelola masa sewa dan status indikator setiap client. Indikator MT4 client membaca status ini lewat EA pembantu KERAMAT_License.</p>
+      <div class="warn" id="warn2" hidden><span><b>Mode darurat aktif.</b> Semua indikator client dihentikan.</span></div>
+      <div class="card" style="max-width:none;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><b>Stop indikator darurat (semua client)</b><div style="color:var(--mute);font-size:14px">Aktifkan untuk menghentikan seluruh indikator sekaligus.</div></div><label class="sw"><input type="checkbox" id="imaster" aria-label="Stop indikator darurat semua client"><i></i></label></div>
+      <div class="grid" style="margin-bottom:18px"><div class="stat hl"><small>Jumlah akun client</small><strong id="ind-cl">0</strong><em>terdaftar</em></div><div class="stat"><small>Indikator aktif</small><strong id="ind-on">0</strong><em>sewa berjalan</em></div></div>
+      <div class="tw"><table style="min-width:1000px"><thead><tr><th>No akun trade</th><th>Nama client</th><th>Tanggal expired</th><th>ID sponsor</th><th>Status</th><th>Indikator</th><th>Aksi</th></tr></thead><tbody id="tb-cind"></tbody></table><div class="empty" id="e-cind">Belum ada client indikator. Approve pesanan sewa indikator terlebih dahulu.</div></div>
     </section>
 
     <a class="wa" id="wafab" target="_blank" rel="noopener" aria-label="Chat admin" hidden><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.100L2 22l5-1.300A10 10 0 1012 2zm0 18.200a8.200 8.200 0 01-4.200-1.200l-.3-.2-3 .8.8-2.900-.2-.3A8.200 8.200 0 1112 20.200zm4.500-6.100c-.2-.1-1.500-.7-1.700-.8-.2-.1-.4-.1-.6.100l-.8 1c-.1.200-.3.200-.5.100a6.700 6.700 0 01-3.300-2.900c-.2-.4.200-.4.700-1.300.1-.2 0-.3 0-.5l-.8-1.800c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.100-.7.300-.2.300-.9.900-.9 2.200s.9 2.500 1.100 2.700c.1.200 1.800 2.800 4.400 3.900 1.600.7 2.300.8 3.100.6.500-.1 1.500-.6 1.700-1.200.2-.6.200-1.100.2-1.200-.1-.1-.2-.2-.4-.3z"/></svg></a>
@@ -261,7 +266,7 @@ a.btn{text-decoration:none}
         <h2 style="margin:0 0 4px;font-size:20px">Edit client</h2>
         <label class="l" for="e-akun">No akun trade</label><div class="field"><input id="e-akun" inputmode="numeric" style="padding-left:16px"></div>
         <label class="l" for="e-nama">Nama client</label><div class="field"><input id="e-nama" style="padding-left:16px"></div>
-        <label class="l" for="e-spon">Sponsor</label><div class="field"><input id="e-spon" style="padding-left:16px"></div>
+        <label class="l" for="e-spon">ID sponsor</label><div class="field"><input id="e-spon" style="padding-left:16px"></div>
         <label class="l" for="e-bal">Balance (USD)</label><div class="field"><input id="e-bal" inputmode="decimal" style="padding-left:16px"></div>
         <label class="l" for="e-exp">Tanggal expired</label><div class="field"><input id="e-exp" type="date" style="padding-left:16px"></div>
         <div class="msg e" id="m-edit" role="alert"></div>
@@ -280,6 +285,64 @@ a.btn{text-decoration:none}
       </div>
     </section>
 
+    <section class="content pg" id="pg-wallet" hidden>
+      <h2>Dompet digital</h2>
+      <p>Tempat menampung fee sponsor Anda. Bagikan ID sponsor Anda ke calon penyewa.</p>
+      <div class="grid" style="margin-bottom:18px">
+        <div class="stat hl"><small>Saldo dompet</small><strong class="sm" id="w-bal">Rp 0</strong><em>tersedia</em></div>
+        <div class="stat"><small>Total fee sponsor</small><strong class="sm" id="w-earn">Rp 0</strong><em>EA Rp 150.000 · Indikator Rp 50.000</em></div>
+        <div class="stat"><small>ID sponsor Anda</small><strong class="sm" id="w-mid">-</strong><em>dipakai saat pengajuan sewa</em></div>
+      </div>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-bottom:18px">
+        <form class="card" id="f-top" novalidate style="max-width:none">
+          <b>Isi saldo</b>
+          <div class="pay" style="margin-top:12px"><div><small>Bank Neo Commerce · a.n Robidin</small><b>5859458157019986</b></div></div>
+          <label class="l" for="t-amt">Jumlah (Rp)</label>
+          <div class="field"><input id="t-amt" inputmode="numeric" placeholder="Minimal 10000"></div>
+          <label class="l" for="t-file">Bukti transfer</label>
+          <label class="drop"><span id="t-name">Pilih foto bukti TF</span><input id="t-file" type="file" accept="image/*"></label>
+          <div class="msg" id="m-top" role="status"></div>
+          <button class="btn pri" type="submit" style="margin-top:10px">Isi saldo</button>
+        </form>
+        <div>
+          <form class="card" id="f-wd" novalidate style="max-width:none" hidden>
+            <b>Tarik saldo</b>
+            <label class="l" for="x-amt">Jumlah (Rp)</label>
+            <div class="field"><input id="x-amt" inputmode="numeric" placeholder="Minimal 50000"></div>
+            <label class="l" for="x-bank">Bank / dompet tujuan</label>
+            <div class="field"><input id="x-bank" placeholder="Contoh: BCA"></div>
+            <label class="l" for="x-no">Nomor rekening</label>
+            <div class="field"><input id="x-no" inputmode="numeric" placeholder="Nomor rekening"></div>
+            <label class="l" for="x-an">Atas nama</label>
+            <div class="field"><input id="x-an" placeholder="Nama pemilik rekening"></div>
+            <div class="msg" id="m-wd" role="status"></div>
+            <button class="btn pri" type="submit" style="margin-top:10px">Tarik saldo</button>
+          </form>
+          <div class="card" id="wd-lock" style="max-width:none"><b>Tarik saldo</b><p style="margin:8px 0 0;color:var(--mute)">Tersedia setelah Anda mendapat fee sponsor.</p></div>
+        </div>
+      </div>
+      <div class="tw"><table><thead><tr><th>Tanggal/waktu</th><th>Keterangan</th><th>Jumlah</th><th>Status</th></tr></thead><tbody id="tb-wal"></tbody></table><div class="empty" id="e-wal">Belum ada riwayat dompet.</div></div>
+    </section>
+
+    <section class="content pg" id="pg-wd" hidden>
+      <h2>Penarikan dompet</h2>
+      <p>Permintaan tarik saldo client. Transfer manual ke rekening tujuan, lalu tandai dibayar.</p>
+      <div class="tw"><table style="min-width:760px"><thead><tr><th>Tanggal/jam</th><th>Client</th><th>Jumlah</th><th>Rekening tujuan</th><th>Aksi</th></tr></thead><tbody id="tb-wd"></tbody></table><div class="empty" id="e-wd">Tidak ada permintaan tarik saldo.</div></div>
+      <div class="msg e" id="m-wd2" role="alert"></div>
+    </section>
+
+    <dialog id="dlg3">
+      <form id="f-edit-i" novalidate>
+        <h2 style="margin:0 0 4px;font-size:20px">Edit client indikator</h2>
+        <label class="l" for="ie-akun">No akun trade</label><div class="field"><input id="ie-akun" readonly style="padding-left:16px"></div>
+        <label class="l" for="ie-nama">Nama client</label><div class="field"><input id="ie-nama" style="padding-left:16px"></div>
+        <label class="l" for="ie-spon">ID sponsor</label><div class="field"><input id="ie-spon" style="padding-left:16px"></div>
+        <label class="l" for="ie-exp">Tanggal expired</label><div class="field"><input id="ie-exp" type="date" style="padding-left:16px"></div>
+        <div class="msg e" id="m-edit-i" role="alert"></div>
+        <div style="display:flex;gap:10px;margin-top:8px"><button class="btn" type="button" id="ie-cancel">Batal</button><button class="btn pri" type="submit">Simpan</button></div>
+      </form>
+    </dialog>
+
     <section class="content pg" id="pg-sewa" hidden>
       <h2>Sewa EA</h2>
       <p>Isi data akun trading Anda untuk mengajukan sewa EA.</p>
@@ -288,8 +351,8 @@ a.btn{text-decoration:none}
         <div class="field"><input id="s-akun" inputmode="numeric" placeholder="Contoh: 12345678"></div>
         <label class="l" for="s-nama">Nama lengkap</label>
         <div class="field"><input id="s-nama" autocomplete="name" placeholder="Sesuai identitas"></div>
-        <label class="l" for="s-spon">Nama sponsor</label>
-        <div class="field"><input id="s-spon" placeholder="Nama sponsor Anda"></div>
+        <label class="l" for="s-spon">ID sponsor</label>
+        <div class="field"><input id="s-spon" placeholder="Contoh: CGC123456 (kosongkan jika tidak ada)"></div>
         <div class="msg" id="m-sewa" role="status"></div>
         <button class="btn pri" type="submit" style="margin-top:10px">Ajukan sewa</button>
       </form>
@@ -303,8 +366,8 @@ a.btn{text-decoration:none}
         <div class="field"><input id="i-akun" inputmode="numeric" placeholder="Contoh: 12345678"></div>
         <label class="l" for="i-nama">Nama lengkap</label>
         <div class="field"><input id="i-nama" autocomplete="name" placeholder="Sesuai identitas"></div>
-        <label class="l" for="i-spon">Nama sponsor</label>
-        <div class="field"><input id="i-spon" placeholder="Nama sponsor Anda"></div>
+        <label class="l" for="i-spon">ID sponsor</label>
+        <div class="field"><input id="i-spon" placeholder="Contoh: CGC123456 (kosongkan jika tidak ada)"></div>
         <div class="msg" id="m-sewaind" role="status"></div>
         <button class="btn pri" type="submit" style="margin-top:10px">Ajukan sewa</button>
       </form>
@@ -318,8 +381,10 @@ a.btn{text-decoration:none}
           <div><small>Bank Neo Commerce · a.n Robidin</small><b id="dana">5859458157019986</b></div>
           <button class="btn sm" type="button" id="cp">Salin nomor</button>
         </div>
-        <label class="l" for="d-amt">Jumlah pembayaran (Rp)</label>
-        <div class="field"><input id="d-amt" inputmode="numeric" placeholder="Contoh: 500000"></div>
+        <label class="l" for="d-ord">Pesanan yang dibayar</label>
+        <div class="field"><select id="d-ord"></select></div>
+        <label class="l" for="d-amt">Jumlah pembayaran</label>
+        <div class="field"><input id="d-amt" readonly placeholder="Otomatis: EA Rp 500.000 · Indikator Rp 200.000 per bulan"></div>
         <label class="l" for="d-file">Bukti transfer</label>
         <label class="drop"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg><span id="d-name">Pilih foto bukti TF</span><input id="d-file" type="file" accept="image/*"></label>
         <div class="msg" id="m-dep" role="status"></div>
@@ -364,7 +429,7 @@ function enter(name,r){
   var wl=waLink("Halo admin CGC, saya "+(U.name||"client")+" ingin bertanya.");$("wafab").href=wl;$("wabtn").href=wl;$("wafab").hidden=(role==="admin");
   var n=name||"Pengguna";$("ini").textContent=role==="admin"?"AD":n.slice(0,2).toUpperCase();
   $("nav").innerHTML=role==="admin"?am:cm;
-  render();renderAdmin();show(role==="admin"?"order":"dash");startSync();pullSlaves();
+  ensureMid();render();renderAdmin();show(role==="admin"?"order":"dash");startSync();pullSlaves();
 }
 $("form").onsubmit=function(e){
   e.preventDefault();var em=$("email"),pw=$("pw"),nm=$("name"),msg="";
@@ -380,8 +445,8 @@ $("logout").onclick=function(){U={uid:"",tok:"",exp:0};tx=[];clients=[];$("app")
 
 /* Sidebar: bab + sub bab */
 var chev='<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
-var cm='<button type="button" class="item" data-pg="dash">Dasbor</button><div class="grp open"><button type="button" aria-expanded="true"><span>Sewa alat</span>'+chev+'</button><div class="subs"><button type="button" class="item" data-pg="sewa">Sewa EA</button><button type="button" class="item" data-pg="sewaind">Sewa Indikator</button></div></div><button type="button" class="item" data-pg="dep">Bayar sewa</button><button type="button" class="item" data-pg="status">Status transaksi</button><button type="button" class="item" data-pg="hist">History transaksi</button><button type="button" class="item" data-pg="ea">Download EA &amp; Indikator</button><button type="button" class="item" data-pg="wa">Chat admin</button><div style="height:10px"></div>';
-var am='<button type="button" class="item" data-pg="order">Notifikasi pesanan</button><button type="button" class="item" data-pg="pay">Notifikasi pembayaran</button><button type="button" class="item" data-pg="ctrl">Control EA client</button><button type="button" class="item" data-pg="cind">Control indikator</button><button type="button" class="item" data-pg="upea">Unggah EA &amp; Indikator</button>';
+var cm='<button type="button" class="item" data-pg="dash">Dasbor</button><button type="button" class="item" data-pg="wallet">Dompet digital</button><div class="grp open"><button type="button" aria-expanded="true"><span>Sewa alat</span>'+chev+'</button><div class="subs"><button type="button" class="item" data-pg="sewa">Sewa EA</button><button type="button" class="item" data-pg="sewaind">Sewa Indikator</button></div></div><button type="button" class="item" data-pg="dep">Bayar sewa</button><button type="button" class="item" data-pg="status">Status transaksi</button><button type="button" class="item" data-pg="hist">History transaksi</button><button type="button" class="item" data-pg="ea">Download EA &amp; Indikator</button><button type="button" class="item" data-pg="wa">Chat admin</button><div style="height:10px"></div>';
+var am='<button type="button" class="item" data-pg="order">Notifikasi pesanan</button><button type="button" class="item" data-pg="pay">Notifikasi pembayaran</button><button type="button" class="item" data-pg="wd">Penarikan dompet</button><div class="grp open"><button type="button" aria-expanded="true"><span>Control alat</span>'+chev+'</button><div class="subs"><button type="button" class="item" data-pg="ctrl">Control EA</button><button type="button" class="item" data-pg="cind">Control indikator</button></div></div><button type="button" class="item" data-pg="upea">Unggah EA &amp; Indikator</button>';
 $("nav").addEventListener("click",function(e){
   var b=e.target.closest("button");if(!b)return;
   if(b.dataset.pg){show(b.dataset.pg);return}
@@ -393,7 +458,7 @@ function show(pg){
   document.querySelectorAll(".pg").forEach(function(s){s.hidden=s.id!=="pg-"+pg});
   document.querySelectorAll(".item.on").forEach(function(x){x.classList.remove("on")});
   var b=document.querySelector('[data-pg="'+pg+'"]');if(b)b.classList.add("on");
-  $("app").classList.remove("nav");window.scrollTo(0,0);if(pg==="ea"||pg==="upea")loadEA();
+  $("app").classList.remove("nav");window.scrollTo(0,0);if(pg==="ea"||pg==="upea")loadEA();if(pg==="wallet")renderWallet();
 }
 var tx=[];
 
@@ -401,13 +466,13 @@ function save(t){if(!t)return;lastChg=Date.now();db("PUT","/tx/"+t.uid+"/"+t.id,
 function fmtD(t){return new Date(t).toLocaleString("id-ID",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}
 function rp(n){return "Rp "+Number(n).toLocaleString("id-ID")}
 function cell(tr,txt){var td=document.createElement("td");td.textContent=txt;tr.appendChild(td)}
-function badge(tr,s){var td=document.createElement("td"),b=document.createElement("span");b.className="bd "+(s==="Disetujui"?"ok":s==="Ditolak"?"no":"wait");b.textContent=s;td.appendChild(b);tr.appendChild(td)}
+function badge(tr,s){var td=document.createElement("td"),b=document.createElement("span");b.className="bd "+(s==="Disetujui"||s==="Dibayar"||s==="Masuk"?"ok":s==="Ditolak"?"no":"wait");b.textContent=s;td.appendChild(b);tr.appendChild(td)}
 function render(){
   var a=$("tb-status"),h=$("tb-hist");a.textContent="";h.textContent="";
   var deps=tx.filter(function(t){return t.type==="Deposit"});
   deps.forEach(function(t){var tr=document.createElement("tr");cell(tr,fmtD(t.at));cell(tr,t.id);cell(tr,rp(t.amount));badge(tr,t.status);a.appendChild(tr)});
   tx.forEach(function(t){var tr=document.createElement("tr");cell(tr,fmtD(t.at));cell(tr,t.id);cell(tr,t.type=="Deposit"?"Bayar sewa":t.type=="Sewa Indicator"?"Sewa Indikator":t.type);cell(tr,t.amount?rp(t.amount):"-");badge(tr,t.status);h.appendChild(tr)});
-  $("empty-status").hidden=deps.length>0;$("empty-hist").hidden=tx.length>0;
+  $("empty-status").hidden=deps.length>0;$("empty-hist").hidden=tx.length>0;fillOrders();
 }
 function newId(p){return p+Date.now().toString().slice(-8)}
 function msg(id,t,bad){var m=$(id);m.textContent=t;m.className="msg"+(bad?" e":"")}
@@ -416,29 +481,80 @@ $("cp").onclick=function(){
   setTimeout(function(){$("cp").textContent="Salin nomor"},1800);
 };
 $("d-file").onchange=function(){$("d-name").textContent=this.files[0]?this.files[0].name:"Pilih foto bukti TF"};
-$("f-sewa").onsubmit=function(e){
-  e.preventDefault();var ids=["s-akun","s-nama","s-spon"],bad=false;
-  ids.forEach(function(i){var v=$(i).value.trim();var no=!v||(i==="s-akun"&&!/^\d{5,}$/.test(v));$(i).classList.toggle("bad",no);if(no)bad=true});
-  if(bad){msg("m-sewa","Lengkapi semua kolom. No akun trade berisi angka saja.",true);return}
-  tx.unshift({id:newId("EA"),at:Date.now(),type:"Sewa EA",amount:0,status:"Menunggu",akun:$("s-akun").value.trim(),nama:$("s-nama").value.trim(),spon:$("s-spon").value.trim(),uid:U.uid});save(tx[0]);render();
-  this.reset();msg("m-sewa","Pengajuan sewa EA terkirim. Admin akan memprosesnya.");
-};
+var PRICE={EA:500000,IND:200000},FEE={EA:150000,IND:50000},wal={balance:0,earned:0},wlog=[];
+/* ID member (ID sponsor): dibuat sekali per akun, dipetakan di /idmap */
+function showMid(){var e=$("w-mid");if(e)e.textContent=U.mid||"-"}
+function ensureMid(){
+  if(U.mid||!U.uid)return;
+  function mkId(n){if(n>6)return;var id="CGC"+(100000+Math.floor(Math.random()*900000));
+    return db("PUT","/idmap/"+id,U.uid).then(function(){return db("PUT","/users/"+U.uid+"/mid",id)}).then(function(){U.mid=id}).catch(function(){return mkId(n+1)})}
+  db("GET","/users/"+U.uid+"/mid").then(function(m){if(m){U.mid=m;return}return mkId(0)}).then(showMid).catch(noop);
+}
+function checkSpon(raw){
+  raw=(raw||"").trim().toUpperCase();if(!raw)return Promise.resolve({ok:true,id:""});
+  if(!/^CGC\d{6}$/.test(raw))return Promise.resolve({ok:false,msg:"Format ID sponsor: CGC123456."});
+  if(raw===U.mid)return Promise.resolve({ok:false,msg:"ID sponsor tidak boleh ID Anda sendiri."});
+  return db("GET","/idmap/"+raw).then(function(u){return u?{ok:true,id:raw}:{ok:false,msg:"ID sponsor tidak ditemukan."}}).catch(function(){return {ok:false,msg:"Gagal memeriksa ID sponsor."}});
+}
+function sewaSubmit(form,p,type,idp,mid,okMsg){
+  var bad=false;
+  [p+"-akun",p+"-nama"].forEach(function(i){var v=$(i).value.trim();var no=!v||(i===p+"-akun"&&!/^\d{5,}$/.test(v));$(i).classList.toggle("bad",no);if(no)bad=true});
+  if(bad){msg(mid,"Lengkapi No akun trade (angka) dan Nama lengkap.",true);return}
+  checkSpon($(p+"-spon").value).then(function(r){
+    if(!r.ok){msg(mid,r.msg,true);return}
+    var t={id:newId(idp),at:Date.now(),type:type,amount:0,status:"Menunggu",akun:$(p+"-akun").value.trim(),nama:$(p+"-nama").value.trim(),spon:r.id,uid:U.uid};
+    tx.unshift(t);save(t);render();form.reset();msg(mid,okMsg);
+  });
+}
+$("f-sewa").onsubmit=function(e){e.preventDefault();sewaSubmit(this,"s","Sewa EA","EA","m-sewa","Pengajuan sewa EA terkirim. Admin akan memprosesnya.")};
+$("f-sewaind").onsubmit=function(e){e.preventDefault();sewaSubmit(this,"i","Sewa Indicator","IN","m-sewaind","Pengajuan sewa indikator terkirim. Admin akan memprosesnya.")};
+/* Bayar sewa: pilih pesanan, nominal otomatis (EA 500.000 / indikator 200.000) */
+function fillOrders(){
+  var s=$("d-ord");if(!s)return;var cur=s.value;s.textContent="";
+  var o0=mk("option","Pilih pesanan sewa");o0.value="";s.appendChild(o0);
+  tx.filter(function(t){return t.type==="Sewa EA"||t.type==="Sewa Indicator"}).forEach(function(t){var o=mk("option",(t.type==="Sewa EA"?"EA":"Indikator")+" · akun "+t.akun+" · "+dOnly(t.at));o.value=t.id;s.appendChild(o)});
+  s.value=cur;payAmt();
+}
+function payAmt(){var o=tx.filter(function(t){return t.id===$("d-ord").value})[0];$("d-amt").value=o?rp(PRICE[o.type==="Sewa EA"?"EA":"IND"])+" / bulan":""}
+$("d-ord").onchange=payAmt;
 $("f-dep").onsubmit=function(e){
-  e.preventDefault();var amt=parseInt($("d-amt").value.replace(/\D/g,""),10),f=$("d-file").files[0];
-  $("d-amt").classList.toggle("bad",!(amt>0));
-  if(!(amt>0)){msg("m-dep","Isi jumlah deposit dengan angka.",true);return}
+  e.preventDefault();var f=$("d-file").files[0],o=tx.filter(function(t){return t.id===$("d-ord").value})[0];
+  if(!o){msg("m-dep","Pilih pesanan sewa yang dibayar. Ajukan sewa dulu jika belum ada.",true);return}
   if(!f){msg("m-dep","Unggah bukti transfer terlebih dahulu.",true);return}
   if(f.size>5*1024*1024){msg("m-dep","Ukuran foto maksimal 5 MB.",true);return}
-  var form=this,did=newId("DP");
-  shrink(f,function(url){var t={id:did,at:Date.now(),type:"Deposit",amount:amt,status:"Menunggu",uid:U.uid};tx.unshift(t);save(t);db("PUT","/proofs/"+did,url).catch(noop);render();
-  form.reset();$("d-name").textContent="Pilih foto bukti TF";msg("m-dep","");show("status")});
+  var prod=o.type==="Sewa EA"?"EA":"IND",form=this,did=newId("DP");
+  shrink(f,function(url){var t={id:did,at:Date.now(),type:"Deposit",amount:PRICE[prod],status:"Menunggu",uid:U.uid,orderId:o.id,product:prod,akun:o.akun,spon:o.spon||""};tx.unshift(t);save(t);db("PUT","/proofs/"+did,url).catch(noop);render();
+  form.reset();$("d-name").textContent="Pilih foto bukti TF";payAmt();msg("m-dep","");show("status")});
 };
-$("f-sewaind").onsubmit=function(e){
-  e.preventDefault();var ids=["i-akun","i-nama","i-spon"],bad=false;
-  ids.forEach(function(i){var v=$(i).value.trim();var no=!v||(i==="i-akun"&&!/^\d{5,}$/.test(v));$(i).classList.toggle("bad",no);if(no)bad=true});
-  if(bad){msg("m-sewaind","Lengkapi semua kolom. No akun trade berisi angka saja.",true);return}
-  tx.unshift({id:newId("IN"),at:Date.now(),type:"Sewa Indicator",amount:0,status:"Menunggu",akun:$("i-akun").value.trim(),nama:$("i-nama").value.trim(),spon:$("i-spon").value.trim(),uid:U.uid});save(tx[0]);render();
-  this.reset();msg("m-sewaind","Pengajuan sewa indikator terkirim. Admin akan memprosesnya.");
+/* Dompet digital (client) */
+function renderWallet(){
+  $("w-bal").textContent=rp(wal.balance);$("w-earn").textContent=rp(wal.earned);showMid();
+  var can=wal.earned>0;$("f-wd").hidden=!can;$("wd-lock").hidden=can;
+  var rows=[];
+  wlog.forEach(function(l){rows.push({at:l.at,ket:l.type+(l.note?" · "+l.note:""),amt:+l.amount,st:"Masuk"})});
+  tx.filter(function(t){return t.type==="Isi Saldo"||t.type==="Tarik Saldo"}).forEach(function(t){rows.push({at:t.at,ket:t.type,amt:t.type==="Isi Saldo"?t.amount:-t.amount,st:t.status})});
+  rows.sort(function(a,b){return b.at-a.at});
+  var tb=$("tb-wal");tb.textContent="";
+  rows.forEach(function(r){var tr=document.createElement("tr");cell(tr,fmtD(r.at));cell(tr,r.ket);cell(tr,(r.amt>=0?"+":"-")+rp(Math.abs(r.amt)));badge(tr,r.st);tb.appendChild(tr)});
+  $("e-wal").hidden=rows.length>0;
+}
+$("t-file").onchange=function(){$("t-name").textContent=this.files[0]?this.files[0].name:"Pilih foto bukti TF"};
+$("f-top").onsubmit=function(e){
+  e.preventDefault();var amt=parseInt($("t-amt").value.replace(/\D/g,""),10),f=$("t-file").files[0];
+  if(!(amt>=10000)){msg("m-top","Minimal isi saldo Rp 10.000.",true);return}
+  if(!f){msg("m-top","Unggah bukti transfer.",true);return}
+  var form=this,id=newId("TP");
+  shrink(f,function(url){var t={id:id,at:Date.now(),type:"Isi Saldo",amount:amt,status:"Menunggu",uid:U.uid,nama:U.name};tx.unshift(t);save(t);db("PUT","/proofs/"+id,url).catch(noop);render();renderWallet();form.reset();$("t-name").textContent="Pilih foto bukti TF";msg("m-top","Permintaan isi saldo terkirim. Saldo masuk setelah admin menyetujui.")});
+};
+$("f-wd").onsubmit=function(e){
+  e.preventDefault();var amt=parseInt($("x-amt").value.replace(/\D/g,""),10),bk=$("x-bank").value.trim(),no=$("x-no").value.trim(),an=$("x-an").value.trim();
+  var pend=tx.filter(function(t){return t.type==="Tarik Saldo"&&t.status==="Menunggu"}).reduce(function(s,t){return s+t.amount},0);
+  if(!(wal.earned>0)){msg("m-wd","Tarik saldo tersedia setelah Anda mendapat fee sponsor.",true);return}
+  if(!(amt>=50000)){msg("m-wd","Minimal tarik saldo Rp 50.000.",true);return}
+  if(amt>wal.balance-pend){msg("m-wd","Saldo tersedia tidak cukup.",true);return}
+  if(!bk||!/^\d{5,}$/.test(no)||!an){msg("m-wd","Lengkapi bank, nomor rekening (angka), dan nama pemilik.",true);return}
+  var t={id:newId("WD"),at:Date.now(),type:"Tarik Saldo",amount:amt,status:"Menunggu",uid:U.uid,nama:U.name,mid:U.mid||"",bank:bk,rek:no,an:an};
+  tx.unshift(t);save(t);render();renderWallet();this.reset();msg("m-wd","Permintaan tarik saldo terkirim. Admin akan memprosesnya.");
 };
 var FB="https://central-global-capital-default-rtdb.firebaseio.com";
 document.querySelectorAll("[data-go]").forEach(function(b){b.onclick=function(){show(b.dataset.go)}});
@@ -553,14 +669,14 @@ function pushAll(){
 }
 function pullSlaves(){
   if(!U.uid||Date.now()-lastChg<4000)return;
-  if(role!=="admin"){db("GET","/tx/"+U.uid).then(function(o){tx=Object.keys(o||{}).map(function(i){return o[i]}).sort(function(a,b){return b.at-a.at});render()}).catch(noop);return}
+  if(role!=="admin"){Promise.all([db("GET","/tx/"+U.uid),db("GET","/wallet/"+U.uid).catch(function(){return null}),db("GET","/walletlog/"+U.uid).catch(function(){return null})]).then(function(a){var o=a[0];tx=Object.keys(o||{}).map(function(i){return o[i]}).sort(function(x,y){return y.at-x.at});wal={balance:+(a[1]&&a[1].balance)||0,earned:+(a[1]&&a[1].earned)||0};var l=a[2]||{};wlog=Object.keys(l).map(function(i){return l[i]});render();renderWallet()}).catch(noop);return}
   if($("dlg").open)return;
   loadConn();
-  Promise.all([db("GET","/META"),db("GET","/STATS"),db("GET","/CONTROL/CLIENTS"),db("GET","/tx"),db("GET","/CONTROL/MASTER"),db("GET","/META_IND").catch(function(){return null}),db("GET","/CONTROL/INDICATORS").catch(function(){return null})]).then(function(a){
+  Promise.all([db("GET","/META"),db("GET","/STATS"),db("GET","/CONTROL/CLIENTS"),db("GET","/tx"),db("GET","/CONTROL/MASTER"),db("GET","/META_IND").catch(function(){return null}),db("GET","/CONTROL/INDICATORS").catch(function(){return null}),db("GET","/CONTROL/IND_MASTER").catch(function(){return null})]).then(function(a){
     var me=a[0]||{},st=a[1]||{},ct=a[2]||{},all=[];
     clients=Object.keys(me).map(function(ak){var m=me[ak],c=ct[ak]||{},s=st[ak]||{};return {akun:ak,nama:m.nama,spon:m.spon,uid:m.uid,exp:+c.exp||0,active:c.active!==false,ea:c.ea!==false,bal:+s.balance||0,eq:+s.equity||0,seen:(+s.last_update||0)*1000}});
     Object.keys(a[3]||{}).forEach(function(u){Object.keys(a[3][u]).forEach(function(i){all.push(a[3][u][i])})});
-    var mi=a[5]||{},ci=a[6]||{};inds=Object.keys(ci).map(function(ak){var c=ci[ak],m=mi[ak]||{};return {akun:ak,nama:m.nama||"-",spon:m.spon||"-",exp:+c.exp||0,active:c.active!==false}});
+    var mi=a[5]||{},ci=a[6]||{};inds=Object.keys(ci).map(function(ak){var c=ci[ak],m=mi[ak]||{};return {akun:ak,nama:m.nama||"-",spon:m.spon||"",uid:m.uid,exp:+c.exp||0,active:c.active!==false,on:c.on!==false}});imaster=!!(a[7]&&a[7].stop);
     tx=all.sort(function(x,y){return y.at-x.at});master=!!(a[4]&&a[4].stop);render();renderAdmin();renderInd();
   }).catch(noop);
 }
@@ -585,15 +701,15 @@ function abtn(label,cls,fn){var b=mk("button",label,"btn sm "+(cls||""));b.type=
 function tdOf(child){var td=document.createElement("td");td.appendChild(child);return td}
 function usd(n){return "$"+Number(n||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
 function renderAdmin(){
-  var o=$("tb-order"),p=$("tb-pay"),c=$("tb-ctrl");o.textContent="";p.textContent="";c.textContent="";
+  var o=$("tb-order"),p=$("tb-pay"),c=$("tb-ctrl");o.textContent="";p.textContent="";c.textContent="";renderWd();
   var ord=tx.filter(function(t){return (t.type==="Sewa EA"||t.type==="Sewa Indicator")&&t.status==="Menunggu"});
   ord.forEach(function(t){var tr=document.createElement("tr");cell(tr,fmtD(t.at));cell(tr,t.akun||"-");cell(tr,t.nama||"-");cell(tr,t.type==="Sewa Indicator"?"Indikator":"EA");
     tr.appendChild(tdOf(abtn("Approve pesanan","pri",function(){t.status="Disetujui";
-      if(t.type==="Sewa Indicator"){var ni={akun:t.akun,nama:t.nama,spon:t.spon,exp:Date.now()+30*864e5,active:true};inds.unshift(ni);pushInd(ni);db("PUT","/META_IND/"+t.akun,{nama:t.nama,spon:t.spon,uid:t.uid}).catch(noop);save(t);db("PUT","/subs/"+t.uid,true).catch(noop);render();renderAdmin();renderInd();return}
+      if(t.type==="Sewa Indicator"){var ni={akun:t.akun,nama:t.nama,spon:t.spon,uid:t.uid,exp:Date.now()+30*864e5,active:true,on:true};inds.unshift(ni);pushInd(ni);db("PUT","/META_IND/"+t.akun,{nama:t.nama,spon:t.spon,uid:t.uid}).catch(noop);save(t);db("PUT","/subs/"+t.uid,true).catch(noop);render();renderAdmin();renderInd();return}
       clients.unshift({akun:t.akun,nama:t.nama,spon:t.spon,uid:t.uid,exp:Date.now()+30*864e5,active:true,ea:true});save(t);db("PUT","/subs/"+t.uid,true).catch(noop);saveC();render();renderAdmin()})));o.appendChild(tr)});
-  var pay=tx.filter(function(t){return t.type==="Deposit"&&t.status==="Menunggu"});
-  pay.forEach(function(t){var tr=document.createElement("tr");cell(tr,fmtD(t.at));cell(tr,t.id);cell(tr,rp(t.amount));
-    var bx=mk("div",null,"ca");bx.appendChild(abtn("Lihat bukti","",function(){db("GET","/proofs/"+t.id).then(function(u){$("pimg").src=(u&&u.indexOf("data:image/")===0)?u:"";$("dlg2").showModal()}).catch(noop)}));bx.appendChild(abtn("Approve pembayaran","pri",function(){t.status="Disetujui";save(t);render();renderAdmin()}));tr.appendChild(tdOf(bx));p.appendChild(tr)});
+  var pay=tx.filter(function(t){return (t.type==="Deposit"||t.type==="Isi Saldo")&&t.status==="Menunggu"});
+  pay.forEach(function(t){var tr=document.createElement("tr");cell(tr,fmtD(t.at));cell(tr,t.id);cell(tr,t.type==="Deposit"?"Bayar sewa "+(t.product==="IND"?"indikator":"EA"):"Isi saldo");cell(tr,rp(t.amount));
+    var bx=mk("div",null,"ca");bx.appendChild(abtn("Lihat bukti","",function(){db("GET","/proofs/"+t.id).then(function(u){$("pimg").src=(u&&u.indexOf("data:image/")===0)?u:"";$("dlg2").showModal()}).catch(noop)}));bx.appendChild(abtn("Approve pembayaran","pri",function(){approvePay(t)}));tr.appendChild(tdOf(bx));p.appendChild(tr)});
   $("e-order").hidden=ord.length>0;$("e-pay").hidden=pay.length>0;$("e-ctrl").hidden=clients.length>0;
   $("master").checked=master;$("warn").hidden=!master;
   $("tot-bal").textContent=usd(clients.reduce(function(s,k){return s+(k.bal||0)},0));$("tot-cl").textContent=clients.length;
@@ -613,21 +729,73 @@ function renderAdmin(){
     tr.appendChild(tdOf(box));c.appendChild(tr);
   });
 }
-/* CONTROL INDIKATOR: web menulis /CONTROL/INDICATORS/{akun}; EA pembantu KERAMAT_License di MT4 client membacanya */
-function pushInd(k){lastChg=Date.now();db("PATCH","/CONTROL/INDICATORS/"+k.akun,{exp:k.exp,active:!!k.active}).catch(noop)}
+/* CONTROL INDIKATOR (format sama dengan Control EA): web menulis /CONTROL/INDICATORS/{akun}; EA pembantu KERAMAT_License membacanya */
+var imaster=false,editingI=null;
+function pushInd(k){lastChg=Date.now();db("PATCH","/CONTROL/INDICATORS/"+k.akun,{exp:k.exp,active:!!k.active,on:!!k.on}).catch(noop);db("PUT","/META_IND/"+k.akun,{nama:k.nama,spon:k.spon||"",uid:k.uid||""}).catch(noop)}
 function renderInd(){
-  var c=$("tb-cind");c.textContent="";
+  var c=$("tb-cind");c.textContent="";$("imaster").checked=imaster;$("warn2").hidden=!imaster;$("ind-cl").textContent=inds.length;var on=0;
   inds.forEach(function(k){
     var tr=document.createElement("tr"),ex=k.exp<Date.now();
-    cell(tr,k.akun);cell(tr,k.nama);cell(tr,dOnly(k.exp));cell(tr,k.spon);
-    var st=!k.active?"Berhenti":ex?"Expired":"Aktif";
+    cell(tr,k.akun);cell(tr,k.nama);cell(tr,dOnly(k.exp));cell(tr,k.spon||"-");
+    var st=!k.active?"Berhenti":ex?"Expired":"Aktif";if(st==="Aktif"&&k.on&&!imaster)on++;
     tr.appendChild(tdOf(mk("span",st,"bd "+(st==="Aktif"?"ok":st==="Expired"?"wait":"no"))));
+    var lab=mk("label",null,"sw"),inp=document.createElement("input");
+    inp.type="checkbox";inp.checked=k.on&&!imaster&&k.active&&!ex;inp.disabled=imaster||!k.active||ex;
+    inp.setAttribute("aria-label","Indikator "+k.nama);inp.onchange=function(){k.on=inp.checked;pushInd(k);renderInd()};
+    lab.appendChild(inp);lab.appendChild(mk("i"));tr.appendChild(tdOf(lab));
     var box=mk("div",null,"ca");
     box.appendChild(abtn("Perpanjang","pri",function(){k.exp=Math.max(Date.now(),k.exp)+30*864e5;k.active=true;pushInd(k);renderInd()}));
+    box.appendChild(abtn("Edit client","",function(){editingI=k;$("ie-akun").value=k.akun;$("ie-nama").value=k.nama;$("ie-spon").value=k.spon||"";$("ie-exp").value=new Date(k.exp).toISOString().slice(0,10);$("m-edit-i").textContent="";$("dlg3").showModal()}));
     box.appendChild(abtn(k.active?"Stop sewa":"Aktifkan sewa",k.active?"dng":"",function(){k.active=!k.active;pushInd(k);renderInd()}));
     tr.appendChild(tdOf(box));c.appendChild(tr);
   });
-  $("e-cind").hidden=inds.length>0;
+  $("ind-on").textContent=on;$("e-cind").hidden=inds.length>0;
+}
+$("imaster").onchange=function(){imaster=this.checked;lastChg=Date.now();db("PUT","/CONTROL/IND_MASTER",{stop:imaster}).catch(noop);renderInd()};
+$("ie-cancel").onclick=function(){$("dlg3").close()};
+$("f-edit-i").onsubmit=function(e){
+  e.preventDefault();var n=$("ie-nama").value.trim(),s=$("ie-spon").value.trim().toUpperCase(),d=$("ie-exp").value;
+  if(!n||!d||(s&&!/^CGC\d{6}$/.test(s))){$("m-edit-i").textContent="Isi nama dan tanggal. ID sponsor berformat CGC123456 atau kosong.";return}
+  editingI.nama=n;editingI.spon=s;editingI.exp=new Date(d+"T23:59:59").getTime();pushInd(editingI);$("dlg3").close();renderInd();
+};
+/* Pembayaran & dompet (admin). Fee sponsor masuk otomatis saat pembayaran sewa di-approve */
+function creditWallet(uid,amt,log){
+  var d={balance:{".sv":{increment:amt}}};if(log)d.earned={".sv":{increment:amt}};
+  var ops=[db("PATCH","/wallet/"+uid,d)];if(log)ops.push(db("PUT","/walletlog/"+uid+"/"+log.id,log));
+  return Promise.all(ops);
+}
+function approvePay(t){
+  var p=Promise.resolve();
+  if(t.type==="Isi Saldo")p=creditWallet(t.uid,t.amount,null);
+  else if(t.spon&&!t.feePaid){
+    var fee=FEE[t.product]||0;
+    if(fee)p=db("GET","/idmap/"+t.spon).then(function(su){
+      if(!su||su===t.uid)return;
+      return db("GET","/walletlog/"+su+"/"+t.id).then(function(x){
+        if(x)return;
+        return creditWallet(su,fee,{id:t.id,at:Date.now(),type:"Fee sponsor",amount:fee,note:(t.product==="IND"?"sewa indikator":"sewa EA")+" · akun "+(t.akun||"-"),from:t.uid});
+      });
+    }).then(function(){t.feePaid=true});
+  }
+  p.then(function(){t.status="Disetujui";save(t);render();renderAdmin()}).catch(function(){msg("m-pay","Gagal memproses pembayaran. Cek aturan database dan coba lagi.",true)});
+}
+function renderWd(){
+  var b=$("tb-wd");b.textContent="";
+  var rows=tx.filter(function(t){return t.type==="Tarik Saldo"&&t.status==="Menunggu"});
+  rows.forEach(function(t){
+    var tr=document.createElement("tr");cell(tr,fmtD(t.at));cell(tr,(t.nama||"-")+(t.mid?" ("+t.mid+")":""));cell(tr,rp(t.amount));cell(tr,(t.bank||"")+" "+(t.rek||"")+" a.n "+(t.an||""));
+    var bx=mk("div",null,"ca");
+    bx.appendChild(abtn("Tandai dibayar","pri",function(){payWd(t)}));
+    bx.appendChild(abtn("Tolak","dng",function(){t.status="Ditolak";save(t);render();renderAdmin()}));
+    tr.appendChild(tdOf(bx));b.appendChild(tr);
+  });
+  $("e-wd").hidden=rows.length>0;
+}
+function payWd(t){
+  db("GET","/wallet/"+t.uid).then(function(w){
+    if(!w||(+w.balance||0)<t.amount){t.status="Ditolak";msg("m-wd2","Saldo client tidak cukup, permintaan ditolak.",true);return}
+    return db("PATCH","/wallet/"+t.uid,{balance:{".sv":{increment:-t.amount}}}).then(function(){t.status="Dibayar"});
+  }).then(function(){save(t);render();renderAdmin()}).catch(function(){msg("m-wd2","Gagal memproses penarikan.",true)});
 }
 $("master").onchange=function(){master=this.checked;saveC();renderAdmin()};
 $("e-cancel").onclick=function(){$("dlg").close()};
