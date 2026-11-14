@@ -290,7 +290,7 @@ a.btn{text-decoration:none}
       <p>Tempat menampung fee sponsor Anda. Bagikan ID sponsor Anda ke calon penyewa.</p>
       <div class="grid" style="margin-bottom:18px">
         <div class="stat hl"><small>Saldo dompet</small><strong class="sm" id="w-bal">Rp 0</strong><em>tersedia</em></div>
-        <div class="stat"><small>Total fee sponsor</small><strong class="sm" id="w-earn">Rp 0</strong><em>EA Rp 100.000 · Indikator Rp 50.000</em></div>
+        <div class="stat"><small>Total fee sponsor</small><strong class="sm" id="w-earn">Rp 0</strong><em>sesuai paket yang dibayar sponsor Anda</em></div>
         <div class="stat"><small>ID sponsor Anda</small><strong class="sm" id="w-mid">-</strong><em>dipakai saat pengajuan sewa</em></div>
       </div>
       <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-bottom:18px">
@@ -373,8 +373,10 @@ a.btn{text-decoration:none}
         </div>
         <label class="l" for="d-ord">Pesanan yang dibayar</label>
         <div class="field"><select id="d-ord"></select></div>
+        <label class="l" for="d-pkg">Paket sewa</label>
+        <div class="field"><select id="d-pkg"></select></div>
         <label class="l" for="d-amt">Jumlah pembayaran</label>
-        <div class="field"><input id="d-amt" readonly placeholder="Otomatis: EA Rp 400.000 · Indikator Rp 200.000 per bulan"></div>
+        <div class="field"><input id="d-amt" readonly placeholder="Otomatis sesuai paket"></div>
         <label class="l" for="d-file">Bukti transfer</label>
         <label class="drop"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg><span id="d-name">Pilih foto bukti TF</span><input id="d-file" type="file" accept="image/*"></label>
         <div class="msg" id="m-dep" role="status"></div>
@@ -471,7 +473,7 @@ $("cp").onclick=function(){
   setTimeout(function(){$("cp").textContent="Salin nomor"},1800);
 };
 $("d-file").onchange=function(){$("d-name").textContent=this.files[0]?this.files[0].name:"Pilih foto bukti TF"};
-var PRICE={EA:500000,IND:200000},FEE={EA:150000,IND:50000},wal={balance:0,earned:0},wlog=[];
+var PACKS={IND:[{m:1,n:"1 bulan",p:200000,f:50000},{m:3,n:"3 bulan",p:500000,f:100000},{m:6,n:"6 bulan",p:1000000,f:200000},{m:12,n:"1 tahun",p:2000000,f:400000}],EA:[{m:1,n:"1 bulan",p:400000,f:100000},{m:3,n:"3 bulan",p:1000000,f:200000},{m:6,n:"6 bulan",p:2000000,f:400000},{m:12,n:"1 tahun",p:4200000,f:800000}]},wal={balance:0,earned:0},wlog=[];
 /* ID member (ID sponsor): dibuat sekali per akun, dipetakan di /idmap */
 function showMid(){var e=$("w-mid");if(e)e.textContent=U.mid||"-"}
 function ensureMid(){
@@ -503,17 +505,20 @@ function fillOrders(){
   var s=$("d-ord");if(!s)return;var cur=s.value;s.textContent="";
   var o0=mk("option","Pilih pesanan sewa");o0.value="";s.appendChild(o0);
   tx.filter(function(t){return t.type==="Sewa EA"||t.type==="Sewa Indicator"}).forEach(function(t){var o=mk("option",(t.type==="Sewa EA"?"EA":"Indikator")+" · akun "+t.akun+" · "+dOnly(t.at));o.value=t.id;s.appendChild(o)});
-  s.value=cur;payAmt();
+  s.value=cur;fillPkgs();payAmt();
 }
-function payAmt(){var o=tx.filter(function(t){return t.id===$("d-ord").value})[0];$("d-amt").value=o?rp(PRICE[o.type==="Sewa EA"?"EA":"IND"])+" / bulan":""}
-$("d-ord").onchange=payAmt;
+function curPacks(){var o=tx.filter(function(t){return t.id===$("d-ord").value})[0];return PACKS[o&&o.type==="Sewa EA"?"EA":"IND"]}
+function fillPkgs(){var s=$("d-pkg"),ps=curPacks(),cur=s.value;s.textContent="";ps.forEach(function(k,i){var o=mk("option",k.n+" — "+rp(k.p));o.value=i;s.appendChild(o)});s.value=(cur!==""&&+cur<ps.length)?cur:"0"}
+function payAmt(){var k=curPacks()[+$("d-pkg").value||0];$("d-amt").value=rp(k.p)}
+$("d-pkg").onchange=payAmt;
+$("d-ord").onchange=function(){fillPkgs();payAmt()};fillPkgs();payAmt();
 $("f-dep").onsubmit=function(e){
   e.preventDefault();var f=$("d-file").files[0],o=tx.filter(function(t){return t.id===$("d-ord").value})[0];
   if(!o){msg("m-dep","Pilih pesanan sewa yang dibayar. Ajukan sewa dulu jika belum ada.",true);return}
   if(!f){msg("m-dep","Unggah bukti transfer terlebih dahulu.",true);return}
   if(f.size>5*1024*1024){msg("m-dep","Ukuran foto maksimal 5 MB.",true);return}
-  var prod=o.type==="Sewa EA"?"EA":"IND",form=this,did=newId("DP");
-  shrink(f,function(url){var t={id:did,at:Date.now(),type:"Deposit",amount:PRICE[prod],status:"Menunggu",uid:U.uid,orderId:o.id,product:prod,akun:o.akun,spon:o.spon||""};tx.unshift(t);save(t);db("PUT","/proofs/"+did,url).catch(noop);render();
+  var prod=o.type==="Sewa EA"?"EA":"IND",k=PACKS[prod][+$("d-pkg").value||0],form=this,did=newId("DP");
+  shrink(f,function(url){var t={id:did,at:Date.now(),type:"Deposit",amount:k.p,fee:k.f,months:k.m,pkg:k.n,status:"Menunggu",uid:U.uid,orderId:o.id,product:prod,akun:o.akun,spon:o.spon||""};tx.unshift(t);save(t);db("PUT","/proofs/"+did,url).catch(noop);render();
   form.reset();$("d-name").textContent="Pilih foto bukti TF";payAmt();msg("m-dep","");show("status")});
 };
 /* Dompet digital (client) */
@@ -690,7 +695,7 @@ function renderAdmin(){
       if(t.type==="Sewa Indicator"){var ni={akun:t.akun,nama:t.nama,spon:t.spon,uid:t.uid,exp:Date.now()+30*864e5,active:true,on:true};inds.unshift(ni);pushInd(ni);db("PUT","/META_IND/"+t.akun,{nama:t.nama,spon:t.spon,uid:t.uid}).catch(noop);save(t);db("PUT","/subs/"+t.uid,true).catch(noop);render();renderAdmin();renderInd();return}
       clients.unshift({akun:t.akun,nama:t.nama,spon:t.spon,uid:t.uid,exp:Date.now()+30*864e5,active:true,ea:true});save(t);db("PUT","/subs/"+t.uid,true).catch(noop);saveC();render();renderAdmin()})));o.appendChild(tr)});
   var pay=tx.filter(function(t){return t.type==="Deposit"&&t.status==="Menunggu"});
-  pay.forEach(function(t){var tr=document.createElement("tr");cell(tr,fmtD(t.at));cell(tr,t.id);cell(tr,t.type==="Deposit"?"Bayar sewa "+(t.product==="IND"?"indikator":"EA"):"-");cell(tr,rp(t.amount));
+  pay.forEach(function(t){var tr=document.createElement("tr");cell(tr,fmtD(t.at));cell(tr,t.id);cell(tr,t.type==="Deposit"?"Bayar sewa "+(t.product==="IND"?"indikator":"EA")+(t.pkg?" · "+t.pkg:""):"-");cell(tr,rp(t.amount));
     var bx=mk("div",null,"ca");bx.appendChild(abtn("Lihat bukti","",function(){db("GET","/proofs/"+t.id).then(function(u){$("pimg").src=(u&&u.indexOf("data:image/")===0)?u:"";$("dlg2").showModal()}).catch(noop)}));bx.appendChild(abtn("Approve pembayaran","pri",function(){approvePay(t)}));tr.appendChild(tdOf(bx));p.appendChild(tr)});
   $("e-order").hidden=ord.length>0;$("e-pay").hidden=pay.length>0;$("e-ctrl").hidden=clients.length>0;
   $("master").checked=master;$("warn").hidden=!master;
@@ -749,12 +754,12 @@ function creditWallet(uid,amt,log){
 function approvePay(t){
   var p=Promise.resolve();
   if(t.spon&&!t.feePaid){
-    var fee=FEE[t.product]||0;
+    var fee=+t.fee||({EA:150000,IND:50000})[t.product]||0;
     if(fee)p=db("GET","/idmap/"+t.spon).then(function(su){
       if(!su||su===t.uid)return;
       return db("GET","/walletlog/"+su+"/"+t.id).then(function(x){
         if(x)return;
-        return creditWallet(su,fee,{id:t.id,at:Date.now(),type:"Fee sponsor",amount:fee,note:(t.product==="IND"?"sewa indikator":"sewa EA")+" · akun "+(t.akun||"-"),from:t.uid});
+        return creditWallet(su,fee,{id:t.id,at:Date.now(),type:"Fee sponsor",amount:fee,note:(t.product==="IND"?"sewa indikator":"sewa EA")+(t.pkg?" · "+t.pkg:"")+" · akun "+(t.akun||"-"),from:t.uid});
       });
     }).then(function(){t.feePaid=true});
   }
