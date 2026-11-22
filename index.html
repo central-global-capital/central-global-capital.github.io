@@ -175,17 +175,18 @@ a.btn{text-decoration:none}
         <div class="field"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg>
         <input id="email" autocomplete="username" placeholder="anda@contoh.com"></div>
 
-        <label class="l" for="pw">Kata sandi</label>
+        <div id="pwBox"><label class="l" for="pw">Kata sandi</label>
         <div class="field"><svg class="i" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
         <input id="pw" type="password" autocomplete="current-password" placeholder="Minimal 8 karakter">
         <button type="button" class="eye" id="eye" aria-label="Tampilkan kata sandi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        </div>
         <div class="err" id="err" role="alert"></div>
 
-        <div class="row" id="rem"><label><input type="checkbox"> Ingat saya</label><a href="#" onclick="return false">Lupa kata sandi?</a></div>
+        <div class="row" id="rem"><label><input type="checkbox"> Ingat saya</label><a href="#" id="forgot" onclick="setMode('reset');return false">Lupa kata sandi?</a></div>
         <button class="btn pri" id="go" type="submit">Masuk</button>
 
-        <div class="or">atau lanjut dengan</div>
-        <button class="btn" type="button" id="google"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M21.6 12.2c0-.7-.1-1.3-.2-1.9H12v3.6h5.4a4.6 4.6 0 01-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.2z"/><path fill="currentColor" opacity=".7" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.7-5.600-4.100H3.100v2.600A10 10 0 0012 22z"/><path fill="currentColor" opacity=".5" d="M6.400 14c-.2-.6-.3-1.300-.3-2s.1-1.400.3-2V7.400H3.100a10 10 0 000 9.200z"/><path fill="currentColor" opacity=".85" d="M12 5.900c1.500 0 2.800.5 3.800 1.500l2.900-2.900A10 10 0 003.100 7.400L6.400 10c.8-2.400 3-4.100 5.600-4.100z"/></svg><span id="gtxt">Masuk dengan Google</span></button>
+        <div id="gBox"><div class="or">atau lanjut dengan</div>
+        <button class="btn" type="button" id="google"><svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M21.6 12.2c0-.7-.1-1.3-.2-1.9H12v3.6h5.4a4.6 4.6 0 01-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.2z"/><path fill="currentColor" opacity=".7" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.7-5.600-4.100H3.100v2.600A10 10 0 0012 22z"/><path fill="currentColor" opacity=".5" d="M6.400 14c-.2-.6-.3-1.300-.3-2s.1-1.400.3-2V7.400H3.100a10 10 0 000 9.200z"/><path fill="currentColor" opacity=".85" d="M12 5.900c1.500 0 2.800.5 3.800 1.500l2.900-2.900A10 10 0 003.100 7.400L6.400 10c.8-2.400 3-4.100 5.600-4.100z"/></svg><span id="gtxt">Masuk dengan Google</span></button></div>
       </form>
       <div class="switch"><span id="swq">Belum punya akun?</span> <button type="button" id="sw">Buat akun</button></div>
     </section>
@@ -200,6 +201,7 @@ a.btn{text-decoration:none}
     <div class="side-top"><div class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/></svg></div><b>CGC</b></div>
     <div id="nav"></div>
     <div class="spacer"></div>
+    <button class="item" id="resetpw" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></svg>Reset kata sandi</button>
     <button class="item" id="logout" style="color:var(--danger)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 4H5v16h5M15 8l4 4-4 4M19 12H9"/></svg>Keluar</button>
   </aside>
   <div class="main">
@@ -262,6 +264,12 @@ a.btn{text-decoration:none}
       <div class="tw"><table><thead><tr><th>File</th><th>Ukuran</th><th>Tanggal</th><th>Catatan</th><th>Aksi</th></tr></thead><tbody id="tb-upea"></tbody></table><div class="empty" id="e-upea">Belum ada file diunggah.</div></div>
     </section>
 
+    <dialog id="dlg4">
+      <h2 style="margin:0 0 8px;font-size:20px">Reset kata sandi</h2>
+      <p id="rp-t" style="color:var(--mute);margin:0 0 6px"></p>
+      <div class="msg" id="rp-m" role="status"></div>
+      <div style="display:flex;gap:10px;margin-top:12px"><button class="btn" type="button" id="rp-x">Tutup</button><button class="btn pri" type="button" id="rp-go">Kirim tautan</button></div>
+    </dialog>
     <dialog id="dlg2"><img id="pimg" alt="Bukti transfer" style="max-width:100%;border-radius:12px"><div style="margin-top:12px"><button class="btn" type="button" id="pclose">Tutup</button></div></dialog>
     <dialog id="dlg">
       <form id="f-edit" novalidate>
@@ -288,7 +296,6 @@ a.btn{text-decoration:none}
       </div>
       <div class="grid">
         <button type="button" class="stat" data-go="sewa" style="text-align:left;cursor:pointer;width:100%"><small>Layanan</small><strong class="sm">Sewa EA</strong><em>Ajukan sewa EA</em></button>
-        <button type="button" class="stat" data-go="sewaind" style="text-align:left;cursor:pointer;width:100%"><small>Layanan</small><strong class="sm">Sewa Indikator</strong><em>Ajukan sewa indikator</em></button>
         <button type="button" class="stat" data-go="status" style="text-align:left;cursor:pointer;width:100%"><small>Pesanan</small><strong class="sm">Status pesanan</strong><em>Pantau pesanan Anda</em></button>
         <button type="button" class="stat" data-go="ea" style="text-align:left;cursor:pointer;width:100%"><small>File</small><strong class="sm">Download</strong><em>EA dan indikator</em></button>
       </div>
@@ -439,16 +446,16 @@ a.btn{text-decoration:none}
 var $=function(i){return document.getElementById(i)};
 var mode="login";
 function setMode(m){
-  mode=m;var r=m==="register";
-  $("ttl").textContent=r?"Buat akun baru":"Selamat datang kembali";
-  $("sub").textContent=r?"Daftar untuk mulai menggunakan platform":"Masuk ke akun Anda";
-  $("nameBox").hidden=!r;$("rem").hidden=r;
-  $("go").textContent=r?"Daftar":"Masuk";
+  mode=m;var r=m==="register",f=m==="reset";
+  $("ttl").textContent=f?"Reset kata sandi":r?"Buat akun baru":"Selamat datang kembali";
+  $("sub").textContent=f?"Masukkan email akun Anda. Kami kirim tautan ke email untuk membuat kata sandi baru.":r?"Daftar untuk mulai menggunakan platform":"Masuk ke akun Anda";
+  $("nameBox").hidden=!r;$("rem").hidden=r||f;$("pwBox").hidden=f;$("gBox").hidden=f;
+  $("go").textContent=f?"Kirim tautan reset":r?"Daftar":"Masuk";
   $("gtxt").textContent=r?"Daftar dengan Google":"Masuk dengan Google";
-  $("swq").textContent=r?"Sudah punya akun?":"Belum punya akun?";
-  $("sw").textContent=r?"Masuk":"Buat akun";
+  $("swq").textContent=f?"Sudah ingat kata sandi?":r?"Sudah punya akun?":"Belum punya akun?";
+  $("sw").textContent=f?"Kembali masuk":r?"Masuk":"Buat akun";
   $("pw").autocomplete=r?"new-password":"current-password";
-  $("err").textContent="";
+  $("err").textContent="";$("err").style.color="";
 }
 $("sw").onclick=function(){setMode(mode==="login"?"register":"login")};
 $("eye").onclick=function(){var p=$("pw");var s=p.type==="password";p.type=s?"text":"password";$("eye").setAttribute("aria-label",s?"Sembunyikan kata sandi":"Tampilkan kata sandi")};
@@ -463,6 +470,12 @@ function enter(name,r){
 $("form").onsubmit=function(e){
   e.preventDefault();var em=$("email"),pw=$("pw"),nm=$("name"),msg="";
   [em,pw,nm].forEach(function(x){x.classList.remove("bad")});
+  if(mode==="reset"){
+    if(!/^\S+@\S+\.\S+$/.test(em.value.trim())){$("err").style.color="";$("err").textContent="Isi email yang valid.";em.classList.add("bad");return}
+    var gb=$("go");gb.disabled=true;
+    sendReset(em.value.trim(),function(ok,t){gb.disabled=false;$("err").style.color=ok?"var(--acc)":"";$("err").textContent=t});
+    return;
+  }
   if(mode==="register"&&nm.value.trim().length<2){msg="Isi nama lengkap Anda.";nm.classList.add("bad")}
   else if(!/^\S+@\S+\.\S+$/.test(em.value.trim())){msg="Isi email yang valid.";em.classList.add("bad")}
   else if(pw.value.length<8){msg="Kata sandi minimal 8 karakter.";pw.classList.add("bad")}
@@ -472,10 +485,31 @@ $("form").onsubmit=function(e){
 $("google").onclick=function(){googleGo()};
 $("logout").onclick=function(){U={uid:"",tok:"",exp:0};tx=[];clients=[];$("app").hidden=true;$("auth").hidden=false;$("form").reset();setMode("login")};
 
+/* RESET KATA SANDI: Firebase mengirim email berisi tautan untuk membuat kata sandi baru */
+var RESET_OK="Jika email terdaftar, tautan untuk membuat kata sandi baru sudah dikirim. Cek kotak masuk dan folder spam.";
+function sendReset(email,cb){
+  if(API_KEY.indexOf("ISI")===0){cb(false,"API_KEY Firebase belum diisi di kode.");return}
+  fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key="+API_KEY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({requestType:"PASSWORD_RESET",email:email})})
+    .then(function(r){return r.json()})
+    .then(function(j){
+      if(j.error){var c=(j.error.message||"").split(" ")[0];if(c==="EMAIL_NOT_FOUND"){cb(true,RESET_OK);return}throw new Error(c)}
+      cb(true,RESET_OK);
+    })
+    .catch(function(e){cb(false,e.message==="TOO_MANY_ATTEMPTS_TRY_LATER"?"Terlalu banyak percobaan. Coba lagi beberapa menit lagi.":"Gagal mengirim email reset. Cek koneksi dan coba lagi.")});
+}
+$("resetpw").onclick=function(){
+  $("rp-t").textContent="Tautan untuk membuat kata sandi baru akan dikirim ke email: "+(U.email||"-");
+  $("rp-m").textContent="";$("rp-m").className="msg";$("rp-go").disabled=!U.email;$("dlg4").showModal();
+};
+$("rp-x").onclick=function(){$("dlg4").close()};
+$("rp-go").onclick=function(){
+  var b=this;b.disabled=true;
+  sendReset(U.email,function(ok,t){$("rp-m").textContent=t;$("rp-m").className="msg"+(ok?"":" e");b.disabled=false});
+};
 /* Sidebar: bab + sub bab */
 var chev='<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
-var cm='<button type="button" class="item" data-pg="dash">Dasbor</button><button type="button" class="item" data-pg="wallet">Dompet digital</button><div class="grp open"><button type="button" aria-expanded="true"><span>Sewa alat</span>'+chev+'</button><div class="subs"><button type="button" class="item" data-pg="sewa">Sewa EA</button><button type="button" class="item" data-pg="sewaind">Sewa Indikator</button><button type="button" class="item" data-pg="mm">Money management</button></div></div><button type="button" class="item" data-pg="status">Status pesanan</button><button type="button" class="item" data-pg="hist">History transaksi</button><button type="button" class="item" data-pg="ea">Download EA &amp; Indikator</button><button type="button" class="item" data-pg="wa">Chat admin</button><div style="height:10px"></div>';
-var am='<button type="button" class="item" data-pg="order">Notifikasi pesanan</button><button type="button" class="item" data-pg="wd">Penarikan dompet</button><div class="grp open"><button type="button" aria-expanded="true"><span>Control alat</span>'+chev+'</button><div class="subs"><button type="button" class="item" data-pg="ctrl">Control EA</button><button type="button" class="item" data-pg="cind">Control indikator</button></div></div><button type="button" class="item" data-pg="upea">Unggah EA &amp; Indikator</button>';
+var cm='<button type="button" class="item" data-pg="dash">Dasbor</button><button type="button" class="item" data-pg="wallet">Dompet digital</button><div class="grp open"><button type="button" aria-expanded="true"><span>Sewa alat</span>'+chev+'</button><div class="subs"><button type="button" class="item" data-pg="sewa">Sewa EA</button><button type="button" class="item" data-pg="mm">Money management</button></div></div><button type="button" class="item" data-pg="status">Status pesanan</button><button type="button" class="item" data-pg="hist">History transaksi</button><button type="button" class="item" data-pg="ea">Download EA &amp; Indikator</button><button type="button" class="item" data-pg="wa">Chat admin</button><div style="height:10px"></div>';
+var am='<button type="button" class="item" data-pg="order">Notifikasi pesanan</button><button type="button" class="item" data-pg="wd">Penarikan dompet</button><button type="button" class="item" data-pg="ctrl">Control EA</button><button type="button" class="item" data-pg="upea">Unggah EA &amp; Indikator</button>';
 $("nav").addEventListener("click",function(e){
   var b=e.target.closest("button");if(!b)return;
   if(b.dataset.pg){show(b.dataset.pg);return}
@@ -605,7 +639,7 @@ function authGo(email,pass,name){
   if(API_KEY.indexOf("ISI")===0){$("err").textContent="API_KEY Firebase belum diisi di kode.";return}
   var go=$("go"),adm=false;go.disabled=true;
   fbAuth(mode==="register"?"signUp":"signInWithPassword",email,pass).then(function(a){
-    U={uid:a.localId,tok:a.idToken,ref:a.refreshToken,exp:Date.now()+(+a.expiresIn-60)*1000,name:name||a.email.split("@")[0]};
+    U={uid:a.localId,tok:a.idToken,ref:a.refreshToken,exp:Date.now()+(+a.expiresIn-60)*1000,name:name||a.email.split("@")[0],email:a.email};
     return db("GET","/admins/"+U.uid).then(function(v){adm=(v===true)},noop);
   }).then(function(){enter(U.name,adm?"admin":"client")})
   .catch(function(e){$("err").textContent=AE[(e.message||"").split(" ")[0]]||"Gagal masuk. Cek koneksi dan konfigurasi Firebase."})
@@ -620,7 +654,7 @@ function loadGsi(cb){
 }
 function startSession(a,name){
   var adm=false;
-  U={uid:a.localId,tok:a.idToken,ref:a.refreshToken,exp:Date.now()+(+a.expiresIn-60)*1000,name:name||a.displayName||(a.email||"Pengguna").split("@")[0]};
+  U={uid:a.localId,tok:a.idToken,ref:a.refreshToken,exp:Date.now()+(+a.expiresIn-60)*1000,name:name||a.displayName||(a.email||"Pengguna").split("@")[0],email:a.email||""};
   return db("GET","/admins/"+U.uid).then(function(v){adm=(v===true)},noop).then(function(){enter(U.name,adm?"admin":"client")});
 }
 function googleGo(){
