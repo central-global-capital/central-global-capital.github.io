@@ -139,9 +139,11 @@ dialog::backdrop{background:#000a}
 .wa{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 6px 18px #0006;z-index:30}
 a.btn{text-decoration:none}
 .field select{width:100%;height:52px;border-radius:16px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg) 60%,var(--card));padding:0 16px;color:inherit;font:inherit}
-.terms{line-height:1.6}
+.terms{font-family:"Times New Roman",Times,serif;font-size:16px;line-height:1.65}
+.terms .tt{text-align:center;font-weight:700;font-size:19px;margin:0 0 12px}
+.terms p,.terms li,.terms .note{text-align:justify;hyphens:auto;-webkit-hyphens:auto}
 .terms p{margin:0 0 8px}
-.terms ol,.terms ul{margin:8px 0 0;padding-left:22px}
+.terms ol,.terms ul{margin:8px 0 0;padding-left:24px}
 .terms li{margin:8px 0}
 .terms ul li{margin:4px 0}
 .terms .note{margin-top:12px;padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--acc) 10%,transparent);color:var(--text);font-size:14px}
@@ -278,11 +280,10 @@ a.btn{text-decoration:none}
       <h2>Selamat Datang di CGC, Pusat Sewa EA dan Indikator</h2>
       <p>Pilih layanan yang Anda butuhkan.</p>
       <div class="card terms" style="max-width:none;margin-bottom:22px">
-        <b>Ketentuan &amp; syarat sewa EA KERAMAT</b>
+        <div class="tt">Ketentuan dan Syarat Sewa EA Keramat</div>
         <ol>
           <li>Pastikan akun trade sudah terdaftar di web dan sewa sudah dibayar.</li>
           <li>Maksimal start balance dalam satu akun adalah <b>50.000 cent / 500 USD</b>. Jika lebih, wajib membuat akun baru, mendaftarkannya lagi ke web, dan membayar sewanya (ternak akun).</li>
-          <li>Sewa EA hanya tersedia paket <b>1 bulan</b>.</li>
         </ol>
       </div>
       <div class="grid">
@@ -363,11 +364,10 @@ a.btn{text-decoration:none}
       <h2>Sewa EA</h2>
       <p>Isi data akun trading Anda untuk mengajukan sewa EA. Setelah itu Anda diarahkan ke pembayaran.</p>
       <div class="card terms" style="margin-bottom:18px">
-        <b>Ketentuan &amp; syarat sewa</b>
+        <div class="tt">Ketentuan dan Syarat Sewa EA Keramat</div>
         <ol>
           <li>Pastikan akun trade sudah terdaftar di web dan sewa sudah dibayar.</li>
           <li>Maksimal start balance dalam satu akun <b>50.000 cent / 500 USD</b>. Jika lebih, wajib membuat akun baru, mendaftarkannya lagi ke web, dan membayar sewanya (ternak akun).</li>
-          <li>Sewa EA hanya tersedia paket <b>1 bulan</b>.</li>
         </ol>
       </div>
       <form class="card" id="f-sewa" novalidate>
